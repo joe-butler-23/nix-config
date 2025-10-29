@@ -6,7 +6,6 @@
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager.url = "github:nix-community/home-manager";
-    # Make HM use the same nixpkgs as your system by default
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
