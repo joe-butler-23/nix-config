@@ -27,7 +27,6 @@
     xfce.mousepad
     xfce.thunar
     gvfs
-    tumbler
     papirus-icon-theme
     hicolor-icon-theme
     desktop-file-utils
