@@ -20,7 +20,6 @@
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       inherit system;
 
-      # Make pkgsUnstable available to modules (you already use this)
       specialArgs = { inherit pkgsUnstable; };
 
       modules = [
