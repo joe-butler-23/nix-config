@@ -6,12 +6,11 @@
 
   services.displayManager.ly = {
     enable = true;
-    # Optional tweaks written into ly's config.ini:
-    # settings = {
-    #   animate = true;
-    #   animation = "cmatrix";
-    #   bigclock = true;
-    # };
+     settings = {
+       animate = true;
+       animation = "cmatrix";
+       bigclock = true;
+     };
   };
 
   programs.hyprland.enable = true;
