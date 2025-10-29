@@ -71,18 +71,15 @@
     ## Sound / power
     alsa-utils
     pavucontrol
-    cpupower
 
     ## Filesystems / maintenance
     snapper
     zram-generator
 
     ## Apps (unfree/FOSS mix)
-    anki
-    espanso
+    anki-bin
+    espanso-wayland
     obsidian
-    onepassword
-    onepassword-cli
     vscodium
     zotero
     zathura
