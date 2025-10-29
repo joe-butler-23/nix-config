@@ -4,6 +4,7 @@
   environment.systemPackages = with pkgs; [
 
     ## Wayland / Hyprland
+    app2unit
     hypridle
     hyprlock
     hyprpaper
