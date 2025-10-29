@@ -4,10 +4,14 @@
   #### Display manager and session
   services.displayManager.sddm.enable = false;
 
-  services.displayManager.emptty = {
+  services.displayManager.ly = {
     enable = true;
-    defaultUser = "me";
-    defaultSession = "hyprland";
+    # Optional tweaks written into ly's config.ini:
+    # settings = {
+    #   animate = true;
+    #   animation = "cmatrix";
+    #   bigclock = true;
+    # };
   };
 
   programs.hyprland.enable = true;
