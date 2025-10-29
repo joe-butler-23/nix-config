@@ -5,6 +5,7 @@
     [
       ./hardware-configuration.nix
       ./modules/packages.nix
+      ./modules/services.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
