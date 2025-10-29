@@ -4,6 +4,7 @@
   imports =
     [
       ./hardware-configuration.nix
+      ./modules/packages.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -73,22 +74,6 @@
 
   # programs.firefox.enable = true;
    programs.hyprland.enable = true;
-
-  # Packages
-  environment.systemPackages = with pkgs; [
-    vim
-    wget
-    git
-    hyprshot
-    hypridle
-    hyprlock
-    qutebrowser
-    foot
-    xfce.thunar
-    xfce.mousepad
-    xdg-desktop-portal-hyprland
-    polkit_gnome
-  ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
