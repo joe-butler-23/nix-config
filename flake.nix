@@ -5,35 +5,47 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      # Track the 25.05 HM release; follows your nixpkgs
+      url = "github:nix-community/home-manager/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
-  let
-    system = "x86_64-linux";
-    pkgs         = import nixpkgs         { inherit system; };
-    pkgsUnstable = import nixpkgs-unstable { inherit system; };
-  in
-  {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      inherit system;
+    let
+      system = "x86_64-linux";
+      pkgs         = import nixpkgs          { inherit system; };
+      pkgsUnstable = import nixpkgs-unstable { inherit system; };
+    in
+    {
+      # Optional: allows `home-manager --flake .#me switch`
+      homeConfigurations."me" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.${system};
+        modules = [ ./home.nix ];
+      };
 
-      specialArgs = { inherit pkgsUnstable; };
+      # Main NixOS system (used by `sudo nixos-rebuild switch --flake ...`)
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        inherit system;
 
-      modules = [
-        ./configuration.nix
+        # Make pkgsUnstable available to your modules (you already use this)
+        specialArgs = { inherit pkgsUnstable; };
 
-        # Enable Home Manager as a NixOS module
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;   # use the pkgs from this system
-          home-manager.useUserPackages = true; # install user pkgs via HM
+        modules = [
+          ./configuration.nix
 
-          # Define your user’s HM config (create ./home.nix next)
-          home-manager.users.me = import ./home.nix;
-        }
-      ];
+          # Integrate Home Manager into the system build
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;    # share pkgs with system
+            home-manager.useUserPackages = true;  # install user pkgs via HM
+ 	    home-manager.backupFileExtension = "hm-bak";
+
+            # Activate Home Manager for user "me"
+            home-manager.users.me = import ./home.nix;
+          }
+        ];
+      };
     };
-  };
 }

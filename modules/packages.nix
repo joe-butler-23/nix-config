@@ -9,7 +9,7 @@
       ## Wayland / Hyprland
       hypridle
       hyprlock
-      hyprpaper
+			hyprshot
       hyprland-protocols
       rofi-wayland
       swaynotificationcenter
@@ -24,6 +24,7 @@
 
       ## Core desktop utils
       foot
+			capitaine-cursors
       bluetui
       localsend
       viewnior
@@ -45,7 +46,7 @@
       fd
       fzf
       git
-      less
+			lazygit
       unzip
       wget
       zoxide

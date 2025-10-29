@@ -6,24 +6,20 @@
 
   services.displayManager.ly = {
     enable = true;
-     settings = {
-       animate = true;
-       animation = "cmatrix";
-       bigclock = true;
-     };
   };
-
-  programs.hyprland.enable = true;
 
   #### PolicyKit
   security.polkit.enable = true;
 
-  #### Networking (NetworkManager with iwd backend)
-  networking.networkmanager.enable = true;
-  networking.networkmanager.wifi.backend = "iwd";
+	#### Syncthing
+	services.syncthing = {
+		enable = true;
+		user = "me";
+		dataDir = "/home/me"; # Default folder base
+		configDir = "/home/me/.config/syncthing";
+	};
 
-  #### Audio (PipeWire + WirePlumber)
-  hardware.pulseaudio.enable = false;
+  #### Audio
   services.pipewire = {
     enable = true;
     alsa.enable = true;
