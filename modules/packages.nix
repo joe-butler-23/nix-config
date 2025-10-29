@@ -1,10 +1,12 @@
 # modules/packages.nix
-{ pkgs, ... }:
+{ pkgs, pkgsUnstable, ... }:
 {
-  environment.systemPackages = with pkgs; [
-
-    ## Wayland / Hyprland
-    app2unit
+  environment.systemPackages =
+    [
+      pkgsUnstable.app2unit
+    ] ++
+    (with pkgs; [
+      ## Wayland / Hyprland
     hypridle
     hyprlock
     hyprpaper
