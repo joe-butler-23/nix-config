@@ -74,22 +74,21 @@
   # programs.firefox.enable = true;
    programs.hyprland.enable = true;
 
-  # List packages installed in system profile.
-  # You can use https://search.nixos.org/ to find more packages (and options).
-   environment.systemPackages = with pkgs; [
-     vim
-     wget
-     git
-     hyprshot
-     hypridle
-     hyprlock
-     qutebrowser
-     foot
-     thunar
-     mousepad
-     xdg-desktop-portal-
-     hyprland polkit_gnome
-   ];
+  # Packages
+  environment.systemPackages = with pkgs; [
+    vim
+    wget
+    git
+    hyprshot
+    hypridle
+    hyprlock
+    qutebrowser
+    foot
+    xfce.thunar
+    xfce.mousepad
+    xdg-desktop-portal-hyprland
+    polkit_gnome
+  ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
