@@ -59,7 +59,7 @@
       syncthing
 
       ## Security / auth / policy
-      polkit-gnome
+      polkit
       sbctl
 
       ## Programming / build
