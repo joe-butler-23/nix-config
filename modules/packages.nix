@@ -9,7 +9,7 @@
     hyprpaper
     hyprland-protocols
     rofi-wayland
-    swaync
+    swaynotificationcenter
     waybar
     wl-clipboard
     xdg-desktop-portal-hyprland
