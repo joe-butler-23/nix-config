@@ -72,8 +72,8 @@
   #   ];
    };
 
-  # programs.firefox.enable = true;
    programs.hyprland.enable = true;
+   programs.zsh.enable = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
