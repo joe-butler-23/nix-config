@@ -27,7 +27,7 @@
       bluetui
       localsend
       viewnior
-      mousepad
+      xfce.mousepad
       xfce.thunar
       gvfs
       papirus-icon-theme
