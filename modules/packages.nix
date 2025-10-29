@@ -42,7 +42,8 @@
       scrcpy
 
       ## Shell / CLI tools
-      bat
+      bat 
+			ripgrep
       fd
       fzf
       git
