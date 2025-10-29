@@ -86,5 +86,5 @@
     vscodium
     zotero
     zathura
-  ];
+  ]
 }
