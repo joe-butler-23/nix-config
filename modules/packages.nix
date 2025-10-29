@@ -7,84 +7,84 @@
     ] ++
     (with pkgs; [
       ## Wayland / Hyprland
-    hypridle
-    hyprlock
-    hyprpaper
-    hyprland-protocols
-    rofi-wayland
-    swaynotificationcenter
-    waybar
-    wl-clipboard
-    xdg-desktop-portal-hyprland
-    xdg-desktop-portal-gtk
-    xdg-utils
-    wayland-utils
-    uwsm
-    wlogout
+      hypridle
+      hyprlock
+      hyprpaper
+      hyprland-protocols
+      rofi-wayland
+      swaynotificationcenter
+      waybar
+      wl-clipboard
+      xdg-desktop-portal-hyprland
+      xdg-desktop-portal-gtk
+      xdg-utils
+      wayland-utils
+      uwsm
+      wlogout
 
-    ## Core desktop utils
-    foot
-    bluetui
-    localsend
-    viewnior
-    xfce.mousepad
-    xfce.thunar
-    gvfs
-    papirus-icon-theme
-    hicolor-icon-theme
-    desktop-file-utils
-    
-    ## Media / screenshots / streaming
-    ffmpeg
-    grim
-    slurp
-    scrcpy
+      ## Core desktop utils
+      foot
+      bluetui
+      localsend
+      viewnior
+      mousepad
+      xfce.thunar
+      gvfs
+      papirus-icon-theme
+      hicolor-icon-theme
+      desktop-file-utils
 
-    ## Shell / CLI tools
-    bat
-    fd
-    fzf
-    git
-    less
-    unzip
-    wget
-    zoxide
-    starship
+      ## Media / screenshots / streaming
+      ffmpeg
+      grim
+      slurp
+      scrcpy
 
-    ## Networking/internet
-    brave
-    iwd
-    sshpass
-    tailscale
-    syncthing
+      ## Shell / CLI tools
+      bat
+      fd
+      fzf
+      git
+      less
+      unzip
+      wget
+      zoxide
+      starship
 
-    ## Security / auth / policy
-    polkit_gnome
-    sbctl
+      ## Networking / internet
+      brave
+      iwd
+      sshpass
+      tailscale
+      syncthing
 
-    ## Programming / build
-    go
-    uv
-    rustup
-    scdoc
+      ## Security / auth / policy
+      polkit-gnome
+      sbctl
 
-    # Fonts
-    jetbrains-mono
+      ## Programming / build
+      go
+      uv
+      rustup
+      scdoc
 
-    ## Sound / power
-    alsa-utils
-    pavucontrol
+      ## Fonts
+      jetbrains-mono
 
-    ## Filesystems / maintenance
-    snapper
-    zram-generator
+      ## Sound / power
+      alsa-utils
+      pavucontrol
 
-    ## Apps (unfree/FOSS mix)
-    anki-bin
-    espanso-wayland
-    obsidian
-    vscodium
-    zotero
-    zathura
-  ]
+      ## Filesystems / maintenance
+      snapper
+      zram-generator
+
+      ## Apps
+      anki-bin
+      espanso-wayland
+      obsidian
+      vscodium
+      zotero
+      zathura
+    ]);
 }
