@@ -1,0 +1,91 @@
+# modules/packages.nix
+{ pkgs, ... }:
+{
+  environment.systemPackages = with pkgs; [
+
+    ## Wayland / Hyprland
+    hypridle
+    hyprlock
+    hyprpaper
+    hyprland-protocols
+    rofi-wayland
+    swaync
+    waybar
+    wl-clipboard
+    xdg-desktop-portal-hyprland
+    xdg-desktop-portal-gtk
+    xdg-utils
+    wayland-utils
+    uwsm
+    wlogout
+
+    ## Core desktop utils
+    foot
+    bluetui
+    localsend
+    viewnior
+    xfce.mousepad
+    xfce.thunar
+    gvfs
+    tumbler
+    papirus-icon-theme
+    hicolor-icon-theme
+    desktop-file-utils
+    
+    ## Media / screenshots / streaming
+    ffmpeg
+    grim
+    slurp
+    scrcpy
+
+    ## Shell / CLI tools
+    bat
+    fd
+    fzf
+    git
+    less
+    unzip
+    wget
+    zoxide
+    starship
+
+    ## Networking/internet
+    brave
+    iwd
+    sshpass
+    tailscale
+    syncthing
+
+    ## Security / auth / policy
+    polkit_gnome
+    sbctl
+
+    ## Programming / build
+    go
+    uv
+    rustup
+    scdoc
+
+    # Fonts
+    jetbrains-mono
+
+    ## Sound / power
+    alsa-utils
+    pavucontrol
+    cpupower
+
+    ## Filesystems / maintenance
+    snapper
+    zram-generator
+
+    ## Apps (unfree/FOSS mix)
+    anki
+    espanso
+    obsidian
+    onepassword
+    onepassword-cli
+    vscodium
+    zotero
+    zathura
+  ];
+}
