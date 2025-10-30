@@ -17,6 +17,7 @@
   };
 
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.timeout = 2;
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
