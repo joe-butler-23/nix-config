@@ -1,26 +1,22 @@
 building the system configuration...
-these 24 derivations will be built:
-  /nix/store/0mfvjhcjbpljpawyb8yjgw1n1b57h8sa-unit-tailscaled.service.drv
-  /nix/store/mn19f4m9jdjqzrfb4nks6vyk9bypd7rn-system-path.drv
-  /nix/store/bhq5wmlr5mhhwr5vf2yx3pa0x6x0p388-dbus-1.drv
-  /nix/store/yfdxmy54chjffimy3hf0yvhiqs0s3m9f-X-Restart-Triggers-dbus.drv
-  /nix/store/3jkwzpds0l2iv3zskxxngjk474s5bl09-unit-dbus.service.drv
-  /nix/store/pdq41sj5bhkw9rnla0mgcnb2l57kmhlp-firewall-start.drv
-  /nix/store/73a6a3616hfzvr1k4mwhf3aiqlcb7qsp-firewall-reload.drv
-  /nix/store/ccajbhyak2bh3nwr21hgnv7m1z42x7sg-unit-firewall.service.drv
-  /nix/store/is2qf67r5mqdc4bwhixirclaqmxilmas-sshd.conf-settings.drv
-  /nix/store/zvwyw1ds0bzmiyvfrnbld9p5lj5fndm3-sshd.conf-final.drv
-  /nix/store/q4vxrxz23lf4bww3xpc20hs5lhsmsblh-X-Restart-Triggers-sshd.drv
-  /nix/store/id575qzqx23ymzpab3801iwm6dr14mc4-unit-sshd.service.drv
-  /nix/store/fgpx771bhcvqrsjq91lyg2dckq2fh6nn-X-Restart-Triggers-polkit.drv
-  /nix/store/vdb0jska5vcmsnvmami114zhi0wcn5n9-unit-polkit.service.drv
-  /nix/store/75cmhgbav5k16nr2x5ik7907cyfbl1yn-system-units.drv
-  /nix/store/gjc6wkcxi41hn41w3jf4xrhpxrkd962r-unit-dbus.service.drv
-  /nix/store/7rj50kmp59ddq8z587h6a12x0qhpfvik-user-units.drv
-  /nix/store/9k12bi3jd3qbglarc6zn3lgv5zgq0w63-user-generators.drv
-  /nix/store/pgxaldg5a1wp2zqllgg45l2kvrjpyqf0-system-generators.drv
-  /nix/store/pz5riyaka432m8lfdlz2x4w9lmrcvyap-sshd.pam.drv
-  /nix/store/wydzf1xayfyzn8b61zyis8030d89ndsi-system-shutdown.drv
-  /nix/store/rmd46y7ppnqw7iiwpfh6ngj0vgq1wmi3-etc.drv
-  /nix/store/vmlaf9m0q0vfdxf503z80j0k8lg5k9li-check-sshd-config.drv
-  /nix/store/rni4w4irpfbiplzs8j8pai17h2s7lday-nixos-system-nixos-25.05.20251026.78e34d1.drv
+warning: Git tree '/home/me/nix-config' is dirty
+error:
+       … while calling the 'seq' builtin
+         at /nix/store/6dvf3k09y1gs9h4sisybvyqdxcyri8xb-source/lib/modules.nix:359:18:
+          358|         options = checked options;
+          359|         config = checked (removeAttrs config [ "_module" ]);
+             |                  ^
+          360|         _module = checked (config._module);
+
+       … while calling the 'throw' builtin
+         at /nix/store/6dvf3k09y1gs9h4sisybvyqdxcyri8xb-source/lib/modules.nix:331:13:
+          330|           else
+          331|             throw baseMsg
+             |             ^
+          332|         else
+
+       error: The option `services.systemd-oomd' does not exist. Definition values:
+       - In `/nix/store/rzys4qbpw49sxpd40pigvpyqmvkwh1g0-source/modules/services.nix':
+           {
+             enable = true;
+           }

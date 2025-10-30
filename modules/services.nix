@@ -67,6 +67,5 @@
   services = {
     irqbalance.enable = true;
     fstrim.enable = true;
-    systemd-oomd.enable = true;
   };
 }
