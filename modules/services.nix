@@ -13,9 +13,9 @@
   #### Syncthing
   services.syncthing = {
     enable = true;
-    user = "me";
-    dataDir = "/home/me"; # Default folder base
-    configDir = "/home/me/.config/syncthing";
+    user = "joebutler";
+    dataDir = "/home/joebutler"; # Default folder base
+    configDir = "/home/joebutler/.config/syncthing";
   };
 
   #### Audio
@@ -54,7 +54,7 @@
       LoginGraceTime = 20;
     };
     extraConfig = ''
-      AllowUsers me
+      AllowUsers joebutler
       ListenAddress 127.0.0.1
       ListenAddress 100.64.0.3
     '';

@@ -7,8 +7,8 @@
   OOS = config.lib.file.mkOutOfStoreSymlink;
   dot = "${config.home.homeDirectory}/.dotfiles";
 in {
-  home.username = "me";
-  home.homeDirectory = "/home/me";
+  home.username = "joebutler";
+  home.homeDirectory = "/home/joebutler";
   home.stateVersion = "25.05";
 
   gtk = {

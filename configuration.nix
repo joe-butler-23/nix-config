@@ -78,7 +78,7 @@
   security.polkit.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.me = {
+  users.users.joebutler = {
     isNormalUser = true;
     createHome = true;
     extraGroups = ["networkmanager" "wheel"]; # Enable ‘sudo’ for the user.

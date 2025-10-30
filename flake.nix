@@ -28,8 +28,8 @@
     pkgs = import nixpkgs {inherit system;};
     pkgsUnstable = import nixpkgs-unstable {inherit system;};
   in {
-    # Optional: allows `home-manager --flake .#me switch`
-    homeConfigurations."me" = home-manager.lib.homeManagerConfiguration {
+    # Optional: allows `home-manager --flake .#joebutler switch`
+    homeConfigurations."joebutler" = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.${system};
       modules = [./home.nix];
     };
@@ -51,8 +51,8 @@
           home-manager.useUserPackages = true; # install user pkgs via HM
           home-manager.backupFileExtension = "hm-bak";
 
-          # Activate Home Manager for user "me"
-          home-manager.users.me = import ./home.nix;
+          # Activate Home Manager for user "joebutler"
+          home-manager.users.joebutler = import ./home.nix;
         }
       ];
     };
