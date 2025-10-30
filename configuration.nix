@@ -31,6 +31,11 @@
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
+  networking.firewall = {
+    enable = true;
+    allowedUDPPorts = [41641]; # Tailscale
+    interfaces.tailscale0.allowedTCPPorts = [22]; # SSH over Tailscale
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/London";

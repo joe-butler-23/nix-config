@@ -13,6 +13,7 @@
       hypridle
       hyprlock
       hyprshot
+      hyprpaper
       hyprland-protocols
       rofi-wayland
       swaynotificationcenter

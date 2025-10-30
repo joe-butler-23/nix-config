@@ -1,8 +1,5 @@
 # modules/services.nix
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   #### Display manager and session
   services.displayManager.sddm.enable = false;
 
@@ -44,8 +41,27 @@
     ];
   };
 
-  #### SSH server
-  services.openssh.enable = true;
+  #### SSH server (hardened for Tailscale)
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      PermitRootLogin = "no";
+      AllowTcpForwarding = false;
+      X11Forwarding = false;
+      LogLevel = "VERBOSE";
+      MaxAuthTries = 3;
+      LoginGraceTime = 20;
+    };
+    extraConfig = ''
+      AllowUsers me
+      ListenAddress 127.0.0.1
+      ListenAddress 100.64.0.3
+    '';
+  };
+
+  #### Tailscale VPN
+  services.tailscale.enable = true;
 
   #### Power management
   services.tlp.enable = true;
