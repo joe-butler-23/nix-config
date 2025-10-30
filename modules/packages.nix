@@ -84,6 +84,7 @@
       ## Filesystems / maintenance
       snapper
       zram-generator
+      auto-cpufreq
 
       ## Apps
       anki-bin

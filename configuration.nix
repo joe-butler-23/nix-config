@@ -29,6 +29,12 @@
   boot.plymouth.enable = false;
   zramSwap.enable = true;
 
+  # Performance-oriented power management
+  powerManagement = {
+    enable = true;
+    cpuFreqGovernor = "performance";
+  };
+
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
   networking.firewall = {

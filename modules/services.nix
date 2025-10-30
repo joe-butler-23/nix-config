@@ -63,6 +63,10 @@
   #### Tailscale VPN
   services.tailscale.enable = true;
 
-  #### Power management
-  services.tlp.enable = true;
+  #### Performance services
+  services = {
+    irqbalance.enable = true;
+    fstrim.enable = true;
+    systemd-oomd.enable = true;
+  };
 }
