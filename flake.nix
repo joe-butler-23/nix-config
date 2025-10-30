@@ -10,9 +10,14 @@
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, treefmt-nix, ... }:
     let
       system = "x86_64-linux";
       pkgs         = import nixpkgs          { inherit system; };
@@ -47,5 +52,10 @@
           }
         ];
       };
+
+      # Format and lint Nix files (treefmt)
+      formatter.${system} = treefmt-nix.lib.mkWrapper
+        nixpkgs.legacyPackages.${system}
+        (import ./treefmt.nix);
     };
 }
