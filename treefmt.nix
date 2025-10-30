@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+_: {
   # Use alejandra as the Nix formatter
   programs.alejandra.enable = true;
 

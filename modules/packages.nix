@@ -1,15 +1,18 @@
 # modules/packages.nix
-{ pkgs, pkgsUnstable, ... }:
 {
+  pkgs,
+  pkgsUnstable,
+  ...
+}: {
   environment.systemPackages =
     [
       pkgsUnstable.app2unit
-    ] ++
-    (with pkgs; [
+    ]
+    ++ (with pkgs; [
       ## Wayland / Hyprland
       hypridle
       hyprlock
-			hyprshot
+      hyprshot
       hyprland-protocols
       rofi-wayland
       swaynotificationcenter
@@ -24,7 +27,7 @@
 
       ## Core desktop utils
       foot
-			capitaine-cursors
+      capitaine-cursors
       bluetui
       localsend
       viewnior
@@ -42,12 +45,12 @@
       scrcpy
 
       ## Shell / CLI tools
-      bat 
-			ripgrep
+      bat
+      ripgrep
       fd
       fzf
       git
-			lazygit
+      lazygit
       unzip
       wget
       zoxide

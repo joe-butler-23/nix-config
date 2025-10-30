@@ -1,12 +1,27 @@
-{ config, lib, pkgs, ... }:
-
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-      ./modules/packages.nix
-      ./modules/services.nix
-    ];
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
+    ./hardware-configuration.nix
+
+    # Core system configuration
+    ./modules/core/system.nix
+
+    # Service modules
+    ./modules/services/desktop.nix
+    ./modules/services/networking.nix
+    ./modules/services/hardware.nix
+
+    # Package modules
+    ./modules/packages/core.nix
+    ./modules/packages/dev.nix
+    ./modules/packages/networking.nix
+    ./modules/packages/desktop.nix
+    ./modules/packages/apps.nix
+    ./modules/packages/tools.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -19,50 +34,28 @@
   networking.networkmanager.enable = true;
 
   # Set your time zone.
-   time.timeZone = "Europe/London";
-
-  # Wayland portals so file pickers, screenshare, xdg-open, etc. work
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  xdg.portal.xdgOpenUsePortal = true;
-  
-  # Thunar needs these services for mounts and thumbnails
-  services.gvfs.enable = true;
-  services.tumbler.enable = true;
-
-	fonts = {
-		fontconfig.enable = true;
-		packages = with pkgs; [
-		  jetbrains-mono
-		  nerd-fonts.jetbrains-mono
-		  font-awesome
-		  noto-fonts-emoji
-		];
-	};
-  
-  # Polkit (auth prompts)
-  security.polkit.enable = true;
+  time.timeZone = "Europe/London";
 
   # Select internationalisation properties.
-   i18n.defaultLocale = "en_GB.UTF-8";
+  i18n.defaultLocale = "en_GB.UTF-8";
 
   # Enable sound.
-   services.pipewire = {
-     enable = true;
-     pulse.enable = true;
-   };
+  services.pipewire = {
+    enable = true;
+    pulse.enable = true;
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-   users.users.me = {
-     isNormalUser = true;
-     createHome = true;
-     extraGroups = [ "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
-   };
+  users.users.me = {
+    isNormalUser = true;
+    createHome = true;
+    extraGroups = ["networkmanager" "wheel"]; # Enable ‘sudo’ for the user.
+  };
 
-   programs.hyprland.enable = true;
-   programs.zsh.enable = true;
+  programs.hyprland.enable = true;
+  programs.zsh.enable = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
   nixpkgs.config.allowUnfree = true;
 
   # Helpful Wayland env tweaks for apps
@@ -72,12 +65,10 @@
     QT_QPA_PLATFORM = "wayland";
   };
 
-	environment.variables = {
-		XCURSOR_THEME = "capitaine-cursors";
-		XCURSOR_SIZE = "24";
-
-	};
+  environment.variables = {
+    XCURSOR_THEME = "capitaine-cursors";
+    XCURSOR_SIZE = "24";
+  };
 
   system.stateVersion = "25.05";
 }
-

@@ -1,6 +1,8 @@
 # modules/services.nix
-{ config, lib, pkgs, ... }:
 {
+  pkgs,
+  ...
+}: {
   #### Display manager and session
   services.displayManager.sddm.enable = false;
 
@@ -11,13 +13,13 @@
   #### PolicyKit
   security.polkit.enable = true;
 
-	#### Syncthing
-	services.syncthing = {
-		enable = true;
-		user = "me";
-		dataDir = "/home/me"; # Default folder base
-		configDir = "/home/me/.config/syncthing";
-	};
+  #### Syncthing
+  services.syncthing = {
+    enable = true;
+    user = "me";
+    dataDir = "/home/me"; # Default folder base
+    configDir = "/home/me/.config/syncthing";
+  };
 
   #### Audio
   services.pipewire = {
