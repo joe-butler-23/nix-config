@@ -10,11 +10,22 @@
   ];
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot = {
+    enable = true;
+    configurationLimit = 5;
+    consoleMode = "max";
+  };
+
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # Boost time optimizations
+  boot.consoleLogLevel = 0;
+  boot.kernelParams = ["quiet"];
+  boot.plymouth.enable = false;
+  zramSwap.enable = true;
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
