@@ -34,6 +34,7 @@ in {
   xdg.configFile."zathura".source = OOS "${dot}/.config/zathura";
   xdg.configFile."lazygit".source = OOS "${dot}/.config/lazygit";
   xdg.configFile."wlogout".source = OOS "${dot}/.config/wlogout";
+  xdg.configFile."mako".source = OOS "${dot}/.config/mako";
 
   # Enable Zsh (uses your linked files above)
   programs.zsh.enable = true;
