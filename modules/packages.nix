@@ -16,7 +16,7 @@
       hyprpaper
       hyprland-protocols
       rofi-wayland
-      swaynotificationcenter
+      mako
       waybar
       wl-clipboard
       xdg-desktop-portal-hyprland
