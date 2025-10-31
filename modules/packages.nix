@@ -7,6 +7,7 @@
   environment.systemPackages =
     [
       pkgsUnstable.app2unit
+      # pkgsUnstable.python313Packages.keymap-drawer - marked as broken
     ]
     ++ (with pkgs; [
       ## Wayland / Hyprland
@@ -20,7 +21,7 @@
       waybar
       wl-clipboard
       xdg-desktop-portal-hyprland
-      xdg-desktop-portal-gtk
+      # xdg-desktop-portal-gtk moved to services only
       xdg-utils
       wayland-utils
       uwsm
@@ -38,6 +39,11 @@
       papirus-icon-theme
       hicolor-icon-theme
       desktop-file-utils
+      yazi
+      qmk
+      imagemagick
+      # python3.keymap-drawer - commented out due to version conflicts
+      # Can be re-enabled if needed
 
       ## Media / screenshots / streaming
       ffmpeg
@@ -56,17 +62,19 @@
       wget
       zoxide
       starship
+      zsh-autosuggestions
+      zsh-history-substring-search
+      zsh-syntax-highlighting
 
       ## Networking / internet
       brave
       iwd
       sshpass
-      tailscale
-      syncthing
+      # tailscale and syncthing moved to services only
 
       ## Security / auth / policy
-      polkit
       sbctl
+      # polkit moved to services only
 
       ## Programming / build
       go
