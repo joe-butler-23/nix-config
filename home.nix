@@ -1,15 +1,31 @@
 {
   config,
   pkgs,
-  lib,
   ...
 }: let
   OOS = config.lib.file.mkOutOfStoreSymlink;
   dot = "${config.home.homeDirectory}/.dotfiles";
 in {
+  imports = [
+    ./modules/home/packages.nix
+    ./modules/home/services.nix
+  ];
+
+  #### User identity
   home.username = "joebutler";
   home.homeDirectory = "/home/joebutler";
   home.stateVersion = "25.05";
+
+  #### Fonts and theming
+  fonts = {
+    fontconfig.enable = true;
+    packages = with pkgs; [
+      jetbrains-mono
+      nerd-fonts.jetbrains-mono
+      font-awesome
+      noto-fonts-emoji
+    ];
+  };
 
   gtk = {
     enable = true;
@@ -20,12 +36,27 @@ in {
     font.name = "Noto Sans 10";
   };
 
-  # Link top-level Zsh files from ~/.dotfiles
+  home.pointerCursor = {
+    name = "capitaine-cursors";
+    size = 24;
+    package = pkgs.capitaine-cursors;
+    gtk.enable = true;
+  };
+
+  #### Session variables
+  home.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    MOZ_ENABLE_WAYLAND = "1";
+    QT_QPA_PLATFORM = "wayland";
+  };
+
+  #### Shell configuration
   home.file.".zshenv".source = OOS "${dot}/.zshenv";
   home.file.".zprofile".source = OOS "${dot}/.zprofile";
   home.file.".zshrc".source = OOS "${dot}/.zshrc";
+  programs.zsh.enable = true;
 
-  # Link configs
+  #### Application configuration links
   xdg.configFile."hypr".source = OOS "${dot}/.config/hypr";
   xdg.configFile."waybar".source = OOS "${dot}/.config/waybar";
   xdg.configFile."foot".source = OOS "${dot}/.config/foot";
@@ -36,6 +67,6 @@ in {
   xdg.configFile."wlogout".source = OOS "${dot}/.config/wlogout";
   xdg.configFile."mako".source = OOS "${dot}/.config/mako";
 
-  # Enable Zsh (uses your linked files above)
-  programs.zsh.enable = true;
+  #### Wayland compositor
+  wayland.windowManager.hyprland.enable = true;
 }

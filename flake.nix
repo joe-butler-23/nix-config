@@ -31,6 +31,7 @@
     # Optional: allows `home-manager --flake .#joebutler switch`
     homeConfigurations."joebutler" = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.${system};
+      extraSpecialArgs = {inherit pkgsUnstable;};
       modules = [./home.nix];
     };
 
@@ -50,6 +51,7 @@
           home-manager.useGlobalPkgs = true; # share pkgs with system
           home-manager.useUserPackages = true; # install user pkgs via HM
           home-manager.backupFileExtension = "hm-bak";
+          home-manager.extraSpecialArgs = {inherit pkgsUnstable;};
 
           # Activate Home Manager for user "joebutler"
           home-manager.users.joebutler = import ./home.nix;
