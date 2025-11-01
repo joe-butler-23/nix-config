@@ -1,6 +1,0 @@
-## links
-
-https://blog.daniel-beskin.com/2025-10-18-symlinking-home-manager
-https://github.com/richardgill/nix
-
-Syncing settings for cline?

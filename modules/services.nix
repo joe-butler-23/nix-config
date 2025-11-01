@@ -41,7 +41,7 @@
     ];
   };
 
-  #### SSH server (hardened for Tailscale)
+  #### SSH server (hardened for local use)
   services.openssh = {
     enable = true;
     settings = {
@@ -55,17 +55,17 @@
     };
     extraConfig = ''
       AllowUsers joebutler
-      ListenAddress 127.0.0.1
-      ListenAddress 100.64.0.3
+      # Listening on all interfaces, Tailscale manages network access via firewall
     '';
   };
 
   #### Tailscale VPN
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    openFirewall = true; # Let tailscaled manage firewall rules
+  };
 
   #### Performance services
-  services = {
-    irqbalance.enable = true;
-    fstrim.enable = true;
-  };
+  services.irqbalance.enable = true;
+  services.fstrim.enable = true;
 }

@@ -29,27 +29,26 @@
   boot.plymouth.enable = false;
   zramSwap.enable = true;
 
-  # Performance-oriented power management
+  # Power management - let auto-cpufreq handle scaling
   powerManagement = {
     enable = true;
-    cpuFreqGovernor = "performance";
+    # cpuFreqGovernor removed to allow auto-cpufreq to manage scaling
   };
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
   networking.firewall = {
     enable = true;
-    allowedUDPPorts = [41641]; # Tailscale
-    interfaces.tailscale0.allowedTCPPorts = [22]; # SSH over Tailscale
+    # Tailscale now manages its own firewall via openFirewall = true
   };
 
   # Set your time zone.
   time.timeZone = "Europe/London";
 
-  # Wayland portals so file pickers, screenshare, xdg-open, etc. work
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
-  xdg.portal.xdgOpenUsePortal = true;
+  # Wayland portals - moved to services.nix
+  # xdg.portal.enable = true;
+  # xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
+  # xdg.portal.xdgOpenUsePortal = true;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_GB.UTF-8";
@@ -57,38 +56,41 @@
   fonts = {
     fontconfig.enable = true;
     packages = with pkgs; [
-      jetbrains-mono
-      nerd-fonts.jetbrains-mono
+      nerd-fonts.jetbrains-mono # Includes regular + Nerd Font functionality
       font-awesome
       noto-fonts-emoji
     ];
   };
 
-  # Enable sound.
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-  };
+  # Enable sound - moved to services.nix
+  # services.pipewire = { enable = true; pulse.enable = true; };
 
   # Thunar needs these services for mounts and thumbnails
   services.gvfs.enable = true;
   services.tumbler.enable = true;
 
-  # Polkit (auth prompts)
-  security.polkit.enable = true;
+  # Polkit (auth prompts) - moved to services.nix
+  # security.polkit.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.joebutler = {
     isNormalUser = true;
+    uid = 1000;
     createHome = true;
     extraGroups = ["networkmanager" "wheel"]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
   };
 
   programs.hyprland.enable = true;
+  hardware.graphics.enable = true;
   programs.zsh.enable = true;
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
   nixpkgs.config.allowUnfree = true;
 
   # Helpful Wayland env tweaks for apps
