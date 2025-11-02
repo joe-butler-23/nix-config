@@ -59,7 +59,6 @@ in {
   #### Application configuration links
   xdg.configFile."waybar".source = OOS "${dot}/.config/waybar";
   xdg.configFile."rofi".source = OOS "${dot}/.config/rofi";
-  xdg.configFile."yazi".source = OOS "${dot}/.config/yazi";
   xdg.configFile."zathura".source = OOS "${dot}/.config/zathura";
   xdg.configFile."lazygit".source = OOS "${dot}/.config/lazygit";
   xdg.configFile."wlogout".source = OOS "${dot}/.config/wlogout";
