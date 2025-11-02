@@ -8,7 +8,7 @@
     ./rofi.nix
     ./starship.nix
     ./waybar.nix
-    ./wlogout.nix
+    ./wlogout/wlogout.nix
     ./yazi.nix
     ./zathura.nix
     ./zsh.nix
