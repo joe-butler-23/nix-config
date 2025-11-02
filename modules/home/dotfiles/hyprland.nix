@@ -26,8 +26,6 @@
         gaps_in = 0;
         gaps_out = 0;
         border_size = 1;
-        col.active_border = "rgba(A7A7A780)";
-        col.inactive_border = "rgba(A7A7A780)";
         resize_on_border = false;
         allow_tearing = false;
         layout = "dwindle";
@@ -111,6 +109,18 @@
         name = "epic-mouse-v1";
         sensitivity = -0.5;
       };
+
+      exec-once = [
+        "app2unit waybar"
+        "app2unit hypridle"
+        "app2unit hyprpaper"
+        "hyprctl dispatch dpms on"
+        "app2unit nm-applet"
+        "app2unit blueman-applet"
+        "sleep 2 && app2unit kanshi &"
+        "foot --server"
+        "clipse -listen"
+      ];
     };
 
     extraConfig = ''
