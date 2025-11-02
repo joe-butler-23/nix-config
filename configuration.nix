@@ -15,6 +15,7 @@
     configurationLimit = 5;
     consoleMode = "max";
   };
+  
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 2;
   boot.tmp.useTmpfs = true;
@@ -27,7 +28,6 @@
   #### Power management
   powerManagement = {
     enable = true;
-    # cpuFreqGovernor removed to allow auto-cpufreq to manage scaling
   };
 
   #### Networking
@@ -35,20 +35,11 @@
   networking.networkmanager.enable = true;
   networking.firewall = {
     enable = true;
-    # Tailscale now manages its own firewall via openFirewall = true
   };
 
   #### Locale and time
   time.timeZone = "Europe/London";
   i18n.defaultLocale = "en_GB.UTF-8";
-
-  #### User account
-  users.users.joebutler = {
-    isNormalUser = true;
-    createHome = true;
-    extraGroups = ["networkmanager" "wheel"]; # Enable 'sudo' for the user.
-    shell = pkgs.zsh;
-  };
 
   #### Nix settings
   nix.settings.experimental-features = ["nix-command" "flakes"];

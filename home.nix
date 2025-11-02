@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  pkgsUnstable,
   ...
 }: let
   OOS = config.lib.file.mkOutOfStoreSymlink;
@@ -9,6 +10,7 @@ in {
   imports = [
     ./modules/home/packages.nix
     ./modules/home/services.nix
+    ./modules/home/dotfiles
   ];
 
   #### User identity
@@ -18,13 +20,15 @@ in {
 
   #### Fonts and theming
   fonts = {
-    fontconfig.enable = true;
-    packages = with pkgs; [
-      jetbrains-mono
-      nerd-fonts.jetbrains-mono
-      font-awesome
-      noto-fonts-emoji
-    ];
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        monospace = ["JetBrains Mono"];
+        sansSerif = ["Noto Sans"];
+        serif = ["Noto Serif"];
+        emoji = ["Noto Color Emoji"];
+      };
+    };
   };
 
   gtk = {
@@ -33,7 +37,10 @@ in {
       name = "Papirus";
       package = pkgs.papirus-icon-theme;
     };
-    font.name = "Noto Sans 10";
+    font = {
+      name = "Noto Sans";
+      size = 10;
+    };
   };
 
   home.pointerCursor = {
@@ -54,7 +61,6 @@ in {
   home.file.".zshenv".source = OOS "${dot}/.zshenv";
   home.file.".zprofile".source = OOS "${dot}/.zprofile";
   home.file.".zshrc".source = OOS "${dot}/.zshrc";
-  programs.zsh.enable = true;
 
   #### Application configuration links
   xdg.configFile."hypr".source = OOS "${dot}/.config/hypr";
@@ -66,7 +72,4 @@ in {
   xdg.configFile."lazygit".source = OOS "${dot}/.config/lazygit";
   xdg.configFile."wlogout".source = OOS "${dot}/.config/wlogout";
   xdg.configFile."mako".source = OOS "${dot}/.config/mako";
-
-  #### Wayland compositor
-  wayland.windowManager.hyprland.enable = true;
 }

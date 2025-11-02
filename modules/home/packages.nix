@@ -26,10 +26,11 @@
       uwsm
       wlogout
 
-      ## Core desktop utils
+      ## Core desktop
       foot
       capitaine-cursors
       bluetui
+      blueman
       localsend
       viewnior
       xfce.mousepad
@@ -38,9 +39,13 @@
       papirus-icon-theme
       hicolor-icon-theme
       desktop-file-utils
+      nerd-fonts.jetbrains-mono
+      font-awesome
+      noto-fonts-emoji
       yazi
       qmk
       imagemagick
+      brightnessctl
 
       ## Media / screenshots / streaming
       ffmpeg

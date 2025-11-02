@@ -1,8 +1,8 @@
 # modules/sys/services.nix
 {pkgs, ...}: {
+
   #### Display manager and session
   services.displayManager.sddm.enable = false;
-
   services.displayManager.ly = {
     enable = true;
   };
@@ -37,7 +37,7 @@
     ];
   };
 
-  #### SSH server (hardened for Tailscale compatibility)
+  #### SSH server
   services.openssh = {
     enable = true;
     settings = {
@@ -51,17 +51,32 @@
     };
     extraConfig = ''
       AllowUsers joebutler
-      # Listening on all interfaces, Tailscale manages network access via firewall
     '';
   };
 
   #### Tailscale VPN
   services.tailscale = {
     enable = true;
-    openFirewall = true; # Let tailscaled manage firewall rules
+    openFirewall = true;
   };
 
   #### Performance services
   services.irqbalance.enable = true;
   services.fstrim.enable = true;
+
+  #### Hyprland configuration
+  programs.hyprland.enable = true;
+  hardware.graphics.enable = true;
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
+  #### User account
+  users.users.joebutler = {
+    isNormalUser = true;
+    createHome = true;
+    extraGroups = ["networkmanager" "wheel"];
+    shell = pkgs.zsh;
+  };
+
+  #### Shell configuration
+  programs.zsh.enable = true;
 }
