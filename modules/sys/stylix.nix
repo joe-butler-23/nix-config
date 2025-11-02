@@ -6,7 +6,7 @@
     enable = true;
 
     # Wallpaper - generates color scheme automatically
-    image = /home/joebutler/Pictures/gradient.jpeg;
+    image = ./../../wallpaper.jpeg;
 
     # Image polarity - affects color generation
     polarity = "dark";
