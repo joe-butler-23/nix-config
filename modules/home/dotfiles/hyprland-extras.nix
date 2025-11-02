@@ -1,4 +1,4 @@
-{config, ...}: {
+_: {
   # Hypridle - idle management daemon
   services.hypridle = {
     enable = true;
@@ -119,8 +119,4 @@
       wallpaper = ",$HOME/Pictures/gradient.jpeg";
     };
   };
-
-  # Keep toggle scripts as symlinks (utility scripts)
-  xdg.configFile."hypr/toggle_eDP1.sh".source = config.lib.file.mkOutOfStoreSymlink "$HOME/.dotfiles/.config/hypr/toggle_eDP1.sh";
-  xdg.configFile."hypr/auto_toggle_eDP1.sh".source = config.lib.file.mkOutOfStoreSymlink "$HOME/.dotfiles/.config/hypr/auto_toggle_eDP1.sh";
 }
