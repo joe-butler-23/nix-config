@@ -20,7 +20,8 @@ _: {
       word-wrap=true
 
       [org/xfce/mousepad/preferences/editor]
-      font-name="JetBrains Mono 11"
+      # Font - commented out to allow Stylix font management
+      # font-name="JetBrains Mono 11"
       auto-indent=true
       smart-home-end=true
       smart-backspace=true

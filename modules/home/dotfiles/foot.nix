@@ -4,7 +4,8 @@ _: {
 
     settings = {
       main = {
-        font = "JetBrainsMono Nerd Font:size=10";
+        # Font - commented out to allow Stylix font management
+        # font = "JetBrainsMono Nerd Font:size=10";
       };
 
       scrollback = {
