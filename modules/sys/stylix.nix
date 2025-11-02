@@ -5,8 +5,8 @@
   stylix = {
     enable = true;
 
-    # Tokyo Night color scheme
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
+    # Nord Light color scheme
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/nord-light.yaml";
 
     # Wallpaper (relative path for flake purity)
     image = ./../../wallpaper.jpeg;

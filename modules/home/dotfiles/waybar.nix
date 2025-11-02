@@ -164,10 +164,14 @@ _: {
       };
     };
 
-    # Minimal style override to preserve font size
+    # Minimal style override to preserve font size and add opacity
     style = ''
       * {
         font-size: 12px;
+      }
+      
+      window#waybar {
+        opacity: 0.8;
       }
     '';
 
