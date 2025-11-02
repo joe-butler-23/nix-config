@@ -169,7 +169,7 @@ _: {
       * {
         font-size: 12px;
       }
-      
+
       window#waybar {
         background-color: rgba(0, 0, 0, 0.9);
         color: #ffffff;

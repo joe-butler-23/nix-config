@@ -1,48 +1,10 @@
 building the system configuration...
 warning: Git tree '/home/joebutler/nix-config' is dirty
-these 12 derivations will be built:
-  /nix/store/k62w3rcklwi7jbk0rai0kjz532wd8qmb-home-manager-path.drv
-  /nix/store/1lifi7rh68b8s5ccfyhm80clqjpg5nkb-user-environment.drv
-  /nix/store/6m5i6fr8b4hbbic32kbgn82py5i0k4aq-hm_fontconfigconf.d10hmfonts.conf.drv
-  /nix/store/7cqmhvx7svpnsn5bjmhzcpmx5hxp60s9-hm_.zshenv.drv
-  /nix/store/9w2b0nk1cdxzqgxc8r61xqq317lbf2x0-hm_.zshrc.drv
-  /nix/store/b6wfdy6hr5pyif25s1wx9rg0z33l88m6-starship-config.drv
-  /nix/store/dk0lyr9f4q01h6ya1dkp56g00q4xl3hy-home-manager-files.drv
-  /nix/store/nnyp8j8xjw0jl139ijhyqjq39qfzw2py-home-manager-generation.drv
-  /nix/store/3d0qwgw00vw58pdsnr2zj3nwvpk9kzl4-unit-home-manager-joebutler.service.drv
-  /nix/store/ddj83fmbp415mlj7y5zd6c4vrl2xrn74-system-units.drv
-  /nix/store/r1w1h78ds5kd03fvjbw9mf2x50zki1qn-etc.drv
-  /nix/store/06f8xqkqiqxhb6f7nv87r2v3z3sakqwx-nixos-system-nixos-25.05.20251027.daf6dc4.drv
-building the system configuration...
-warning: Git tree '/home/joebutler/nix-config' is dirty
-error:
-       … while calling the 'head' builtin
-         at /nix/store/l6dvcwx15645vi6dj9i8b3h7w4dzai0p-source/lib/attrsets.nix:1571:13:
-         1570|           if length values == 1 || pred here (elemAt values 1) (head values) then
-         1571|             head values
-             |             ^
-         1572|           else
-
-       … while evaluating the attribute 'value'
-         at /nix/store/l6dvcwx15645vi6dj9i8b3h7w4dzai0p-source/lib/modules.nix:1083:7:
-         1082|     // {
-         1083|       value = addErrorContext "while evaluating the option `${showOption loc}':" value;
-             |       ^
-         1084|       inherit (res.defsFinal') highestPrio;
-
-       … while evaluating the option `system.build.toplevel':
-
-       … while evaluating definitions from `/nix/store/l6dvcwx15645vi6dj9i8b3h7w4dzai0p-source/nixos/modules/system/activation/top-level.nix':
-
-       … while evaluating the option `assertions':
-
-       … while evaluating definitions from `/nix/store/a4la088hi5id7sw77gy9zdvwn83dgczz-source/nixos/common.nix':
-
-       (stack trace truncated; use '--show-trace' to show the full, detailed trace)
-
-       error: undefined variable 'CHOOSER'
-       at /nix/store/j3w7sszhgj4j41g497lfxc3x0lcaxnsm-source/modules/home/dotfiles/yazi.nix:20:51:
-           19|           {
-           20|             run = ''[ -f "$1" ] && echo "$1" > "${CHOOSER}"'';
-             |                                                   ^
-           21|             desc = "Pick file and quit";
+these 7 derivations will be built:
+  /nix/store/cmba87yp8q6gjz6z026d11zmc52awh5y-foot.ini.drv
+  /nix/store/yf5dh18yd4ygxa5p1xi0r47s0qyfsvsn-home-manager-files.drv
+  /nix/store/g1yfcj5ds54xvn5nz97gs104dbg5v8jj-home-manager-generation.drv
+  /nix/store/vnbljp5mfdv07vnfmiz6cm4g81xv6nri-unit-home-manager-joebutler.service.drv
+  /nix/store/xcr99hs6rp0s0nz5k85xdii1ncb1v9rl-system-units.drv
+  /nix/store/k9ixgkg0cjy5fbnm0nrafvsar2wagphr-etc.drv
+  /nix/store/ffhlcnks9bm6f3r91v2cs9fczlp7d1yh-nixos-system-nixos-25.05.20251027.daf6dc4.drv

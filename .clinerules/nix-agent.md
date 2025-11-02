@@ -105,8 +105,8 @@ For system modifications:
 
 Follow this ordered process for making NixOS configuration changes:
 
-1. **Format Code**: Use `make format` or `nix fmt` to ensure consistent formatting with alejandra, statix linting, and deadnix dead code detection
-2. **Commit to github**: Commit changes to github with a meaningful commit message before applying to maintain rollback capabilit
+1. **Format Code**: Use `nix fmt` to ensure consistent formatting with alejandra, statix linting, and deadnix dead code detection
+2. **Commit to github**: Commit changes to github with a meaningful commit message before applying to maintain rollback capability
 3. **Dry Build**: Test configurations with `sudo nixos-rebuild dry-build --flake .` to validate syntax and dependencies without applying changes
 4. **Build VM (Optional)**: Test major changes with `sudo nixos-rebuild build-vm --flake .` to verify in an isolated environment
 5. **Switch/Apply**: Apply changes with `sudo nixos-rebuild switch --flake .` or `home-manager switch --flake .#me` for user configurations
