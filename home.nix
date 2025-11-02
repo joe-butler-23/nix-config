@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ./modules/home/packages.nix
     ./modules/home/services.nix
@@ -20,6 +17,13 @@
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
+  };
+
+  # Disable Stylix theming for apps with manual themes
+  stylix.targets = {
+    foot.enable = false;    # Manual Nord theme in foot.nix
+    mako.enable = false;    # Manual theme in mako.nix
+    hyprlock.enable = false; # Manual theme in hyprland-extras.nix
   };
 
   #### Session variables
