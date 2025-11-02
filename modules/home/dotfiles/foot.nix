@@ -13,12 +13,11 @@ _: {
       };
 
       cursor = {
-        style = "block";
+        style = "beam";
       };
 
       # Nord dark theme - overrides Stylix theming
       colors = {
-        cursor = "2e3440 d8dee9";
         foreground = "d8dee9";
         background = "2e3440";
 
