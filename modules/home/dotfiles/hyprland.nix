@@ -112,7 +112,7 @@
       exec-once = [
         "app2unit waybar"
         "app2unit hypridle"
-        "app2unit hyprpaper" # Stylix generates config, hyprpaper displays wallpaper
+        # hyprpaper launched via systemd service (hyprland-extras.nix)
         "hyprctl dispatch dpms on"
         "app2unit nm-applet"
         "app2unit blueman-applet"
