@@ -7,7 +7,7 @@
 set -e  # Exit on any error
 
 # Configuration
-KEYBOARD_DIR="$HOME/nix-config/sys/keyboard/"
+KEYBOARD_DIR="$HOME/nix-config/hardware/keyboard/"
 CORNE_DIR="$KEYBOARD_DIR/corne"
 KEYMAP_FILE="keymap.c"
 BACKUP_DIR="$DOTFILES_DIR/backups"
