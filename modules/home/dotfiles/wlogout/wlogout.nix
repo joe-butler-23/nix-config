@@ -42,17 +42,6 @@ _: {
     ];
 
     style = ''
-      /*
-              _                         _
-      __      _| | ___   __ _  ___  _   _| |_
-      \ \ /\ / / |/ _ \ / _` |/ _ \| | | | __|
-       \ V  V /| | (_) | (_| | (_) | |_| | |_
-        \_/\_/ |_|\___/ \__, |\___/ \__,_|\__|
-                        |___/
-
-      by Stephan Raabe (2024)
-      -----------------------------------------------------
-      */
 
       * {
         font-family: "JetBrains Mono", monospace;
@@ -94,38 +83,44 @@ _: {
       #lock {
         margin: 10px;
         border-radius: 10px;
-        background-image: image(url("/home/joebutler/nix-config/modules/home/dotfiles/wlogout/icons/lock.png"));
+        background-image: image(url("icons/lock.png"));
       }
 
       #logout {
         margin: 10px;
         border-radius: 10px;
-        background-image: image(url("/home/joebutler/nix-config/modules/home/dotfiles/wlogout/icons/logout.png"));
+        background-image: image(url("icons/logout.png"));
       }
 
       #shutdown {
         margin: 10px;
         border-radius: 10px;
-        background-image: image(url("/home/joebutler/nix-config/modules/home/dotfiles/wlogout/icons/shutdown.png"));
+        background-image: image(url("icons/shutdown.png"));
       }
 
       #reboot {
         margin: 10px;
         border-radius: 10px;
-        background-image: image(url("/home/joebutler/nix-config/modules/home/dotfiles/wlogout/icons/reboot.png"));
+        background-image: image(url("icons/reboot.png"));
       }
 
       #suspend {
         margin: 10px;
         border-radius: 10px;
-        background-image: image(url("/home/joebutler/nix-config/modules/home/dotfiles/wlogout/icons/suspend.png"));
+        background-image: image(url("icons/suspend.png"));
       }
 
       #hibernate {
         margin: 10px;
         border-radius: 10px;
-        background-image: image(url("/home/joebutler/nix-config/modules/home/dotfiles/wlogout/icons/hibernate.png"));
+        background-image: image(url("icons/hibernate.png"));
       }
     '';
+  };
+
+  # Copy icons to runtime location
+  home.file.".config/wlogout/icons" = {
+    source = ./icons;
+    recursive = true;
   };
 }
