@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  pkgsUnstable,
   ...
 }: let
   OOS = config.lib.file.mkOutOfStoreSymlink;

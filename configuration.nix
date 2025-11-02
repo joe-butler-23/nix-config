@@ -15,7 +15,7 @@
     configurationLimit = 5;
     consoleMode = "max";
   };
-  
+
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 2;
   boot.tmp.useTmpfs = true;

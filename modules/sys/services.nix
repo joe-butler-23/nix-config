@@ -1,6 +1,5 @@
 # modules/sys/services.nix
 {pkgs, ...}: {
-
   #### Display manager and session
   services.displayManager.sddm.enable = false;
   services.displayManager.ly = {
