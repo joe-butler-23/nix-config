@@ -1,44 +1,12 @@
-_: {
+{ config, ... }:
+
+{
   programs.foot = {
     enable = true;
 
     settings = {
       main = {
         font = "JetBrainsMono Nerd Font:size=10";
-      };
-
-      colors = {
-        alpha = "1.0";
-        background = "121212";
-        foreground = "d5d5d5";
-        flash = "7f7f00";
-        flash-alpha = "0.5";
-
-        # Regular colors
-        regular0 = "121212";
-        regular1 = "B14242";
-        regular2 = "D87C4A";
-        regular3 = "E49A44";
-        regular4 = "4A8B8B";
-        regular5 = "a7a7a7";
-        regular6 = "b4b4b4";
-        regular7 = "d5d5d5";
-
-        # Bright colors
-        bright0 = "949494";
-        bright1 = "B14242";
-        bright2 = "D87C4A";
-        bright3 = "E49A44";
-        bright4 = "4A8B8B";
-        bright5 = "a7a7a7";
-        bright6 = "b4b4b4";
-        bright7 = "d5d5d5";
-
-        # Special colors
-        search-box-no-match = "121212 f5f5f5";
-        search-box-match = "121212 D87C4A";
-        jump-labels = "121212 D87C4A";
-        urls = "4A8B8B";
       };
 
       scrollback = {
