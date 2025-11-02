@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   stylix = {
     enable = true;
 
@@ -48,6 +45,12 @@
     # Terminal opacity
     opacity = {
       terminal = 0.95;
+    };
+
+    # Disable Stylix theming for apps with manual themes
+    targets = {
+      foot.enable = false;  # Manual Nord theme in foot.nix
+      mako.enable = false;  # Manual theme in mako.nix
     };
   };
 }
