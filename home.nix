@@ -70,4 +70,11 @@ in {
   xdg.configFile."lazygit".source = OOS "${dot}/.config/lazygit";
   xdg.configFile."wlogout".source = OOS "${dot}/.config/wlogout";
   xdg.configFile."mako".source = OOS "${dot}/.config/mako";
+
+  #### Hypr additional config files (hyprland.conf is managed by the hyprland module)
+  xdg.configFile."hypr/hypridle.conf".source = OOS "${dot}/.config/hypr/hypridle.conf";
+  xdg.configFile."hypr/hyprlock.conf".source = OOS "${dot}/.config/hypr/hyprlock.conf";
+  xdg.configFile."hypr/hyprpaper.conf".source = OOS "${dot}/.config/hypr/hyprpaper.conf";
+  xdg.configFile."hypr/toggle_eDP1.sh".source = OOS "${dot}/.config/hypr/toggle_eDP1.sh";
+  xdg.configFile."hypr/auto_toggle_eDP1.sh".source = OOS "${dot}/.config/hypr/auto_toggle_eDP1.sh";
 }
