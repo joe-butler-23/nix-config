@@ -5,8 +5,10 @@
     ./hyprland.nix
     ./hyprland-extras.nix
     ./mako.nix
+    ./mousepad.nix
     ./rofi.nix
     ./starship.nix
+    ./thunar.nix
     ./waybar.nix
     ./wlogout/wlogout.nix
     ./yazi.nix
