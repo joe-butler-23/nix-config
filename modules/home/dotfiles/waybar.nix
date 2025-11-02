@@ -48,8 +48,8 @@ _: {
         };
 
         clock = {
-          format = "{:%H:%M}  ";
-          format-alt = "{:%A, %B %d, %Y (%R)}  ";
+          format = "{:%H:%M} 🕐 ";
+          format-alt = "{:%A, %B %d, %Y (%R)} 📅 ";
           tooltip-format = "<tt><small>{calendar}</small></tt>";
           calendar = {
             mode = "month";
@@ -164,13 +164,15 @@ _: {
       };
     };
 
-    # Minimal style override to preserve font size and add opacity
+    # Minimal style override to preserve font size, add dark background and opacity
     style = ''
       * {
         font-size: 12px;
       }
       
       window#waybar {
+        background-color: rgba(0, 0, 0, 0.9);
+        color: #ffffff;
         opacity: 0.8;
       }
     '';
