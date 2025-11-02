@@ -22,10 +22,6 @@ _: {
       then builtins.fromJSON (builtins.getEnv "SYNCTHING_FOLDERS")
       else {};
 
-    # Override device ID if provided
-    overrideDevices = builtins.getEnv "SYNCTHING_DEVICE_ID" != "";
-    overrideFolders = builtins.getEnv "SYNCTHING_FOLDERS" != "";
-
     # Basic settings
     extraOptions = {
       gui = {
