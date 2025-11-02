@@ -1,0 +1,18 @@
+# Build artifacts and logs
+dry_build.log
+docs.txt
+
+# Nix build results
+result
+result-*
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
