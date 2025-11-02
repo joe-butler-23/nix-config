@@ -1,10 +1,4 @@
 {
-  config,
-  pkgs,
-  ...
-}: let
-  dot = "${config.home.homeDirectory}/.dotfiles";
-in {
   programs.rofi = {
     enable = true;
     package = pkgs.rofi-wayland;
@@ -74,12 +68,4 @@ in {
       click-to-exit = true;
     };
   };
-
-  # Keep complex subdirectories as symlinks
-  xdg.configFile."rofi/applets".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/rofi/applets";
-  xdg.configFile."rofi/colors".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/rofi/colors";
-  xdg.configFile."rofi/images".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/rofi/images";
-  xdg.configFile."rofi/launchers".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/rofi/launchers";
-  xdg.configFile."rofi/powermenu".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/rofi/powermenu";
-  xdg.configFile."rofi/scripts".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/rofi/scripts";
 }
