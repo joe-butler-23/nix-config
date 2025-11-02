@@ -38,9 +38,9 @@ in {
           warp-on-scroll = false;
           format = "{name}: {icon}";
           format-icons = {
-            urgent = "";
-            active = "";
-            default = "";
+            urgent = "";
+            active = "";
+            default = "";
           };
         };
 
@@ -85,12 +85,12 @@ in {
         temperature = {
           critical-threshold = 80;
           format = "{temperatureC}°C {icon}";
-          format-icons = ["" "" ""];
+          format-icons = ["" "" ""];
         };
 
         backlight = {
           format = "{percent}% {icon}";
-          format-icons = ["" "" "" "" "" "" "" "" ""];
+          format-icons = ["" "" "" "" "" "" "" "" ""];
         };
 
         battery = {
@@ -100,10 +100,10 @@ in {
           };
           format = "{capacity}% {icon}";
           format-full = "{capacity}% {icon}";
-          format-charging = "{capacity}% ";
-          format-plugged = "{capacity}% ";
+          format-charging = "{capacity}% ";
+          format-plugged = "{capacity}% ";
           format-alt = "{time} {icon}";
-          format-icons = ["" "" "" "" ""];
+          format-icons = ["" "" "" "" ""];
         };
 
         power-profiles-daemon = {
@@ -111,10 +111,10 @@ in {
           tooltip-format = "Power profile: {profile}\nDriver: {driver}";
           tooltip = true;
           format-icons = {
-            default = "";
-            performance = "";
-            balanced = "";
-            power-saver = "";
+            default = "";
+            performance = "";
+            balanced = "";
+            power-saver = "";
           };
         };
 
@@ -129,19 +129,19 @@ in {
 
         pulseaudio = {
           format = "{volume}% {icon} {format_source}";
-          format-bluetooth = "{volume}% {icon} {format_source}";
-          format-bluetooth-muted = " {icon} {format_source}";
-          format-muted = " {format_source}";
-          format-source = "{volume}% ";
-          format-source-muted = "";
+          format-bluetooth = "{volume}% {icon} {format_source}";
+          format-bluetooth-muted = " {icon} {format_source}";
+          format-muted = " {format_source}";
+          format-source = "{volume}% ";
+          format-source-muted = "";
           format-icons = {
-            headphone = "";
-            hands-free = "";
-            headset = "";
-            phone = "";
-            portable = "";
-            car = "";
-            default = ["" "" ""];
+            headphone = "";
+            hands-free = "";
+            headset = "";
+            phone = "";
+            portable = "";
+            car = "";
+            default = ["" "" ""];
           };
           on-click = "pavucontrol";
         };
