@@ -112,7 +112,7 @@
       exec-once = [
         "app2unit waybar"
         "app2unit hypridle"
-        # hyprpaper launched via systemd service (hyprland-extras.nix)
+        "app2unit hyprpaper"  # Wallpaper daemon - launched after Wayland session starts
         "hyprctl dispatch dpms on"
         "app2unit nm-applet"
         "app2unit blueman-applet"

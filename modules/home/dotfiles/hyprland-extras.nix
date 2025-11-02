@@ -117,10 +117,5 @@ _: {
     };
   };
 
-  # Hyprpaper - wallpaper daemon
-  # Stylix generates the configuration, hyprpaper displays it
-  services.hyprpaper = {
-    enable = true;
-    # Settings managed by Stylix
-  };
+
 }
