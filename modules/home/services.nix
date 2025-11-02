@@ -5,18 +5,8 @@ _: {
     enable = true;
     tray.enable = true;
 
-    # Basic settings - configure devices/folders via web UI at http://localhost:8384
-    extraOptions = {
-      gui = {
-        theme = "dark";
-        insecureAdminAccess = false;
-      };
-      options = {
-        globalAnnounceEnabled = false;
-        localAnnounceEnabled = true;
-        relaysEnabled = false;
-        natEnabled = true;
-      };
-    };
+    # Configure via web UI at http://localhost:8384
+    # - Add devices and folders through the web interface
+    # - Settings are persisted in ~/.config/syncthing/
   };
 }
