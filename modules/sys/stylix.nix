@@ -8,8 +8,8 @@
     # Tokyo Night color scheme
     base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
 
-    # Wallpaper - full path
-    image = /home/joebutler/Pictures/gradient.jpeg;
+    # Wallpaper (relative path for flake purity)
+    image = ./../../wallpaper.jpeg;
 
     # Font configuration
     fonts = {
