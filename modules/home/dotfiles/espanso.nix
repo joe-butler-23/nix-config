@@ -1,5 +1,8 @@
-{config, ...}: let
-  yaml = config.lib.formats.yaml {};
+{
+  pkgs,
+  ...
+}: let
+  yaml = pkgs.formats.yaml {};
 in {
   # Espanso config files - package installed system-wide
   xdg.configFile = {
