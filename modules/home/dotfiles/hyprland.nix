@@ -112,7 +112,8 @@
       exec-once = [
         "app2unit waybar"
         "app2unit hypridle"
-        "app2unit hyprpaper"
+        # Hyprpaper commented out - Stylix manages wallpapers
+        # "app2unit hyprpaper"
         "hyprctl dispatch dpms on"
         "app2unit nm-applet"
         "app2unit blueman-applet"

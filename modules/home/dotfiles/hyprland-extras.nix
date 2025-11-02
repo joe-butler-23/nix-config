@@ -118,11 +118,12 @@ _: {
   };
 
   # Hyprpaper - wallpaper daemon
-  services.hyprpaper = {
-    enable = true;
-    settings = {
-      preload = "$HOME/Pictures/gradient.jpeg";
-      wallpaper = ",$HOME/Pictures/gradient.jpeg";
-    };
-  };
+  # Commented out to allow Stylix wallpaper management
+  # services.hyprpaper = {
+  #   enable = true;
+  #   settings = {
+  #     preload = "$HOME/Pictures/gradient.jpeg";
+  #     wallpaper = ",$HOME/Pictures/gradient.jpeg";
+  #   };
+  # };
 }
