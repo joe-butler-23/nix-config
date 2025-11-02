@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
   imports = [
@@ -24,7 +25,6 @@
   boot.consoleLogLevel = 0;
   boot.kernelParams = ["quiet"];
   boot.plymouth.enable = true;
-  boot.plymouth.theme = "ifruit-custom";
   zramSwap.enable = true;
 
   #### Locale and time

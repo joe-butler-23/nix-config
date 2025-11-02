@@ -89,21 +89,4 @@
   networking.firewall = {
     enable = true;
   };
-
-  # Add custom Plymouth theme
-  environment.systemPackages = [
-    pkgs.plymouth
-  ];
-
-  # Create symlink for custom Plymouth theme
-  systemd.services."plymouth-hold".wantedBy = ["multi-user.target"];
-
-  # Copy Plymouth theme to system location
-  system.activationScripts.setupPlymouthTheme.text = ''
-    #!/bin/sh
-    mkdir -p /usr/share/plymouth/themes/ifruit-custom
-    cp -r ${../plymouth/ifruit-custom}/* /usr/share/plymouth/themes/ifruit-custom/
-    chmod 644 /usr/share/plymouth/themes/ifruit-custom/*
-    plymouth-set-default-theme ifruit-custom
-  '';
 }
