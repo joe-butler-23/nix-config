@@ -45,8 +45,8 @@
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       inherit system;
 
-      # Make pkgsUnstable available to your modules (you already use this)
-      specialArgs = {inherit pkgsUnstable;};
+      # Make pkgsUnstable and inputs available to your modules
+      specialArgs = {inherit pkgsUnstable inputs;};
 
       modules = [
         ./configuration.nix
@@ -58,7 +58,7 @@
           home-manager.useGlobalPkgs = true; # share pkgs with system
           home-manager.useUserPackages = true; # install user pkgs via HM
           home-manager.backupFileExtension = "hm-bak";
-          home-manager.extraSpecialArgs = {inherit pkgsUnstable;};
+          home-manager.extraSpecialArgs = {inherit pkgsUnstable inputs;};
 
           # Activate Home Manager for user "joebutler"
           home-manager.users.joebutler = import ./home.nix;

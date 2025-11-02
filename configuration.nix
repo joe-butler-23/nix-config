@@ -7,7 +7,7 @@
     ./hardware-configuration.nix
     ./modules/sys/packages.nix
     ./modules/sys/services.nix
-    # ./modules/sys/stylix.nix  # Moved to home.nix due to Stylix breaking change
+    ./modules/sys/stylix.nix
   ];
 
   #### Boot configuration
