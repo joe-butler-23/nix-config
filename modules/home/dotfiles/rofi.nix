@@ -3,7 +3,8 @@
     enable = true;
     package = pkgs.rofi-wayland;
 
-    font = "Mono 12";
+    # Font - commented out to allow Stylix font management
+    # font = "Mono 12";
     terminal = "rofi-sensible-terminal";
 
     extraConfig = {
