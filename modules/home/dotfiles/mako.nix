@@ -4,9 +4,11 @@ _: {
 
     settings = {
       font = "JetBrainsMono Nerd Font 11";
-      background-color = "#1e1e2e";
-      text-color = "#cdd6f4";
-      border-color = "#585b70";
+      # Theme colors - commented out to allow Stylix theming
+      # background-color = "#1e1e2e";
+      # text-color = "#cdd6f4";
+      # border-color = "#585b70";
+      # progress-color = "#89b4fa";
       border-size = 2;
       border-radius = 8;
       width = 350;
@@ -15,7 +17,6 @@ _: {
       default-timeout = 5000;
       margin = "10,10,0,0";
       padding = "8,10";
-      progress-color = "#89b4fa";
       layer = "overlay";
       anchor = "top-right";
     };
