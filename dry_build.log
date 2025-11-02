@@ -1,10 +1,10 @@
 building the system configuration...
 warning: Git tree '/home/joebutler/nix-config' is dirty
 these 7 derivations will be built:
-  /nix/store/cmba87yp8q6gjz6z026d11zmc52awh5y-foot.ini.drv
-  /nix/store/yf5dh18yd4ygxa5p1xi0r47s0qyfsvsn-home-manager-files.drv
-  /nix/store/g1yfcj5ds54xvn5nz97gs104dbg5v8jj-home-manager-generation.drv
-  /nix/store/vnbljp5mfdv07vnfmiz6cm4g81xv6nri-unit-home-manager-joebutler.service.drv
-  /nix/store/xcr99hs6rp0s0nz5k85xdii1ncb1v9rl-system-units.drv
-  /nix/store/k9ixgkg0cjy5fbnm0nrafvsar2wagphr-etc.drv
-  /nix/store/ffhlcnks9bm6f3r91v2cs9fczlp7d1yh-nixos-system-nixos-25.05.20251027.daf6dc4.drv
+  /nix/store/4wz4dy3j76wqdgg5hhf5mv1sa3f9436c-yazi-theme.drv
+  /nix/store/j7qp0177drwqjfyp8zviwc0m61mz4w8d-home-manager-files.drv
+  /nix/store/ld2dz62k8p8igk0i8vv3q4vmimwa29ac-home-manager-generation.drv
+  /nix/store/mlb205m3mjxq8y2rwamjznv5ra04y4qp-unit-home-manager-joebutler.service.drv
+  /nix/store/vm9bvcw88mjiai1xs54wl7nkf4dircz9-system-units.drv
+  /nix/store/iy4b0l8gfkrvh7aaws6481f6dq506pbf-etc.drv
+  /nix/store/wlm6c3w7vgn4s6ci8f6a5ii6j8w1lbqi-nixos-system-nixos-25.05.20251027.daf6dc4.drv
