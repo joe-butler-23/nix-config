@@ -3,8 +3,8 @@ _: {
     enable = true;
 
     settings = {
-      font = "JetBrainsMono Nerd Font 11";
-      # Theme colors - commented out to allow Stylix theming
+      # Theme settings - commented out to allow Stylix theming
+      # font = "JetBrainsMono Nerd Font 11";
       # background-color = "#1e1e2e";
       # text-color = "#cdd6f4";
       # border-color = "#585b70";
