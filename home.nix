@@ -2,10 +2,7 @@
   config,
   pkgs,
   ...
-}: let
-  OOS = config.lib.file.mkOutOfStoreSymlink;
-  dot = "${config.home.homeDirectory}/.dotfiles";
-in {
+}: {
   imports = [
     ./modules/home/packages.nix
     ./modules/home/services.nix
@@ -57,7 +54,4 @@ in {
   };
 
   #### Application configuration links
-  xdg.configFile."lazygit".source = OOS "${dot}/.config/lazygit";
-  xdg.configFile."wlogout".source = OOS "${dot}/.config/wlogout";
-  xdg.configFile."mako".source = OOS "${dot}/.config/mako";
 }
