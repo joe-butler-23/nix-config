@@ -3,8 +3,6 @@
     enable = true;
     package = pkgs.rofi-wayland;
 
-    theme = "Paper";
-
     font = "Mono 12";
     terminal = "rofi-sensible-terminal";
 
