@@ -52,13 +52,15 @@ _: {
 
       background = {
         monitor = "";
-        path = "$HOME/Pictures/gradient.jpeg";
+        # Wallpaper path - commented out to allow Stylix wallpaper management
+        # path = "$HOME/Pictures/gradient.jpeg";
         blur_passes = 1;
       };
 
       image = {
         monitor = "";
-        path = "$HOME/Pictures/gradient.jpeg";
+        # Image path - commented out to allow Stylix wallpaper management
+        # path = "$HOME/Pictures/gradient.jpeg";
         size = 75;
         border_size = 2;
         # Theme colors - commented out to allow Stylix theming
