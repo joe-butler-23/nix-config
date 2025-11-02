@@ -1,6 +1,4 @@
-{config, ...}: let
-  dot = "${config.home.homeDirectory}/.dotfiles";
-in {
+{config, ...}: {
   programs.waybar = {
     enable = true;
 
@@ -355,6 +353,5 @@ in {
     '';
   };
 
-  # Keep scripts directory as symlink
-  xdg.configFile."waybar/scripts".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/waybar/scripts";
+  # No scripts needed - power button directly launches wlogout
 }
