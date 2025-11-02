@@ -1,7 +1,4 @@
-{
-  config,
-  ...
-}: let
+{config, ...}: let
   dot = "${config.home.homeDirectory}/.dotfiles";
 in {
   programs.yazi = {
@@ -37,7 +34,7 @@ in {
 
     # Keymap configuration
     keymap = {
-      manager.prepend_keymap = [
+      mgr.prepend_keymap = [
         {
           on = "<Enter>";
           run = ["open" "quit"];
@@ -45,7 +42,7 @@ in {
         }
       ];
 
-      manager.append_keymap = [
+      mgr.append_keymap = [
         {
           on = "o";
           run = "open";
@@ -62,7 +59,8 @@ in {
     };
   };
 
-  # Keep flavors and plugins as symlinks (external content)
-  xdg.configFile."yazi/flavors".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/yazi/flavors";
-  xdg.configFile."yazi/plugins".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/yazi/plugins";
+  # Keep flavors and plugins as individual symlinks (external content)
+  xdg.configFile."yazi/flavors/ashen.yazi".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/yazi/flavors/ashen.yazi";
+  xdg.configFile."yazi/flavors/kanagawa-dragon.yazi".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/yazi/flavors/kanagawa-dragon.yazi";
+  xdg.configFile."yazi/plugins/sudo.yazi".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/yazi/plugins/sudo.yazi";
 }
