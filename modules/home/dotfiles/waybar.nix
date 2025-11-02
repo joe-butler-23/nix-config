@@ -164,9 +164,16 @@ _: {
       };
     };
 
-    # Custom styling commented out to allow Stylix theming
+    # Minimal style override to preserve font size
+    style = ''
+      * {
+        font-size: 12px;
+      }
+    '';
+
+    # Full custom styling commented out - only font-size override above
     # Uncomment and modify if you want to override Stylix colors
-    # style = ''
+    # Original style = ''
     #   /* Global settings */
     #   * {
     #     border: none;

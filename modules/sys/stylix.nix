@@ -5,13 +5,13 @@
   stylix = {
     enable = true;
 
-    # Wallpaper - generates color scheme automatically
-    image = ./../../wallpaper.jpeg;
+    # Tokyo Night color scheme
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
 
-    # Image polarity - affects color generation
-    polarity = "dark";
+    # Wallpaper - full path
+    image = /home/joebutler/Pictures/gradient.jpeg;
 
-    # Font configuration - matching your existing setup
+    # Font configuration
     fonts = {
       monospace = {
         name = "JetBrainsMono Nerd Font";
@@ -32,20 +32,20 @@
 
       sizes = {
         applications = 10;
-        desktop = 10;
+        desktop = 12; # Waybar uses desktop size
         popups = 10;
         terminal = 11;
       };
     };
 
-    # Cursor configuration - matching your existing setup
+    # Cursor configuration
     cursor = {
       name = "capitaine-cursors";
       package = pkgs.capitaine-cursors;
       size = 24;
     };
 
-    # Optional: Terminal opacity
+    # Terminal opacity
     opacity = {
       terminal = 0.95;
     };

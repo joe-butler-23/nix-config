@@ -25,6 +25,15 @@
     };
   };
 
+  # Icon theme (Stylix doesn't handle icons)
+  gtk = {
+    enable = true;
+    iconTheme = {
+      name = "Papirus-Dark";
+      package = pkgs.papirus-icon-theme;
+    };
+  };
+
   #### Session variables
   home.sessionVariables = {
     NIXOS_OZONE_WL = "1";
