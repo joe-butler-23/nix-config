@@ -1,6 +1,4 @@
-{config, ...}: let
-  dot = "${config.home.homeDirectory}/.dotfiles";
-in {
+{
   programs.yazi = {
     enable = true;
 
@@ -50,17 +48,5 @@ in {
         }
       ];
     };
-
-    # Theme configuration
-    theme = {
-      flavor = {
-        dark = "kanagawa-dragon";
-      };
-    };
   };
-
-  # Keep flavors and plugins as individual symlinks (external content)
-  xdg.configFile."yazi/flavors/ashen.yazi".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/yazi/flavors/ashen.yazi";
-  xdg.configFile."yazi/flavors/kanagawa-dragon.yazi".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/yazi/flavors/kanagawa-dragon.yazi";
-  xdg.configFile."yazi/plugins/sudo.yazi".source = config.lib.file.mkOutOfStoreSymlink "${dot}/.config/yazi/plugins/sudo.yazi";
 }
