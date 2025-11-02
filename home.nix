@@ -1,6 +1,4 @@
 {
-  config,
-  pkgs,
   ...
 }: {
   imports = [
@@ -25,25 +23,6 @@
         emoji = ["Noto Color Emoji"];
       };
     };
-  };
-
-  gtk = {
-    enable = true;
-    iconTheme = {
-      name = "Papirus";
-      package = pkgs.papirus-icon-theme;
-    };
-    font = {
-      name = "Noto Sans";
-      size = 10;
-    };
-  };
-
-  home.pointerCursor = {
-    name = "capitaine-cursors";
-    size = 24;
-    package = pkgs.capitaine-cursors;
-    gtk.enable = true;
   };
 
   #### Session variables

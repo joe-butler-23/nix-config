@@ -11,6 +11,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    stylix = {
+      url = "github:nix-community/stylix/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -21,6 +26,7 @@
     nixpkgs,
     nixpkgs-unstable,
     home-manager,
+    stylix,
     treefmt-nix,
     ...
   }: let
@@ -44,6 +50,7 @@
 
       modules = [
         ./configuration.nix
+        stylix.nixosModules.stylix
 
         # Integrate Home Manager into the system build
         home-manager.nixosModules.home-manager
