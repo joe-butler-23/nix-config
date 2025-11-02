@@ -59,7 +59,7 @@
     '';
 
     # Interactive shell initialization
-    initExtra = ''
+    initContent = ''
       ####################
       # Options
       ####################
