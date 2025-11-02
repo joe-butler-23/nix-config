@@ -25,6 +25,7 @@
     mako.enable = false;    # Manual theme in mako.nix
     hyprlock.enable = false; # Manual theme in hyprland-extras.nix
     yazi.enable = false;    # Manual Kanagawa theme in yazi.nix
+    waybar.enable = false;  # Manual theme in waybar.nix
   };
 
   #### Session variables
