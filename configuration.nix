@@ -23,7 +23,8 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.consoleLogLevel = 0;
   boot.kernelParams = ["quiet"];
-  boot.plymouth.enable = false;
+  boot.plymouth.enable = true;
+  boot.plymouth.theme = "ifruit-custom";
   zramSwap.enable = true;
 
   #### Locale and time

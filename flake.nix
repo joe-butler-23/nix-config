@@ -38,7 +38,10 @@
     homeConfigurations."joebutler" = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.${system};
       extraSpecialArgs = {inherit pkgsUnstable;};
-      modules = [./home.nix];
+      modules = [
+        ./home.nix
+        stylix.homeModules.stylix # Import Stylix Home Manager module
+      ];
     };
 
     # Main NixOS system (used by `sudo nixos-rebuild switch --flake ...`)

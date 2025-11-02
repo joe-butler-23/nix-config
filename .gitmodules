@@ -1,0 +1,3 @@
+[submodule "plymouth/ifruit-colour"]
+	path = plymouth/ifruit-colour
+	url = https://github.com/toddcircle/ifruit-colour.git

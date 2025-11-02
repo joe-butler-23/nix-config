@@ -52,8 +52,7 @@ _: {
 
       background = {
         monitor = "";
-        # Wallpaper path - commented out to allow Stylix wallpaper management
-        # path = "$HOME/Pictures/gradient.jpeg";
+        path = "$HOME/Pictures/gradient.jpeg";
         blur_passes = 1;
       };
 
@@ -63,8 +62,7 @@ _: {
         # path = "$HOME/Pictures/gradient.jpeg";
         size = 75;
         border_size = 2;
-        # Theme colors - commented out to allow Stylix theming
-        # border_color = "#ffffff";
+        border_color = "#ffffff";
         position = "-50, 50";
         halign = "right";
         valign = "bottom";
@@ -77,14 +75,13 @@ _: {
         dots_size = 0.1;
         dots_spacing = 0.35;
         dots_center = true;
-        # Theme colors - commented out to allow Stylix theming
-        # outer_color = "#ffffff";
-        # inner_color = "#ffffff";
-        # font_color = "#ffffff";
+        outer_color = "#ffffff";
+        inner_color = "#ffffff";
+        font_color = "#ffffff";
         fade_on_empty = false;
         hide_input = true;
         rounding = -1;
-        # check_color = "#204a87";
+        check_color = "#204a87";
         position = "0, -200";
         halign = "center";
         valign = "center";
@@ -94,10 +91,9 @@ _: {
         {
           monitor = "";
           text = "cmd[update:1000] echo \"$(date +\"%A, %B %d\")\"";
-          # Theme colors and fonts - commented out to allow Stylix theming
-          # color = "rgba(242, 243, 244, 0.75)";
-          # font_size = 22;
-          # font_family = "JetBrains Mono";
+          color = "rgba(242, 243, 244, 0.75)";
+          font_size = 22;
+          font_family = "JetBrains Mono";
           position = "0, 300";
           halign = "center";
           valign = "center";
@@ -105,10 +101,9 @@ _: {
         {
           monitor = "";
           text = "cmd[update:1000] echo \"$(date +\"%-I:%M\")\"";
-          # Theme colors and fonts - commented out to allow Stylix theming
-          # color = "rgba(242, 243, 244, 0.75)";
-          # font_size = 95;
-          # font_family = "JetBrains Mono Extrabold";
+          color = "rgba(242, 243, 244, 0.75)";
+          font_size = 95;
+          font_family = "JetBrains Mono Extrabold";
           position = "0, 200";
           halign = "center";
           valign = "center";
@@ -116,6 +111,4 @@ _: {
       ];
     };
   };
-
-
 }
