@@ -63,7 +63,6 @@ in {
   home.file.".zshrc".source = OOS "${dot}/.zshrc";
 
   #### Application configuration links
-  xdg.configFile."hypr".source = OOS "${dot}/.config/hypr";
   xdg.configFile."waybar".source = OOS "${dot}/.config/waybar";
   xdg.configFile."foot".source = OOS "${dot}/.config/foot";
   xdg.configFile."rofi".source = OOS "${dot}/.config/rofi";

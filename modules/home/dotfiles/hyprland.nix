@@ -114,6 +114,7 @@
     };
 
     extraConfig = ''
+      $mainMod = SUPER
       $terminal = foot
       $menu = rofi -show drun -matching regex -no-tokenize -drun-match-fields 'name'  -drun-display-format '{name}' -run-command "app2unit -- {cmd}"
       $browser = app2unit brave
