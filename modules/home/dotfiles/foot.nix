@@ -1,6 +1,4 @@
-{ config, ... }:
-
-{
+_: {
   programs.foot = {
     enable = true;
 

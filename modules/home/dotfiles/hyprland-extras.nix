@@ -52,13 +52,13 @@ _: {
 
       background = {
         monitor = "";
-        path = "$HOME/Pictures/xfce-4.18-final.png";
+        path = "$HOME/Pictures/gradient.jpeg";
         blur_passes = 1;
       };
 
       image = {
         monitor = "";
-        path = "$HOME/Pictures/xfce-4.18-final.png";
+        path = "$HOME/Pictures/gradient.jpeg";
         size = 75;
         border_size = 2;
         border_color = "#ffffff";

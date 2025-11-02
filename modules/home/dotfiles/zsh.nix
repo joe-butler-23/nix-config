@@ -1,12 +1,13 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  ...
+}: {
   programs.zsh = {
     enable = true;
 
     # Shell options
     defaultKeymap = "emacs";
-    
+
     # History configuration
     history = {
       size = 10000;

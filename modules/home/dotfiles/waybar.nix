@@ -1,4 +1,4 @@
-{config, ...}: {
+_: {
   programs.waybar = {
     enable = true;
 
@@ -352,6 +352,4 @@
       }
     '';
   };
-
-  # No scripts needed - power button directly launches wlogout
 }

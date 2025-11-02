@@ -94,37 +94,37 @@ _: {
       #lock {
         margin: 10px;
         border-radius: 10px;
-        background-image: image(url("icons/lock.png"));
+        background-image: image(url("/home/joebutler/nix-config/modules/home/dotfiles/wlogout/icons/lock.png"));
       }
 
       #logout {
         margin: 10px;
         border-radius: 10px;
-        background-image: image(url("icons/logout.png"));
+        background-image: image(url("/home/joebutler/nix-config/modules/home/dotfiles/wlogout/icons/logout.png"));
       }
 
       #shutdown {
         margin: 10px;
         border-radius: 10px;
-        background-image: image(url("icons/shutdown.png"));
+        background-image: image(url("/home/joebutler/nix-config/modules/home/dotfiles/wlogout/icons/shutdown.png"));
       }
 
       #reboot {
         margin: 10px;
         border-radius: 10px;
-        background-image: image(url("icons/reboot.png"));
+        background-image: image(url("/home/joebutler/nix-config/modules/home/dotfiles/wlogout/icons/reboot.png"));
       }
 
       #suspend {
         margin: 10px;
         border-radius: 10px;
-        background-image: image(url("icons/suspend.png"));
+        background-image: image(url("/home/joebutler/nix-config/modules/home/dotfiles/wlogout/icons/suspend.png"));
       }
 
       #hibernate {
         margin: 10px;
         border-radius: 10px;
-        background-image: image(url("icons/hibernate.png"));
+        background-image: image(url("/home/joebutler/nix-config/modules/home/dotfiles/wlogout/icons/hibernate.png"));
       }
     '';
   };
