@@ -1,7 +1,4 @@
-{
-  config,
-  ...
-}: let
+{config, ...}: let
   dot = "${config.home.homeDirectory}/.dotfiles";
 in {
   programs.waybar = {
@@ -169,7 +166,193 @@ in {
       };
     };
 
-    style = builtins.readFile "${dot}/.config/waybar/style.css";
+    style = ''
+      /* Global settings */
+      * {
+        border: none;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        min-height: 0;
+      }
+
+      /* Waybar window style */
+      window#waybar {
+        background-color: rgba(0, 0, 0, 0.9);
+        color: #ffffff;
+      }
+
+      /* Workspaces */
+      #workspaces button {
+        color: #ffffff;
+        box-shadow: inset 0 -3px transparent;
+      }
+
+      #workspaces button:hover {
+        background: rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0 -3px #ffffff;
+      }
+
+      #workspaces button.focused {
+        background-color: #2c3e50;
+      }
+
+      #workspaces button.urgent {
+        background-color: #f53c3c;
+      }
+
+      /* Mode widget */
+      #mode {
+        background-color: #2c3e50;
+      }
+
+      /* Module common styles (padding, margin, and a right border for separation) */
+      #clock,
+      #battery,
+      #power-profiles-daemon,
+      #cpu,
+      #memory,
+      #temperature,
+      #backlight,
+      #pulseaudio,
+      #custom-media,
+      #tray,
+      #idle_inhibitor,
+      #custom-power {
+        padding: 0 5px;
+        margin: 3px 3px;
+        border-right: 1px solid #444;
+      }
+
+      /* Remove right border for the last widget in a group */
+      .modules-right > widget:last-child,
+      .modules-left > widget:first-child {
+        border-right: none;
+      }
+
+      /* Clock module */
+      #clock {
+        background-color: #2c3e50;
+        color: #ffffff;
+      }
+
+      /* Battery module */
+      #battery {
+        background-color: #4CAF50;
+        color: #000000;
+        min-width: 50px;
+      }
+
+      #battery.charging {
+        background-color: #4CAF50;
+        color: #000000;
+        min-width: 50px;
+      }
+
+      #battery.critical:not(.charging) {
+        background-color: #f53c3c;
+        color: #000000;
+        min-width: 50px;
+        animation: blink 0.5s linear infinite alternate;
+      }
+
+      #power-profiles-daemon {
+        background-color: #2980b9;
+        color: #ffffff;
+        border-right: 1px solid #444;
+        min-width: 20px;
+      }
+
+      /* Blink animation for critical battery */
+      @keyframes blink {
+        to {
+          background-color: #ffffff;
+          color: rgba(0, 0, 0, 0.9);
+        }
+      }
+
+      /* CPU module */
+      #cpu {
+        background-color: #9b59b6;
+        color: #ffffff;
+      }
+
+      /* Memory module */
+      #memory {
+        background-color: #2c3e50;
+        color: #ffffff;
+      }
+
+      /* Backlight module */
+      #backlight {
+        background-color: #2c3e50;
+        color: #ffffff;
+      }
+
+      /* Pulseaudio (audio) module */
+      #pulseaudio {
+        background-color: #f0932b;
+        color: #000000;
+      }
+
+      #pulseaudio.muted {
+        background-color: #f0932b;
+        color: #000000;
+      }
+
+      /* Temperature module */
+      #temperature {
+        background-color: #f0932b;
+        color: #ffffff;
+      }
+
+      #temperature.critical {
+        background-color: #f53c3c;
+      }
+
+      /* Custom Media module */
+      #custom-media {
+        background-color: #4CAF50;
+        color: #2c3e50;
+        min-width: 100px;
+      }
+
+      #custom-media.custom-spotify {
+        background-color: #4CAF50;
+      }
+
+      #custom-media.custom-vlc {
+        background-color: #ffa000;
+      }
+
+      /* Tray module */
+      #tray {
+        background-color: #2980b9;
+        color: #000000;
+      }
+
+      /* Idle Inhibitor module */
+      #idle_inhibitor {
+        background-color: #2d3436;
+        color: #ffffff;
+      }
+
+      #idle_inhibitor.activated {
+        background-color: #ffffff;
+        color: #2c3e50;
+      }
+
+      /* Custom Power module */
+      #custom-power {
+        background-color: #ffffff;
+        color: #2c3e50;
+      }
+
+      /* Additional focus styles */
+      label:focus {
+        background-color: rgba(0, 0, 0, 0.9);
+      }
+    '';
   };
 
   # Keep scripts directory as symlink
