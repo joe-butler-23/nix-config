@@ -128,10 +128,4 @@ _: {
       }
     '';
   };
-
-  # Copy icons directory (local assets)
-  xdg.configFile."wlogout/icons" = {
-    source = ./icons;
-    recursive = true;
-  };
 }
