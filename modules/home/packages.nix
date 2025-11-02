@@ -62,11 +62,6 @@
       lazygit
       unzip
       wget
-      zoxide
-      starship
-      zsh-autosuggestions
-      zsh-history-substring-search
-      zsh-syntax-highlighting
 
       ## Networking / internet
       brave

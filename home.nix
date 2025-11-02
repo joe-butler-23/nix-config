@@ -56,11 +56,6 @@ in {
     QT_QPA_PLATFORM = "wayland";
   };
 
-  #### Shell configuration
-  home.file.".zshenv".source = OOS "${dot}/.zshenv";
-  home.file.".zprofile".source = OOS "${dot}/.zprofile";
-  home.file.".zshrc".source = OOS "${dot}/.zshrc";
-
   #### Application configuration links
   xdg.configFile."waybar".source = OOS "${dot}/.config/waybar";
   xdg.configFile."foot".source = OOS "${dot}/.config/foot";
