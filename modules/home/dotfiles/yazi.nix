@@ -17,7 +17,7 @@ in {
             for = "unix";
           }
           {
-            run = ''[ -f "$1" ] && echo "$1" > "${CHOOSER}"'';
+            run = ''[ -f "$1" ] && echo "$1" > "''${CHOOSER}"'';
             desc = "Pick file and quit";
             for = "unix";
           }
