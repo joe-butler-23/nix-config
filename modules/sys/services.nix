@@ -78,4 +78,16 @@
 
   #### Shell configuration
   programs.zsh.enable = true;
+
+  #### Power management
+  powerManagement = {
+    enable = true;
+  };
+
+  #### Networking
+  networking.hostName = "nixos";
+  networking.networkmanager.enable = true;
+  networking.firewall = {
+    enable = true;
+  };
 }

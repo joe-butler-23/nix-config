@@ -13,20 +13,7 @@
   home.homeDirectory = "/home/joebutler";
   home.stateVersion = "25.05";
 
-  #### Fonts and theming
-  fonts = {
-    fontconfig = {
-      enable = true;
-      defaultFonts = {
-        monospace = ["JetBrains Mono"];
-        sansSerif = ["Noto Sans"];
-        serif = ["Noto Serif"];
-        emoji = ["Noto Color Emoji"];
-      };
-    };
-  };
-
-  # Icon theme (Stylix doesn't handle icons)
+  # Icon theme (Stylix doesn't handle icons, fonts managed by Stylix)
   gtk = {
     enable = true;
     iconTheme = {

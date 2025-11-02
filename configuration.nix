@@ -26,18 +26,6 @@
   boot.plymouth.enable = false;
   zramSwap.enable = true;
 
-  #### Power management
-  powerManagement = {
-    enable = true;
-  };
-
-  #### Networking
-  networking.hostName = "nixos";
-  networking.networkmanager.enable = true;
-  networking.firewall = {
-    enable = true;
-  };
-
   #### Locale and time
   time.timeZone = "Europe/London";
   i18n.defaultLocale = "en_GB.UTF-8";
