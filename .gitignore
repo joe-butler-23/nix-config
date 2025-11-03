@@ -19,3 +19,11 @@ Thumbs.db
 
 # Hardware-specific configuration
 hardware-configuration.nix
+hardware-*.nix
+
+# Personal/temporary files
+*.log
+*.tmp
+.cache/
+.ssh/
+.gnupg/
