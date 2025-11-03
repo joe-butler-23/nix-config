@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   yaml = pkgs.formats.yaml {};
 in {
   # Espanso config files - package installed system-wide

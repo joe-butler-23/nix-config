@@ -4,7 +4,7 @@
     ./modules/home/services.nix
     ./modules/home/dotfiles
   ];
-  
+
   #### User identity
   home.username = "joebutler";
   home.homeDirectory = "/home/joebutler";
