@@ -57,6 +57,7 @@ _: {
       button {
         color: #FFFFFF;
         font-size:20px;
+        background-color: transparent;
 
         background-repeat: no-repeat;
         background-position: center;
