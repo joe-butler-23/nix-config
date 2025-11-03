@@ -3,9 +3,8 @@
     ./modules/home/packages.nix
     ./modules/home/services.nix
     ./modules/home/dotfiles
-    ./modules/home/walker.nix
   ];
-
+  
   #### User identity
   home.username = "joebutler";
   home.homeDirectory = "/home/joebutler";
