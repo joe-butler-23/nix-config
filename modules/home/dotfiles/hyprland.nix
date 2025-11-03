@@ -112,7 +112,7 @@
       exec-once = [
         "app2unit waybar"
         "app2unit hypridle"
-        "app2unit hyprpaper" # Wallpaper daemon - launched after Wayland session starts
+        "app2unit hyprpaper"
         "hyprctl dispatch dpms on"
         "app2unit nm-applet"
         "app2unit blueman-applet"
@@ -125,7 +125,7 @@
     extraConfig = ''
       $mainMod = SUPER
       $terminal = foot
-      $menu = rofi -show drun -matching regex -no-tokenize -drun-match-fields 'name'  -drun-display-format '{name}' -run-command "app2unit -- {cmd}"
+      $menu = rofi -show drun -matching regex -no-tokenize -drun-match-fields 'name' -drun-display-format '{name}' -display-drun "" -theme-str 'textbox-prompt-colon { enabled: false; }' -run-command "app2unit -- {cmd}"
       $browser = app2unit brave
       $fileManager = app2unit foot -a yazi -D ~ sh -lc 'TMPFILE=$(mktemp); yazi --chooser-file="$TMPFILE"; if [ -s "$TMPFILE" ]; then xdg-open "$(cat "$TMPFILE")"; fi; rm -f "$TMPFILE"'
 

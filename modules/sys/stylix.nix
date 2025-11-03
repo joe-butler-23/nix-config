@@ -1,9 +1,13 @@
 {pkgs, ...}: {
   stylix = {
     enable = true;
+    autoEnable = false;
 
     # Nord Light color scheme
     base16Scheme = "${pkgs.base16-schemes}/share/themes/nord-light.yaml";
+
+    # Disable Plymouth theming
+    targets.plymouth.enable = false;
 
     # Wallpaper (relative path for flake purity)
     image = ./../../wallpaper.jpeg;
