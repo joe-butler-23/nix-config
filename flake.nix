@@ -34,18 +34,8 @@
     pkgs = import nixpkgs {inherit system;};
     pkgsUnstable = import nixpkgs-unstable {inherit system;};
   in {
-    # Optional: allows `home-manager --flake .#joebutler switch`
-    homeConfigurations."joebutler" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.${system};
-      extraSpecialArgs = {inherit pkgsUnstable;};
-      modules = [
-        {
-          nixpkgs.config.allowUnfree = true;
-        }
-        ./home.nix
-        stylix.homeModules.stylix # Import Stylix Home Manager module
-      ];
-    };
+    # Standalone home-manager configuration removed to avoid conflicts
+    # Use the integrated configuration in nixosConfigurations instead
 
     # Main NixOS system (used by `sudo nixos-rebuild switch --flake ...`)
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
