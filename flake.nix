@@ -39,6 +39,9 @@
       pkgs = nixpkgs.legacyPackages.${system};
       extraSpecialArgs = {inherit pkgsUnstable;};
       modules = [
+        {
+          nixpkgs.config.allowUnfree = true;
+        }
         ./home.nix
         stylix.homeModules.stylix # Import Stylix Home Manager module
       ];

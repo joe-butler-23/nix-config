@@ -21,17 +21,16 @@
 
   # Stylix theming
   stylix.targets = {
-
     # False
     foot.enable = false;
     mako.enable = false;
-    hyprlock.enable = false;
     yazi.enable = false;
     waybar.enable = false;
 
     # True
     rofi.enable = true;
     gtk.enable = true;
+    hyprlock.enable = true;
   };
 
   #### Session variables

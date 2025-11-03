@@ -10,6 +10,9 @@
       pkgsUnstable.app2unit
     ]
     ++ (with pkgs; [
+      ## Home Manage
+      home-manager
+
       ## Wayland / Hyprland
       hypridle
       hyprlock
@@ -59,9 +62,12 @@
       fd
       fzf
       git
+      jq
       lazygit
       unzip
       wget
+      starship
+      zoxide
 
       ## Networking / internet
       brave

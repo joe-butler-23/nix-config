@@ -68,12 +68,6 @@ _: {
         grace = 0;
       };
 
-      background = {
-        monitor = "";
-        path = "$HOME/nix-config/wallpaper.jpeg";
-        blur_passes = 1;
-      };
-
       image = {
         monitor = "";
         path = "$HOME/nix-config/wallpaper.jpeg";
@@ -92,13 +86,9 @@ _: {
         dots_size = 0.1;
         dots_spacing = 0.35;
         dots_center = true;
-        outer_color = "#ffffff";
-        inner_color = "#ffffff";
-        font_color = "#ffffff";
         fade_on_empty = false;
-        hide_input = true;
+        hide_input = false;
         rounding = -1;
-        check_color = "#204a87";
         position = "0, -200";
         halign = "center";
         valign = "center";
