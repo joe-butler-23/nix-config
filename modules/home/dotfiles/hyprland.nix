@@ -145,6 +145,7 @@
       bind = $mainMod, F3, exec, hyprctl keyword monitor eDP-1,preferred,0x0,1 && hyprctl keyword monitor DP-5,disable && hyprctl dispatch moveworkspacetomonitor all eDP-1
       bind = $mainMod, m, exec, ~/.config/hypr/toggle_eDP1.sh
       bind = $mainMod, n, exec, hyprctl keyword monitor eDP-1,enable
+      bind = $mainMod, W, exec, walker
 
       bind = $mainMod, h, movefocus, l
       bind = $mainMod, l, movefocus, r
