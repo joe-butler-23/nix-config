@@ -16,3 +16,6 @@ result-*
 # OS files
 .DS_Store
 Thumbs.db
+
+# Hardware-specific configuration
+hardware-configuration.nix
