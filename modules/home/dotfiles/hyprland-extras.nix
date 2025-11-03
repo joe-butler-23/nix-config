@@ -1,4 +1,22 @@
 _: {
+  # Hyprpaper - wallpaper management
+  services.hyprpaper = {
+    enable = true;
+    settings = {
+      ipc = {
+        on_shutdown = [
+          "hyprctl dispatch dpms on"
+        ];
+      };
+      preload = [
+        "$HOME/nix-config/wallpaper.jpeg"
+      ];
+      wallpaper = [
+        ",$HOME/nix-config/wallpaper.jpeg"
+      ];
+    };
+  };
+
   # Hypridle - idle management daemon
   services.hypridle = {
     enable = true;
@@ -52,14 +70,13 @@ _: {
 
       background = {
         monitor = "";
-        path = "$HOME/Pictures/gradient.jpeg";
+        path = "$HOME/nix-config/wallpaper.jpeg";
         blur_passes = 1;
       };
 
       image = {
         monitor = "";
-        # Image path - commented out to allow Stylix wallpaper management
-        # path = "$HOME/Pictures/gradient.jpeg";
+        path = "$HOME/nix-config/wallpaper.jpeg";
         size = 75;
         border_size = 2;
         border_color = "#ffffff";

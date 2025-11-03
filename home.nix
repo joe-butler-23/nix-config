@@ -21,14 +21,17 @@
 
   # Stylix theming
   stylix.targets = {
-    foot.enable = false; # Manual Nord theme in foot.nix
-    mako.enable = false; # Manual theme in mako.nix
-    hyprlock.enable = false; # Manual theme in hyprland-extras.nix
-    yazi.enable = false; # Manual Kanagawa theme in yazi.nix
-    waybar.enable = false; # Manual theme in waybar.nix
-    rofi.enable = true; #
+
+    # False
+    foot.enable = false;
+    mako.enable = false;
+    hyprlock.enable = false;
+    yazi.enable = false;
+    waybar.enable = false;
+
+    # True
+    rofi.enable = true;
     gtk.enable = true;
-    hyprpaper.enable = true;
   };
 
   #### Session variables
