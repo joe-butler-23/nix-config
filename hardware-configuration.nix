@@ -27,13 +27,13 @@
   };
 
   fileSystems."/home" = {
-    device = "/dev/disk/by-label/NIXOS_ROOT;
+    device = "/dev/disk/by-label/NIXOS_ROOT";
     fsType = "btrfs";
     options = ["subvol=home" "compress=zstd" "noatime"];
   };
 
   fileSystems."/nix" = {
-    device = "/dev/disk/by-label/NIXOS_ROOT;
+    device = "/dev/disk/by-label/NIXOS_ROOT";
     fsType = "btrfs";
     options = ["subvol=nix" "compress=zstd" "noatime"];
   };
