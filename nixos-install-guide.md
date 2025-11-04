@@ -45,32 +45,66 @@ From the other machine: `ssh nixos@192.168.0.xxx`.
 
 Run `lsblk` to identify disk. Then run `sudo gdisk /dev/sdx` where sdx is the target drive. Typically it is nvme0n1.
 
-### Partition Setup
+#### Wipe and create a new GPT table
 
-Then do the following:
+```bash
+sudo gdisk /dev/nvme0n1
+```
 
-- View help. `?`
-- Create a new GPT. `o`
-- Create a new EFI partition. `n <default> <default> +1G ef00`
-- Create a new LVM partition for the rest of the drive. `n <default> <default> <default> 8e00`
-- Save the changes and exit. `w`
+Inside gdisk:
+
+- `o`   → create a new empty GPT
+- `y`   → confirm
+- `w`   → write table
+- `y`   → confirm
+
+---
+
+#### Create 2 partitions
+
+Partition 1 — EFI (1 GiB)
+
+- `n`
+- press `Enter` to accept default partition number
+- press `Enter` to accept default first sector
+- type `+1G` and press `Enter` for last sector
+- type `EF00` for hex code (EFI System)
+
+Partition 2 — rest of disk
+
+- `n`
+- press `Enter`
+- press `Enter`
+- press `Enter`
+- type `8300` for hex code (Linux filesystem)
+
+Write the table
+
+- `w`
+- `y`
+
+---
+
+#### Verify
+
+```bash
+lsblk -o NAME,SIZE,TYPE,MOUNTPOINTS
+```
+
+This should show should show two partitions as /dev/sdx1 and /dev/sdx2
 
 ### Enable Encryption
 
-Enable encryption on the non-boot part of the drive with the following:
+Enable encryption on the non-boot part of the drive with the cryptsetup:
 
-```bash
-sudo cryptsetup -v -y \
-    -c aes-xts-plain64 -s 512 -h sha512 -i 2000 --use-random \
-    --label=NIXOS_LUKS luksFormat --type luks2 /dev/sdx2
-```
+Cryptsetup has the following options:
 
 - `-v`: Verbose, increases output for debugging in case something goes wrong.
 - `-y`: Ask for the password interactively, twice, and ensure their match before proceeding.
 - `-c`: Specifies the cypher, in this case aes-xts-plain64 is also the default for the LUKS2 format.
 - `-s`: Specifies the key size used by the cypher.
 - `-h`: Specifies the hashing algorith used, sha256 by default.
-- `-i`: Milliseconds to spend processing the passphrase, 2000 by default. Longer is more secure but less convenient.
+- `-i`: Milliseconds to spend processing the passphrase, 2000 by default.
 - `--use-random`: Specifies the more secure RNG source.
 - `--label`: Adds a label to the partition so we can reference it easily in configs.
 - `luksFormat`: Operation mode that encrypts a partition and sets a passphrase.
@@ -84,6 +118,8 @@ sudo cryptsetup -v -y \
     -c aes-xts-plain64 -s 512 -h sha512 -i 2000 --use-random \
     --label=NIXOS_LUKS luksFormat --type luks2 /dev/nvme0n1p2
 ```
+
+It should warn about overwriting data, and then let you set a password. 
 
 ### Verify and Open Encrypted Container
 
@@ -187,7 +223,7 @@ nvme0n1            disk
 sudo nixos-generate-config --root /mnt
 ```
 
-This generates the initial config, which must then bew amended to account for the encryption and partition set-up. So identify the config files and the required disk info:
+This generates the initial config, which must be amended to account for the encryption and partition set-up. So identify the config files and the required disk info:
 
 ```bash
 ls -l /mnt/etc/nixos/
@@ -202,7 +238,7 @@ ls -l /dev/disk/by-uuid/  | grep db52d953-3a83-4c18-b9ab-af6ced62bb6f || true
 
 ### Amend Hardware Configuration
 
-First amend the hardware-configuration:
+First amend the hardware-configuration, with `nano /mnt/etc/nixos/hardware-configuration.nix` 
 
 Add `"compress=zstd" "noatime"` to each of the btrfs options, i.e. `'options = [ "subvol=persist"  "compress=zstd" "noatime" ];'`.
 
