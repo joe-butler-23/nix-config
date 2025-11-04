@@ -234,11 +234,9 @@ ls -l /dev/disk/by-uuid/  | grep db52d953-3a83-4c18-b9ab-af6ced62bb6f || true
 
 ### Amend Hardware Configuration
 
-First amend the hardware-configuration, with `sudo nano /mnt/etc/nixos/hardware-configuration.nix` 
+First amend the hardware-configuration, with `sudo nano /mnt/etc/nixos/hardware-configuration.nix`. Follow the instructions here https://jadarma.github.io/blog/posts/2024/08/installing-nixos-with-flakes-and-lvm-on-luks/.
 
-Add `"compress=zstd" "noatime"` to each of the btrfs options, i.e. `'options = [ "subvol=persist"  "compress=zstd" "noatime" ];'`.
-
-And make sure the top looks like this to enable cryptd:
+In particular, add `"compress=zstd" "noatime"` to each of the btrfs options, i.e. `'options = [ "subvol=persist"  "compress=zstd" "noatime" ];'`. Also set fmask=0077 and dmask=0077 for boot, and change the partition names to `/dev/disk/by-label`. And make sure the top looks like this to enable cryptd:
 
 ```nix
 boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
@@ -267,10 +265,10 @@ sudo nix --extra-experimental-features 'nix-command flakes' \
   flake show /mnt/root/nix-config
 ```
 
-Once installation completes, set a password:
+Once installation completes, set a user password:
 
 ```
-sudo nixos-enter --root /mnt -- sh -c 'passwd'
+sudo nixos-enter --root /mnt -- sh -c 'passwd joebutler'
 ```
 
 Then unmount and reboot:
@@ -281,9 +279,36 @@ sudo cryptsetup close cryptroot
 sudo reboot
 ```
 
-Now scroll down to post-installation steps
+I have had problems in the past with user not being set up properly, in which case log in to shell as root and do the following:
 
-## Install with fresh nix setup
+```
+mkdir -p /home/joebutler
+chown -R joebutler:users /home/joebutler
+passwd joebutler
+```
+
+And then need to do some configuring for the full nix config [for future, I think I can skip generating any of the configs, and just go straight to a nix-install with my github configs to miss out the steps here, since the hardware config in my repo uses labels rather than UUIDs]. Connect to internet, then:
+
+```
+# clone your repo
+git clone https://github.com/joe-butler-23/nix-config.git /home/joebutler/nix-config
+
+# ensure ownership and restrictive perms
+sudo chown -R joebutler:users /home/joebutler/nix-config
+chmod -R go-rwx /home/joebutler/nix-config
+
+# replace /etc/nixos with symlink to your repo
+sudo rm -rf /etc/nixos
+sudo ln -s /home/joebutler/nix-config /etc/nixos
+
+# rebuild
+cd /home/joebutler/nix-config
+sudo nixos-rebuild switch --flake 
+
+```
+
+
+## Alternatively, install with fresh nix setup
 
 ### Edit Configuration.nix
 
@@ -356,17 +381,20 @@ sudo nixos-install --root /mnt --no-root-passwd --flake /mnt/etc/nixos#nixos
 Then set password:
 
 ```bash
-sudo nixos-enter --root /mnt -c 'passwd me'
+sudo nixos-enter --root /mnt -c 'passwd'
 ```
 
 And then unmount and reboot:
 
 ```bash
 sudo umount -R /mnt
+sudo swapoff -L NIXOS_SWAP
+sudo vgchange -a n lvmroot
+sudo cryptsetup close /dev/mapper/cryptrootew
 sudo reboot
 ```
 
-## Post-Installation Setup
+## Post-reboot
 
 ### Boot Permissions
 
@@ -377,7 +405,7 @@ sudo chmod 700 /boot
 sudo chmod 600 /boot/loader/random-seed
 ```
 
-### Git Repository Setup
+### Git Repository Setup 
 
 Establish NixOS as git repo:
 
