@@ -177,16 +177,12 @@ sudo mount -o subvol=root,compress=zstd,noatime /dev/mapper/lvmroot-root /mnt
 
 sudo mkdir /mnt/boot
 sudo mount /dev/nvme0n1p1 /mnt/boot
-
 sudo mkdir /mnt/home
 sudo mount -o subvol=home,compress=zstd,noatime /dev/mapper/lvmroot-root /mnt/home
-
 sudo mkdir /mnt/nix
 sudo mount -o subvol=nix,compress=zstd,noatime /dev/mapper/lvmroot-root /mnt/nix
-
 sudo mkdir /mnt/persist
 sudo mount -o subvol=persist,compress=zstd,noatime /dev/mapper/lvmroot-root /mnt/persist
-
 sudo mkdir -p /mnt/var/log
 sudo mount -o subvol=log,compress=zstd,noatime /dev/mapper/lvmroot-root /mnt/var/log
 ```
@@ -238,7 +234,7 @@ ls -l /dev/disk/by-uuid/  | grep db52d953-3a83-4c18-b9ab-af6ced62bb6f || true
 
 ### Amend Hardware Configuration
 
-First amend the hardware-configuration, with `nano /mnt/etc/nixos/hardware-configuration.nix` 
+First amend the hardware-configuration, with `sudo nano /mnt/etc/nixos/hardware-configuration.nix` 
 
 Add `"compress=zstd" "noatime"` to each of the btrfs options, i.e. `'options = [ "subvol=persist"  "compress=zstd" "noatime" ];'`.
 
@@ -252,9 +248,46 @@ boot.kernelModules = [ "kvm-intel" ];
 boot.extraModulePackages = [ ];
 ```
 
+In nano its ctrl + w to exit, press y to save. 
+
+There are then different options depending on wheterh the intention is to use an existing config or start fresh. To use the config in this repo first: 
+
+## Install with existing nix config
+
+```
+# Clone flake beside /etc/nixos
+sudo mkdir -p /mnt/root
+sudo git clone https://github.com/joe-butler-23/nix-config.git /mnt/root/nix-config
+
+# Copy the already-generated + amended hardware config into flake repo
+sudo cp -v /mnt/etc/nixos/hardware-configuration.nix /mnt/root/nix-config/hardware-configuration.nix
+
+# Verify the flake outputs to confirm the host attr (expects `nixos`)
+sudo nix --extra-experimental-features 'nix-command flakes' \
+  flake show /mnt/root/nix-config
+```
+
+Once installation completes, set a password:
+
+```
+sudo nixos-enter --root /mnt -- sh -c 'passwd'
+```
+
+Then unmount and reboot:
+
+```
+sudo umount -R /mnt
+sudo cryptsetup close cryptroot
+sudo reboot
+```
+
+Now scroll down to post-installation steps
+
+## Install with fresh nix setup
+
 ### Edit Configuration.nix
 
-Then edit configuration.nix. Follow the instructions here https://jadarma.github.io/blog/posts/2024/08/installing-nixos-with-flakes-and-lvm-on-luks/ for the configuration file.
+Then edit configuration.nix with `sudo nano /mnt/etc/nixos/configuration.nix`. Follow the instructions here https://jadarma.github.io/blog/posts/2024/08/installing-nixos-with-flakes-and-lvm-on-luks/ for the configuration file.
 
 ## Flake Setup
 
