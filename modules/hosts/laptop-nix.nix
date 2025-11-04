@@ -18,12 +18,6 @@ profile docked {
   output eDP-1 disable
   exec hyprctl reload
 }
-
-profile dual_monitor {
-  output "Acer Technologies KA240Y 4129031E83W01" enable position 0,0 mode 1920x1080
-  output "Dell Inc. DELL S2721HSX 1991Q83" enable position 1920,0 mode 1920x1080
-  output eDP-1 disable
-}
     '';
   };
 }
