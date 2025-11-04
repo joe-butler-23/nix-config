@@ -4,7 +4,15 @@
 
 ### WiFi Configuration
 
-To configure the WiFi, first start wpa_supplicant with `sudo systemctl start wpa_supplicant`, then run `wpa_cli`. For most home networks, the following commands are used:
+To configure the WiFi, first start wpa_supplicant:
+
+```
+sudo systemctl start wpa_supplicant
+
+wpa_cli
+```
+
+Then connect to a network
 
 ```
 add_network
@@ -17,9 +25,19 @@ enable_network 0
 OK
 ```
 
-To ssh in, establish the IP address with `ip addr show wlp3s0` and set password with `sudo passwd nixos`.
+To ssh in, establish the IP address with:
 
-And then from other machine: `ssh nixos@192.168.0.xxx`.
+```
+# Establish device
+ip a
+
+# Identify ip address 
+ip addr show wlp3s0 # Where wlp3s0 is the device na,e
+
+# Set password
+sudo passwd nixos
+```
+From the other machine: `ssh nixos@192.168.0.xxx`.
 
 ## Disk Encryption and Partitioning
 
