@@ -31,37 +31,35 @@
     ...
   }: let
     system = "x86_64-linux";
-    pkgsUnstable = import nixpkgs-unstable {inherit system;};
+    pkgsUnstable = import nixpkgs-unstable { inherit system; };
   in {
-    # Standalone home-manager configuration removed to avoid conflicts
-    # Use the integrated configuration in nixosConfigurations instead
+    nixosConfigurations = {
+      # Laptop host (hostname must be "laptop-nix")
+      laptop-nix = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit pkgsUnstable; };
 
-    # Main NixOS system (used by `sudo nixos-rebuild switch --flake ...`)
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      inherit system;
+        modules = [
+          ./configuration.nix
+          stylix.nixosModules.stylix
 
-      # Make pkgsUnstable available to your modules
-      specialArgs = {inherit pkgsUnstable;};
+          # Home Manager integrated as before
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "hm-bak";
+            home-manager.extraSpecialArgs = { inherit pkgsUnstable; };
+            home-manager.users.joebutler = import ./home.nix;
+          }
 
-      modules = [
-        ./configuration.nix
-        stylix.nixosModules.stylix
-
-        # Integrate Home Manager into the system build
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true; # share pkgs with system
-          home-manager.useUserPackages = true; # install user pkgs via HM
-          home-manager.backupFileExtension = "hm-bak";
-          home-manager.extraSpecialArgs = {inherit pkgsUnstable;};
-
-          # Activate Home Manager for user "joebutler"
-          home-manager.users.joebutler = import ./home.nix;
-        }
-      ];
+          # Host-specific deltas for the laptop
+          ./modules/hosts/laptop-nix.nix
+        ];
+      };
     };
 
-    # Format and lint Nix files (treefmt)
+    # formatter unchanged
     formatter.${system} =
       treefmt-nix.lib.mkWrapper
       nixpkgs.legacyPackages.${system}

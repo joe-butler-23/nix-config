@@ -19,6 +19,11 @@
 
   #### Bluetooth
   hardware.bluetooth.enable = true;
+  hardware.bluetooth.settings = {
+    General = {
+      Enable = "Source,Sink,Media,Socket,HID";
+    };
+  };
   services.blueman.enable = true;
 
   #### Desktop plumbing
@@ -84,7 +89,6 @@
   };
 
   #### Networking
-  networking.hostName = "nixos";
   networking.networkmanager.enable = true;
   networking.firewall = {
     enable = true;
