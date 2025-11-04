@@ -234,6 +234,8 @@ ls -l /dev/disk/by-uuid/  | grep db52d953-3a83-4c18-b9ab-af6ced62bb6f || true
 
 ### Amend Hardware Configuration
 
+## this needs amending since the guidance refers to an approach for ext4 rather than btrfs. so will likely create issues. 
+
 First amend the hardware-configuration, with `sudo nano /mnt/etc/nixos/hardware-configuration.nix`. Follow the instructions here https://jadarma.github.io/blog/posts/2024/08/installing-nixos-with-flakes-and-lvm-on-luks/.
 
 In particular, add `"compress=zstd" "noatime"` to each of the btrfs options, i.e. `'options = [ "subvol=persist"  "compress=zstd" "noatime" ];'`. Also set fmask=0077 and dmask=0077 for boot, and change the partition names to `/dev/disk/by-label`. And make sure the top looks like this to enable cryptd:
@@ -287,7 +289,7 @@ chown -R joebutler:users /home/joebutler
 passwd joebutler
 ```
 
-And then need to do some configuring for the full nix config [for future, I think I can skip generating any of the configs, and just go straight to a nix-install with my github configs to miss out the steps here, since the hardware config in my repo uses labels rather than UUIDs]. Connect to internet, then:
+And then need to do some configuring for the full nix config [for future, I think I can skip generating any of the configs, and just go straight to a nix-install with my github configs to miss out the steps here, since the hardware config in my repo uses labels rather than UUIDs, but make `sure sudo dosfslabel /dev/nvme0n1p1 NIXOS_BOOT` to ensure the hardware config file works]. Connect to internet, then:
 
 ```
 # clone your repo
@@ -303,7 +305,7 @@ sudo ln -s /home/joebutler/nix-config /etc/nixos
 
 # rebuild
 cd /home/joebutler/nix-config
-sudo nixos-rebuild switch --flake 
+sudo nixos-rebuild switch --flake .
 
 ```
 
