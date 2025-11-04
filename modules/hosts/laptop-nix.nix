@@ -1,7 +1,11 @@
-{ ... }:
+{ config, ... }:
 {
-  # Host name for automatic flake selection
   networking.hostName = "laptop-nix";
+
+  assertions = [{
+    assertion = config.networking.hostName == "laptop-nix";
+    message = "Refusing to build: this module is only for host 'laptop-nix'.";
+  }];
 
   # Laptop-only Home-Manager config
   home-manager.users.joebutler = {
