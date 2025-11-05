@@ -10,6 +10,7 @@
     ./thunar.nix
     ./waybar.nix
     ./wlogout/wlogout.nix
+    ./whichkey.nix
     ./yazi.nix
     ./zathura.nix
     ./zsh.nix

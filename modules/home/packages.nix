@@ -2,14 +2,12 @@
 {
   pkgs,
   pkgsUnstable,
-  whichkey,
   ...
 }: {
   #### User packages
   home.packages =
     [
       pkgsUnstable.app2unit
-      whichkey.packages.x86_64-linux.wlr-which-key
     ]
     ++ (with pkgs; [
       ## Home Manage
