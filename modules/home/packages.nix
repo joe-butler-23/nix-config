@@ -58,12 +58,15 @@
 
       ## Shell / CLI tools
       bat
-      ripgrep
+      clipse
       fd
       fzf
+      gemini-cli
       git
       jq
       lazygit
+      nix-search-tv
+      ripgrep
       unzip
       wget
       starship
@@ -76,9 +79,10 @@
 
       ## Programming / build
       go
-      uv
+      opencode
       rustup
       scdoc
+      uv
 
       ## Sound / power
       alsa-utils

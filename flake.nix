@@ -41,7 +41,10 @@
   }: let
     system = "x86_64-linux";
     pkgsUnstable = import nixpkgs-unstable { inherit system; };
-    pkgs = import nixpkgs { inherit system; };
+    pkgs = import nixpkgs { 
+      inherit system;
+      config.allowUnfree = true;
+    };
 
     # Generated extensions set (kept up-to-date by upstream CI)
     vsx = nix-vscode-extensions.extensions.${system}.vscode-marketplace;
@@ -95,6 +98,18 @@
 
           # Desktop-only deltas
           ./modules/hosts/desktop-nix.nix
+        ];
+      };
+    };
+
+    # Standalone home-manager configurations
+    homeConfigurations = {
+      joebutler = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        extraSpecialArgs = { inherit pkgsUnstable vsx whichkey; };
+        modules = [ 
+          ./home.nix
+          stylix.homeModules.stylix
         ];
       };
     };

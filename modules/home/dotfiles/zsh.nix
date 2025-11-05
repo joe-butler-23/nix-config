@@ -32,8 +32,13 @@
 
     # Shell aliases
     shellAliases = {
-      k = "kitty @ launch --type=os-window";
-      nvim = "nvim --listen /tmp/nvim";
+      # NixOS concise aliases (work from any directory)
+      hs = "home-manager switch --flake \"$HOME/nix-config#joebutler\"";
+      ns = "sudo nixos-rebuild switch --flake \"$HOME/nix-config\"";
+      hsdry = "home-manager build --flake \"$HOME/nix-config#joebutler\"";
+      nsdry = "sudo nixos-rebuild dry-build --flake \"$HOME/nix-config\"";
+      hn = "home-manager news";
+      hstatus = "home-manager generations";
     };
 
     # Completion initialization
