@@ -1,20 +1,24 @@
-{pkgs, ...}: {
+# modules/home/vscodium.nix
+{ pkgs, vsx, ... }:
+{
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;
-
-    # Keep extensions reproducible & installed by Nix
     mutableExtensionsDir = false;
 
-    # Cline (official) from Open VSX via nixpkgs
-    extensions = with pkgs.vscode-extensions; [
-      saoudrizwan.claude-dev
-    ];
+    profiles.default = {
+      extensions = [
+        # Cline Nightly from generated marketplace set
+        vsx.saoudrizwan.cline-nightly
+        # Tokyo Night theme from nixpkgs
+        pkgs.vscode-extensions.enkia.tokyo-night
+      ];
 
-    # Minimal sensible defaults (extend later)
-    userSettings = {
-      "telemetry.telemetryLevel" = "off";
-      "update.mode" = "none";
+      userSettings = {
+        "telemetry.telemetryLevel" = "off";
+        "update.mode" = "none";
+        "workbench.colorTheme" = "Tokyo Night Light";
+      };
     };
   };
 }

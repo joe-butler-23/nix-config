@@ -138,7 +138,7 @@
       bind = $mainMod, U, togglesplit, # dwindle
       bind = $mainMod, B, exec, $browser
       bind = $mainMod, Y, exec, app2unit hyprshot -m region --clipboard-only
-      bind = $mainMod, SPACE, exec, /home/joebutler/.cargo/bin/wlr-which-key
+      bind = $mainMod, SPACE, exec, wlr-which-key
       bind = $mainMod, a, exec, app2unit footclient
       bind = $mainMod, F, exec, app2unit footclient -a filepicker -D ~ sh -lc "$HOME/bin/fzf_file_launcher.sh"
       bind = $mainMod, R, exec, ~/bin/refile-mousepad.sh
