@@ -13,6 +13,19 @@
   services.tlp.enable = true;
   powerManagement.powertop.enable = true;
 
+  # TLP configuration - prevent keyboard standby when plugged in
+  services.tlp.settings = {
+    # Disable USB autosuspend when on AC power (when keyboard is in use)
+    USB_AUTOSUSPEND_ON_AC = 0;
+    USB_AUTOSUSPEND_ON_BAT = 1;
+    
+    # Exclude input devices from USB autosuspend
+    USB_EXCLUDE_INPUT = 1;
+    
+    # Exclude specific USB devices by vendor/product if needed
+    USB_DEVICE_BLACKLIST = "0483:5740"; # Corne keyboard vendor:product
+  };
+
   # Laptop-only Home-Manager config
   home-manager.users.joebutler = {
     services.kanshi.enable = true;
