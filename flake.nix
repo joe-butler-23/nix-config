@@ -31,54 +31,54 @@
     ...
   }: let
     system = "x86_64-linux";
-    pkgsUnstable = import nixpkgs-unstable { inherit system; };
+    pkgsUnstable = import nixpkgs-unstable {inherit system;};
   in {
-nixosConfigurations = {
-  # Laptop (auto-selected when hostname == "laptop-nix")
-  laptop-nix = nixpkgs.lib.nixosSystem {
-    inherit system;
-    specialArgs = { inherit pkgsUnstable; };
-    modules = [
-      ./configuration.nix
-      stylix.nixosModules.stylix
+    nixosConfigurations = {
+      # Laptop (auto-selected when hostname == "laptop-nix")
+      laptop-nix = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {inherit pkgsUnstable;};
+        modules = [
+          ./configuration.nix
+          stylix.nixosModules.stylix
 
-      # Home Manager integrated as before
-      home-manager.nixosModules.home-manager
-      {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.backupFileExtension = "hm-bak";
-        home-manager.extraSpecialArgs = { inherit pkgsUnstable; };
-        home-manager.users.joebutler = import ./home.nix;
-      }
+          # Home Manager integrated as before
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "hm-bak";
+            home-manager.extraSpecialArgs = {inherit pkgsUnstable;};
+            home-manager.users.joebutler = import ./home.nix;
+          }
 
-      # Laptop-only deltas (kanshi + hostname)
-      ./modules/hosts/laptop-nix.nix
-    ];
-  };
+          # Laptop-only deltas (kanshi + hostname)
+          ./modules/hosts/laptop-nix.nix
+        ];
+      };
 
-  # Desktop (auto-selected when hostname == "desktop-nix")
-  desktop-nix = nixpkgs.lib.nixosSystem {
-    inherit system;
-    specialArgs = { inherit pkgsUnstable; };
-    modules = [
-      ./configuration.nix
-      stylix.nixosModules.stylix
+      # Desktop (auto-selected when hostname == "desktop-nix")
+      desktop-nix = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {inherit pkgsUnstable;};
+        modules = [
+          ./configuration.nix
+          stylix.nixosModules.stylix
 
-      home-manager.nixosModules.home-manager
-      {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.backupFileExtension = "hm-bak";
-        home-manager.extraSpecialArgs = { inherit pkgsUnstable; };
-        home-manager.users.joebutler = import ./home.nix;
-      }
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "hm-bak";
+            home-manager.extraSpecialArgs = {inherit pkgsUnstable;};
+            home-manager.users.joebutler = import ./home.nix;
+          }
 
-      # Desktop-only deltas (hostname for now)
-      ./modules/hosts/desktop-nix.nix
-    ];
-  };
-};
+          # Desktop-only deltas (hostname for now)
+          ./modules/hosts/desktop-nix.nix
+        ];
+      };
+    };
 
     # formatter unchanged
     formatter.${system} =

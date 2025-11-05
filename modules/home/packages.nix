@@ -88,7 +88,6 @@
       anki-bin
       espanso-wayland
       obsidian
-      vscodium
       zotero
       zathura
     ]);

@@ -2,6 +2,7 @@
   imports = [
     ./modules/home/packages.nix
     ./modules/home/services.nix
+    ./modules/home/vscodium.nix
     ./modules/home/dotfiles
   ];
 
