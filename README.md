@@ -2,7 +2,8 @@
 
 ### System Configuration
 - **NixOS 25.05** with experimental features enabled (flakes, nix-command)
-- **Home Manager** integration for user-level configuration management
+- **Hybrid Setup**: Both system-level NixOS and standalone Home Manager configurations
+- **Concise Aliases**: Quick commands for configuration management (hs, ns, hsdry, nsdry, hn, hstatus)
 - **Stylix** for unified system-wide theming and colour schemes
 
 ## Repository Structure
@@ -83,11 +84,93 @@ nix fmt
 nix check
 ```
 
+## Hybrid Setup & Concise Aliases
+
+This configuration uses a hybrid approach that provides both system-level NixOS management and standalone Home Manager functionality, with convenient aliases for quick access.
+
+### Available Aliases
+
+| Alias | Command | Purpose | When to Use |
+|-------|---------|---------|-------------|
+| `hs` | `home-manager switch --flake "$HOME/nix-config#joebutler"` | Update user configuration | Daily user changes, package updates, dotfile tweaks |
+| `ns` | `sudo nixos-rebuild switch --flake "$HOME/nix-config"` | Update system configuration | System services, kernel changes, system packages |
+| `hsdry` | `home-manager build --flake "$HOME/nix-config#joebutler"` | Test user changes | Safe testing before applying user config |
+| `nsdry` | `sudo nixos-rebuild dry-build --flake "$HOME/nix-config"` | Test system changes | Safe testing before applying system config |
+| `hn` | `home-manager news` | Check for updates | Review important Home Manager news |
+| `hstatus` | `home-manager generations` | View history | Check configuration generations and rollback options |
+
+### Practical Usage Scenarios
+
+#### Scenario 1: Installing a New User Tool
+```bash
+# Add package to modules/home/packages.nix
+# Then apply user-level changes (fast, no sudo required)
+hs
+```
+
+#### Scenario 2: Adding a System Service
+```bash
+# Add service to modules/sys/services.nix
+# Then apply system-level changes (requires sudo)
+ns
+```
+
+#### Scenario 3: Testing Configuration Changes
+```bash
+# Make changes to dotfiles or packages
+# Test first without applying
+hsdry
+
+# If successful, apply the changes
+hs
+```
+
+#### Scenario 4: Troubleshooting After Update
+```bash
+# Check what generations are available
+hstatus
+
+# Review recent Home Manager news
+hn
+
+# If needed, rollback to previous generation
+home-manager switch --generation <generation-number>
+```
+
+#### Scenario 5: System Maintenance
+```bash
+# Check for system updates first
+nsdry
+
+# If no issues, apply system updates
+ns
+
+# Then update user packages
+hs
+```
+
+### Benefits of Hybrid Approach
+
+1. **Speed**: User updates (`hs`) are much faster than full system rebuilds
+2. **Safety**: Dry run commands (`hsdry`, `nsdry`) prevent breaking changes
+3. **Flexibility**: Choose between user-only vs full system updates
+4. **Convenience**: Short aliases work from any directory
+5. **Isolation**: User changes don't affect system stability
+6. **Portability**: Home Manager config can be used on other NixOS systems
+
+### Workflow Recommendations
+
+- **Daily Development**: Use `hs` for quick user package/config changes
+- **System Changes**: Use `ns` for system services, kernel, or system packages
+- **Testing**: Always use `hsdry`/`nsdry` before applying major changes
+- **Maintenance**: Use `hn` weekly to check for important updates
+- **Troubleshooting**: Use `hstatus` to review and rollback if needed
+
 ## Guide: Installing Local Packages with Flakes
 
-This guide demonstrates how to install a local Rust project as a Nix package using flakes, based on the wlr-which-key implementation.
+This guide demonstrates how to install a local Rust project as a Nix package using flakes, based on wlr-which-key implementation.
 
-### 1. Create the Project Flake
+### 1. Create Project Flake
 
 In your project directory (e.g., `/home/joebutler/development/whichkey`):
 
@@ -147,7 +230,7 @@ In your project directory (e.g., `/home/joebutler/development/whichkey`):
 
 ### 2. Add to System Configuration
 
-Add the local flake as an input to your main nix-config:
+Add local flake as an input to your main nix-config:
 
 ```nix
 # flake.nix (in your nix-config)
@@ -201,9 +284,9 @@ Create a dedicated module for the package:
 }
 ```
 
-### 4. Import the Module
+### 4. Import Module
 
-Add the module to your dotfiles imports:
+Add module to your dotfiles imports:
 
 ```nix
 # modules/home/dotfiles/default.nix
@@ -221,10 +304,10 @@ Add the module to your dotfiles imports:
 ### 5. Rebuild and Test
 
 ```bash
-# Rebuild the system
+# Rebuild system
 sudo nixos-rebuild switch
 
-# Test the package
+# Test package
 which wlr-which-key
 # Should show: /home/joebutler/.nix-profile/bin/wlr-which-key
 ```
@@ -239,7 +322,7 @@ which wlr-which-key
 ### Common Issues
 
 - **"access to absolute path forbidden"**: Use `xdg.configFile.text` instead of absolute paths
-- **"does not provide attribute"**: Ensure the flake outputs the correct package name
+- **"does not provide attribute"**: Ensure flake outputs correct package name
 - **Missing dependencies**: Add required libraries to `buildInputs`
 - **"Git tree is dirty"**: Normal for development - doesn't affect functionality
 - **"Will not write lock file"**: Normal for local inputs - doesn't affect functionality
