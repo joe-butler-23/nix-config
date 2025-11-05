@@ -27,9 +27,6 @@ menu:
   - key: "a"
     desc: ai
     submenu:
-      - key: "t"
-        desc: triage agent
-        cmd: echo "triage agent placeholder"
       - key: "r"
         desc: RAG
         submenu:
@@ -67,124 +64,9 @@ menu:
   - key: "c"
     desc: create
     submenu:
-      - key: "t"
-        desc: task
-        submenu:
-          - key: "n"
-            desc: new task
-            cmd: echo "new task placeholder"
-          - key: "l"
-            desc: list tasks
-            cmd: echo "list tasks placeholder"
-          - key: "s"
-            desc: search tasks
-            cmd: echo "search tasks placeholder"
       - key: "p"
         desc: project
         cmd: kitty --class filepicker -e /home/joebutler/bin/project-manager add
-
-  # configuration
-  - key: "o"
-    desc: configuration
-    submenu:
-      - key: "a"
-        desc: applications
-        submenu:
-          - key: "f"
-            desc: firefox config
-            cmd: echo "firefox config placeholder"
-          - key: "n"
-            desc: neovim config
-            cmd: echo "neovim config placeholder"
-          - key: "v"
-            desc: vs code settings
-            cmd: echo "vs code settings placeholder"
-      - key: "g"
-        desc: git configuration
-        submenu:
-          - key: "g"
-            desc: git config
-            cmd: echo "git config placeholder"
-          - key: "i"
-            desc: git ignore global
-            cmd: echo "git ignore global placeholder"
-          - key: "s"
-            desc: ssh config
-            cmd: echo "ssh config placeholder"
-      - key: "t"
-        desc: terminal & shell
-        submenu:
-          - key: "a"
-            desc: edit alacritty config
-            cmd: echo "edit alacritty config placeholder"
-          - key: "b"
-            desc: edit bash profile
-            cmd: echo "edit bash profile placeholder"
-          - key: "k"
-            desc: edit kitty config
-            cmd: echo "edit kitty config placeholder"
-          - key: "z"
-            desc: edit zsh config
-            cmd: echo "edit zsh config placeholder"
-      - key: "w"
-        desc: window manager
-        submenu:
-          - key: "e"
-            desc: edit sway config
-            cmd: echo "edit sway config placeholder"
-          - key: "h"
-            desc: edit hyprland config
-            cmd: echo "edit hyprland config placeholder"
-          - key: "r"
-            desc: reload sway config
-            cmd: echo "reload sway config placeholder"
-          - key: "w"
-            desc: edit waybar config
-            cmd: echo "edit waybar config placeholder"
-
-  # information
-  - key: "i"
-    desc: information
-    submenu:
-      - key: "d"
-        desc: disk info
-        submenu:
-          - key: "f"
-            desc: file systems
-            cmd: echo "file systems placeholder"
-          - key: "l"
-            desc: large files
-            cmd: echo "large files placeholder"
-          - key: "u"
-            desc: disk usage
-            cmd: echo "disk usage placeholder"
-      - key: "n"
-        desc: network info
-        submenu:
-          - key: "c"
-            desc: connections
-            cmd: echo "connections placeholder"
-          - key: "i"
-            desc: ip addresses
-            cmd: echo "ip addresses placeholder"
-          - key: "r"
-            desc: routing table
-            cmd: echo "routing table placeholder"
-      - key: "s"
-        desc: system info
-        submenu:
-          - key: "h"
-            desc: hardware info
-            cmd: echo "hardware info placeholder"
-          - key: "o"
-            desc: os info
-            cmd: echo "os info placeholder"
-          - key: "p"
-            desc: processes
-            cmd: echo "processes placeholder"
-          - key: "u"
-            desc: uptime
-            cmd: echo "uptime placeholder"
 
   # projects
   - key: "p"
@@ -199,9 +81,6 @@ menu:
           - key: "o"
             desc: opencode
             cmd: /home/joebutler/bin/ai-launcher "/home/joebutler/.local/share/Cryptomator/mnt/enc_vault/Obsidian_Vault/finances/budget"
-          - key: "q"
-            desc: quick note
-            cmd: "echo 'quick note for budgeting placeholder'"
       - key: "f"
         desc: fitness and health
         submenu:
@@ -211,9 +90,6 @@ menu:
           - key: "o"
             desc: opencode
             cmd: /home/joebutler/bin/ai-launcher "/home/joebutler/.local/share/Cryptomator/mnt/enc_vault/Obsidian_Vault/health"
-          - key: "q"
-            desc: quick note
-            cmd: "echo 'quick note for fitness and health placeholder'"
       - key: "h"
         desc: house
         submenu:
@@ -223,9 +99,6 @@ menu:
           - key: "o"
             desc: opencode
             cmd: /home/joebutler/bin/ai-launcher "/home/joebutler/.local/share/Cryptomator/mnt/enc_vault/Obsidian_Vault/house"
-          - key: "q"
-            desc: quick note
-            cmd: "echo 'quick note for house placeholder'"
       - key: "m"
         desc: meaningful money
         submenu:
@@ -235,9 +108,6 @@ menu:
           - key: "o"
             desc: opencode
             cmd: /home/joebutler/bin/ai-launcher "/home/joebutler/.local/share/Cryptomator/mnt/enc_vault/Obsidian_Vault/finances/meaningful_money"
-          - key: "q"
-            desc: quick note
-            cmd: "echo 'quick note for meaningful money placeholder'"
       - key: "v"
         desc: how to prove it
         submenu:
@@ -247,9 +117,6 @@ menu:
           - key: "o"
             desc: opencode
             cmd: /home/joebutler/bin/ai-launcher "/home/joebutler/.local/share/Cryptomator/mnt/enc_vault/Obsidian_Vault/study/maths/how_to_prove_it"
-          - key: "q"
-            desc: quick note
-            cmd: "echo 'quick note for how to prove it placeholder'"
       - key: "r"
         desc: reading
         submenu:
@@ -259,9 +126,6 @@ menu:
           - key: "o"
             desc: opencode
             cmd: /home/joebutler/bin/ai-launcher "/home/joebutler/.local/share/Cryptomator/mnt/enc_vault/Obsidian_Vault/study/reading"
-          - key: "q"
-            desc: quick note
-            cmd: "echo 'quick note for reading placeholder'"
       - key: "s"
         desc: sys-arc
         submenu:
@@ -271,9 +135,6 @@ menu:
           - key: "o"
             desc: opencode
             cmd: /home/joebutler/bin/ai-launcher "/home/joebutler/.local/share/Cryptomator/mnt/enc_vault/Obsidian_Vault/system"
-          - key: "q"
-            desc: quick note
-            cmd: "echo 'quick note for sys-arc placeholder'"
 
   # quick actions
   - key: "q"
@@ -294,171 +155,11 @@ menu:
           - key: "k"
             desc: kill listener
             cmd: clipse -kill
-      - key: "s"
-        desc: screenshot tools
-        submenu:
-          - key: "a"
-            desc: screenshot area
-            cmd: echo "screenshot area placeholder"
-          - key: "c"
-            desc: screenshot to clipboard
-            cmd: echo "screenshot to clipboard placeholder"
-          - key: "f"
-            desc: screenshot full
-            cmd: echo "screenshot full placeholder"
-          - key: "w"
-            desc: screenshot window
-            cmd: echo "screenshot window placeholder"
-      - key: "w"
-        desc: window management
-        submenu:
-          - key: "f"
-            desc: toggle fullscreen
-            cmd: echo "toggle fullscreen placeholder"
-          - key: "s"
-            desc: split horizontal
-            cmd: echo "split horizontal placeholder"
-          - key: "s"
-            desc: toggle stacking
-            cmd: echo "toggle stacking placeholder"
-          - key: "t"
-            desc: toggle tabbed
-            cmd: echo "toggle tabbed placeholder"
-          - key: "v"
-            desc: split vertical
-            cmd: echo "split vertical placeholder"
-
-  # system management
-  - key: "s"
-    desc: system
-    submenu:
-      - key: "p"
-        desc: power management
-        submenu:
-          - key: "h"
-            desc: hibernate
-            cmd: echo "hibernate placeholder"
-          - key: "l"
-            desc: lock screen
-            cmd: echo "lock screen placeholder"
-          - key: "o"
-            desc: shutdown
-            cmd: echo "shutdown placeholder"
-          - key: "r"
-            desc: reboot
-            cmd: echo "reboot placeholder"
-          - key: "s"
-            desc: sleep
-            cmd: echo "sleep placeholder"
-          - key: "x"
-            desc: exit wayland
-            cmd: echo "exit wayland placeholder"
-      - key: "u"
-        desc: updates & maintenance
-        submenu:
-          - key: "c"
-            desc: clean system
-            cmd: echo "clean system placeholder"
-          - key: "l"
-            desc: system logs
-            submenu:
-              - key: "j"
-                desc: journalctl (today)
-                cmd: echo "journalctl placeholder"
-              - key: "k"
-                desc: kernel messages
-                cmd: echo "kernel messages placeholder"
-              - key: "s"
-                desc: systemd services
-                cmd: echo "systemd services placeholder"
-          - key: "p"
-            desc: package management
-            submenu:
-              - key: "i"
-                desc: install package
-                cmd: echo "install package placeholder"
-              - key: "o"
-                desc: orphaned packages
-                cmd: echo "orphaned packages placeholder"
-              - key: "r"
-                desc: remove package
-                cmd: echo "remove package placeholder"
-              - key: "s"
-                desc: search packages
-                cmd: echo "search packages placeholder"
-          - key: "u"
-            desc: system update
-            cmd: echo "system update placeholder"
-
-  # utilities
-  - key: "u"
-    desc: utilities
-    submenu:
-      - key: "c"
-        desc: calculator & tools
-        submenu:
-          - key: "c"
-            desc: calculator
-            cmd: echo "calculator placeholder"
-          - key: "c"
-            desc: color picker
-            cmd: echo "color picker placeholder"
-          - key: "m"
-            desc: magnifier
-            cmd: echo "magnifier placeholder"
-      - key: "f"
-        desc: file operations
-        submenu:
-          - key: "d"
-            desc: disk usage
-            cmd: echo "disk usage placeholder"
-          - key: "m"
-            desc: file manager
-            cmd: echo "file manager placeholder"
-          - key: "s"
-            desc: search files
-            cmd: echo "search files placeholder"
-          - key: "t"
-            desc: terminal file manager
-            cmd: echo "terminal file manager placeholder"
-      - key: "n"
-        desc: network tools
-        submenu:
-          - key: "i"
-            desc: network info
-            cmd: echo "network info placeholder"
-          - key: "p"
-            desc: ping test
-            cmd: echo "ping test placeholder"
-          - key: "s"
-            desc: speed test
-            cmd: echo "speed test placeholder"
-          - key: "w"
-            desc: wifi manager
-            cmd: echo "wifi manager placeholder"
-      - key: "s"
-        desc: system monitoring
-        submenu:
-          - key: "h"
-            desc: htop (processes)
-            cmd: echo "htop placeholder"
-          - key: "i"
-            desc: iotop (i/o)
-            cmd: echo "iotop placeholder"
-          - key: "n"
-            desc: nethog (network)
-            cmd: echo "nethog placeholder"
-          - key: "t"
-            desc: system temperatures
-            cmd: echo "system temperatures placeholder"
 
   # workflows
   - key: "w"
     desc: workflows
     submenu:
-      - key: "m"
-        desc: misc tasks
-        cmd: echo "misc tasks placeholder"
       - key: "s"
         desc: study mode
         cmd: /home/joebutler/bin/study-focus/study-focus toggle
