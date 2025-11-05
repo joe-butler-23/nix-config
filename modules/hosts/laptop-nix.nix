@@ -8,6 +8,11 @@
     }
   ];
 
+  # Laptop-specific power management services
+  services.thermald.enable = true;
+  services.tlp.enable = true;
+  powerManagement.powertop.enable = true;
+
   # Laptop-only Home-Manager config
   home-manager.users.joebutler = {
     services.kanshi.enable = true;
