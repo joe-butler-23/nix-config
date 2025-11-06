@@ -66,6 +66,15 @@ _: {
         no_fade_out = true;
         hide_cursor = false;
         grace = 0;
+        ignore_empty_input = true;
+      };
+
+      background = {
+        monitor = "";
+        path = "screenshot";
+        color = "rgba(25, 25, 25, 1.0)";
+        blur_passes = 3;
+        blur_size = 8;
       };
 
       image = {
