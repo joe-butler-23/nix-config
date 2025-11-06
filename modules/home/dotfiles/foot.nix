@@ -47,6 +47,11 @@ _: {
         dim6 = "6d96a5"; # dim cyan
         dim7 = "aeb3bb"; # dim white
       };
+
+      key-bindings = {
+        # Copy last command output to clipboard with Ctrl+Space
+        pipe-command-output = "wl-copy";
+      };
     };
   };
 }

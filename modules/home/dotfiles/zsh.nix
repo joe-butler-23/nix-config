@@ -166,6 +166,21 @@
       fi
 
       ############################################
+      # Foot: mark start/end of command output (OSC-133)
+      ############################################
+      function precmd() {
+        if ! builtin zle; then
+          print -n "\e]133;D\e\\"
+        fi
+      }
+
+      function preexec() {
+        print -n "\e]133;C\e\\"
+        # Remember last command exactly as it will be run
+        LAST_CMD="$ZSH_COMMAND"
+      }
+
+      ############################################
       # Copy last terminal output
       ############################################
       # Clipboard helper (Wayland/X11/mac/OSC52 fallback)
@@ -179,9 +194,6 @@
           printf '\033]52;c;%s\007' "$data"
         fi
       }
-
-      # Remember last command exactly as it will be run
-      preexec() { LAST_CMD="$ZSH_COMMAND"; }
 
       # Re-run last command, mirror to screen, copy full output
       copy_last_output() {
