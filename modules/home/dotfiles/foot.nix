@@ -48,9 +48,9 @@ _: {
         dim7 = "aeb3bb"; # dim white
       };
 
-      key-bindings = {
+      "key-bindings" = {
         # Copy last command output to clipboard with Ctrl+Space
-        pipe-command-output = "wl-copy";
+        "pipe-command-output" = "[wl-copy] Control+Shift+b";
       };
     };
   };

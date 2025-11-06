@@ -1,19 +1,18 @@
-_: {
+{ config, lib, ... }:
+let
+  # One absolute path for everything (avoids $HOME expansion issues)
+  wallpaper = "${config.home.homeDirectory}/nix-config/wallpaper.jpeg";
+in
+{
   # Hyprpaper - wallpaper management
   services.hyprpaper = {
     enable = true;
     settings = {
       ipc = {
-        on_shutdown = [
-          "hyprctl dispatch dpms on"
-        ];
+        on_shutdown = [ "hyprctl dispatch dpms on" ];
       };
-      preload = [
-        "$HOME/nix-config/wallpaper.jpeg"
-      ];
-      wallpaper = [
-        ",$HOME/nix-config/wallpaper.jpeg"
-      ];
+      preload = [ wallpaper ];
+      wallpaper = [ ",${wallpaper}" ];
     };
   };
 
@@ -32,12 +31,12 @@ _: {
         {
           timeout = 150;
           on-timeout = "brightnessctl -s set 10";
-          on-resume = "brightnessctl -r";
+          on-resume  = "brightnessctl -r";
         }
         {
           timeout = 150;
           on-timeout = "brightnessctl -sd rgb:kbd_backlight set 0";
-          on-resume = "brightnessctl -rd rgb:kbd_backlight";
+          on-resume  = "brightnessctl -rd rgb:kbd_backlight";
         }
         {
           timeout = 180;
@@ -46,7 +45,7 @@ _: {
         {
           timeout = 330;
           on-timeout = "hyprctl dispatch dpms off";
-          on-resume = "hyprctl dispatch dpms on";
+          on-resume  = "hyprctl dispatch dpms on";
         }
         {
           timeout = 1800;
@@ -69,17 +68,16 @@ _: {
         ignore_empty_input = true;
       };
 
+      # Force these paths so they override any conflicting module
       background = {
         monitor = "";
-        path = "screenshot";
-        color = "rgba(25, 25, 25, 1.0)";
+        path = lib.mkForce wallpaper;
         blur_passes = 3;
-        blur_size = 8;
       };
 
       image = {
         monitor = "";
-        path = "$HOME/nix-config/wallpaper.jpeg";
+        path = lib.mkForce wallpaper;
         size = 75;
         border_size = 2;
         border_color = "#ffffff";
