@@ -74,6 +74,13 @@
       export COLORTERM=truecolor
 
       ####################
+      # Starship Prompt (now system-level)
+      ####################
+      if command -v starship >/dev/null 2>&1; then
+        eval "$(starship init zsh)"
+      fi
+
+      ####################
       # 1Password Injection
       ####################
       if command -v op >/dev/null 2>&1 && [ -S "/run/user/$UID/1password/agent.sock" ]; then

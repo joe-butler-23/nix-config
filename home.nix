@@ -11,15 +11,6 @@
   home.homeDirectory = "/home/joebutler";
   home.stateVersion = "25.05";
 
-  # Icon theme (Stylix doesn't handle icons, fonts managed by Stylix)
-  gtk = {
-    enable = true;
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
-    };
-  };
-
   # Stylix theming
   stylix.targets = {
     # False

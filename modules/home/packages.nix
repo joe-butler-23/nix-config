@@ -19,7 +19,7 @@
       hyprshot
       hyprpaper
       hyprland-protocols
-      rofi-wayland
+      # rofi-wayland removed - let Stylix handle rofi package
       mako
       waybar
       wl-clipboard
@@ -67,10 +67,11 @@
       lazygit
       nix-search-tv
       ripgrep
+      tmux
       unzip
       wget
-      starship
-      zoxide
+      # starship moved to system packages to fix timing issue
+      # zoxide moved to system packages to fix timing issue
 
       ## Networking / internet
       brave
@@ -91,6 +92,7 @@
       ## Apps
       anki-bin
       espanso-wayland
+      gnumeric
       obsidian
       zotero
       zathura

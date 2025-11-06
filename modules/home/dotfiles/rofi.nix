@@ -1,7 +1,8 @@
 {pkgs, ...}: {
   programs.rofi = {
     enable = true;
-    package = pkgs.rofi-wayland;
+    # Remove package specification - let Stylix handle it
+    # package = pkgs.rofi-wayland;
 
     # Font - commented out to allow Stylix font management
     # font = "Mono 12";
