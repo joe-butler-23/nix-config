@@ -40,8 +40,8 @@
     ...
   }: let
     system = "x86_64-linux";
-    pkgsUnstable = import nixpkgs-unstable { inherit system; };
-    pkgs = import nixpkgs { 
+    pkgsUnstable = import nixpkgs-unstable {inherit system;};
+    pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
     };
@@ -53,7 +53,7 @@
       # Laptop (auto-selected when hostname == "laptop-nix")
       laptop-nix = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit pkgsUnstable whichkey; };
+        specialArgs = {inherit pkgsUnstable whichkey;};
         modules = [
           ./configuration.nix
           stylix.nixosModules.stylix
@@ -66,7 +66,7 @@
             home-manager.backupFileExtension = "hm-bak";
 
             # Pass both pkgsUnstable, vsx, and whichkey to HM modules
-            home-manager.extraSpecialArgs = { inherit pkgsUnstable vsx whichkey; };
+            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey;};
 
             home-manager.users.joebutler = import ./home.nix;
           }
@@ -79,7 +79,7 @@
       # Desktop (auto-selected when hostname == "desktop-nix")
       desktop-nix = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit pkgsUnstable whichkey; };
+        specialArgs = {inherit pkgsUnstable whichkey;};
         modules = [
           ./configuration.nix
           stylix.nixosModules.stylix
@@ -91,7 +91,7 @@
             home-manager.backupFileExtension = "hm-bak";
 
             # Pass both pkgsUnstable, vsx, and whichkey to HM modules
-            home-manager.extraSpecialArgs = { inherit pkgsUnstable vsx whichkey; };
+            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey;};
 
             home-manager.users.joebutler = import ./home.nix;
           }
@@ -106,8 +106,8 @@
     homeConfigurations = {
       joebutler = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = { inherit pkgsUnstable vsx whichkey; };
-        modules = [ 
+        extraSpecialArgs = {inherit pkgsUnstable vsx whichkey;};
+        modules = [
           ./home.nix
           stylix.homeModules.stylix
         ];

@@ -3,11 +3,23 @@
   pkgs,
   pkgsUnstable,
   ...
-}: {
+}: let
+  # Define a custom R environment with specific packages
+  R-with-packages = pkgs.rWrapper.override {
+    packages = with pkgs.rPackages; [
+      languageserver
+      tidyverse
+      rmarkdown
+      knitr
+      httpgd
+    ];
+  };
+in {
   #### User packages
   home.packages =
     [
       pkgsUnstable.app2unit
+      pkgsUnstable.gemini-cli
     ]
     ++ (with pkgs; [
       ## Home Manage
@@ -61,8 +73,8 @@
       clipse
       fd
       fzf
-      gemini-cli
       git
+      htop
       jq
       lazygit
       nix-search-tv
@@ -81,8 +93,12 @@
       ## Programming / build
       go
       opencode
+      R-with-packages
       rustup
       scdoc
+      tectonic
+      texlive.combined.scheme-full
+      pandoc
       uv
 
       ## Sound / power

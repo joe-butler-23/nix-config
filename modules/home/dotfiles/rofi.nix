@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+_: {
   programs.rofi = {
     enable = true;
     # Remove package specification - let Stylix handle it

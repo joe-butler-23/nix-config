@@ -1,18 +1,20 @@
-{ config, lib, ... }:
-let
+{
+  config,
+  lib,
+  ...
+}: let
   # One absolute path for everything (avoids $HOME expansion issues)
   wallpaper = "${config.home.homeDirectory}/nix-config/wallpaper.jpeg";
-in
-{
+in {
   # Hyprpaper - wallpaper management
   services.hyprpaper = {
     enable = true;
     settings = {
       ipc = {
-        on_shutdown = [ "hyprctl dispatch dpms on" ];
+        on_shutdown = ["hyprctl dispatch dpms on"];
       };
-      preload = [ wallpaper ];
-      wallpaper = [ ",${wallpaper}" ];
+      preload = [wallpaper];
+      wallpaper = [",${wallpaper}"];
     };
   };
 
@@ -31,12 +33,12 @@ in
         {
           timeout = 150;
           on-timeout = "brightnessctl -s set 10";
-          on-resume  = "brightnessctl -r";
+          on-resume = "brightnessctl -r";
         }
         {
           timeout = 150;
-          on-timeout = "brightnessctl -sd rgb:kbd_backlight set 0";
-          on-resume  = "brightnessctl -rd rgb:kbd_backlight";
+          on-timeout = "brightnessctl -sd dell::kbd_backlight set 0";
+          on-resume = "brightnessctl -rd dell::kbd_backlight";
         }
         {
           timeout = 180;
@@ -45,7 +47,7 @@ in
         {
           timeout = 330;
           on-timeout = "hyprctl dispatch dpms off";
-          on-resume  = "hyprctl dispatch dpms on";
+          on-resume = "hyprctl dispatch dpms on";
         }
         {
           timeout = 1800;

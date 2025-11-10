@@ -111,14 +111,13 @@
 
       exec-once = [
         "app2unit waybar"
-        "app2unit hypridle"
         "app2unit hyprpaper"
         "hyprctl dispatch dpms on"
         "app2unit nm-applet"
         "app2unit blueman-applet"
         "sleep 2 && app2unit kanshi &"
-        "foot --server"
-        "clipse -listen"
+        "app2unit foot --server"
+        "app2unit clipse -listen"
       ];
     };
 
