@@ -46,7 +46,7 @@ pkgs.writeShellScriptBin "fzf-file-launcher" ''
       --prompt="Find file > " \
       --preview '${pkgs.bat}/bin/bat --style=numbers --color=always --line-range :200 {} 2>/dev/null || ${pkgs.coreutils}/bin/head -n 200 {}' \
       --preview-window=right:60%:wrap \
-      --bind 'ctrl-y:execute(${pkgs.coreutils}/bin/printf "%s" {} | ${pkgs.wl-clipboard}/bin/wl-copy 2>/dev/null || ${pkgs.coreutils}/bin/printf "%s" {} | ${pkgs.xclip}/bin/xclip -selection clipboard 2>/dev/null || ${pkgs.coreutils}/bin/printf "%s" {} | ${pkgs.xsel}/bin/xsel --clipboard --input 2>/dev/null || ${pkgs.coreutils}/bin/printf "%s" {} | ${pkgs.darwin.apple_sdk.frameworks.CoreServices}/bin/pbcopy 2>/dev/null; echo "Copied: {}")+abort'
+      --bind 'ctrl-y:execute(${pkgs.coreutils}/bin/printf "%s" {} | ${pkgs.wl-clipboard}/bin/wl-copy 2>/dev/null || ${pkgs.coreutils}/bin/printf "%s" {} | ${pkgs.xclip}/bin/xclip -selection clipboard 2>/dev/null || ${pkgs.coreutils}/bin/printf "%s" {} | ${pkgs.xsel}/bin/xsel --clipboard --input 2>/dev/null; echo "Copied: {}")+abort'
   )"
 
   [ -n "''${SELECTION:-}" ] || exit 0
@@ -67,17 +67,24 @@ pkgs.writeShellScriptBin "fzf-file-launcher" ''
   # Open file based on MIME type
   case "$mime" in
     text/*|application/x-shellscript|application/json|application/xml)
-      if use_footclient; then
-        # Use existing foot server
-        open_detached ${pkgs.foot}/bin/footclient -a editor -D ~ "$EDITOR_CMD" "$SELECTION"
-      elif command -v ${pkgs.foot}/bin/foot >/dev/null 2>&1; then
-        # Start a new foot if needed
-        open_detached ${pkgs.foot}/bin/foot -a editor -D ~ "$EDITOR_CMD" "$SELECTION"
-      else
-        # Fallback to whatever $TERMINAL is
-        term="''${TERMINAL:-${pkgs.xterm}/bin/xterm}"
-        open_detached "$term" -e "$EDITOR_CMD" "$SELECTION"
-      fi
+      editor_base="$(basename "$EDITOR_CMD")"
+      case "$editor_base" in
+        nvim|vim|vi|nano|hx|helix|kak|micro)
+          # Terminal editors: need terminal wrapper
+          if use_footclient; then
+            open_detached ${pkgs.foot}/bin/footclient -a editor -D ~ "$EDITOR_CMD" "$SELECTION"
+          elif command -v ${pkgs.foot}/bin/foot >/dev/null 2>&1; then
+            open_detached ${pkgs.foot}/bin/foot -a editor -D ~ "$EDITOR_CMD" "$SELECTION"
+          else
+            term="''${TERMINAL:-${pkgs.xterm}/bin/xterm}"
+            open_detached "$term" -e "$EDITOR_CMD" "$SELECTION"
+          fi
+          ;;
+        *)
+          # GUI editors: launch directly, no terminal wrapper
+          open_detached "$EDITOR_CMD" "$SELECTION"
+          ;;
+      esac
       ;;
     *)
       if command -v ${pkgs.xdg-utils}/bin/xdg-open >/dev/null 2>&1; then

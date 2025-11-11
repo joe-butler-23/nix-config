@@ -33,7 +33,7 @@
         submenu:
           - key: "f"
             desc: find files
-            cmd: foot -a filepicker -e /home/joebutler/bin/fzf_file_launcher.sh
+            cmd: foot -a filepicker -e /home/joebutler/nix-config/scripts/result/bin/fzf-file-launcher
           - key: "p"
             desc: path
             cmd: foot -a dirfinder -D ~ sh -lc /home/joebutler/bin/directory-finder.sh
