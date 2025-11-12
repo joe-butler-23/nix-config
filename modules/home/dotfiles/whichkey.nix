@@ -46,6 +46,14 @@
         desc: clipboard
         cmd: foot -a clipse -D ~ sh -lc clipse
 
+      # ai
+      - key: "a"
+        desc: ai
+        submenu:
+          - key: "p"
+            desc: prompt library
+            cmd: foot -a aipicker -e copy-prompt
+
       # workflows
       - key: "w"
         desc: workflows
@@ -53,5 +61,6 @@
           - key: "s"
             desc: study mode
             cmd: /home/joebutler/bin/study-focus/study-focus toggle
+  +++++++ REPLACE
   '';
 }

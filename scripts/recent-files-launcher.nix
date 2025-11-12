@@ -33,8 +33,7 @@
     head -10 | \
     cut -d' ' -f2-
   }
-  +++++++ REPLACE
-
+  
   # Main script logic
   main() {
     # Get recent files
