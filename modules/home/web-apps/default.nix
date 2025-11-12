@@ -7,7 +7,6 @@
       exec = "${pkgs.brave}/bin/brave --app=https://chat.openai.com";
       categories = [ "Network" "Office" "Development" ];
       terminal = false;
-      keywords = [ "AI" "Chat" "Assistant" "GPT" "OpenAI" ];
     };
 
     gmail = {
