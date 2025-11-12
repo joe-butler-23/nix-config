@@ -19,19 +19,21 @@
       return 1
     fi
     
-    # Parse XML to extract file paths and visited timestamps, sort by visited time, take top 10
-    grep -E 'href="file://|visited="' "$recent_file" | \
-    sed 'N;s/\n/ /' | \
-    awk -F'href="|visited="' '{
-      gsub(/".*/, "", $2)  # Extract file path
-      gsub(/".*/, "", $3)  # Extract visited timestamp
-      gsub(/^file:\/\//, "", $2)  # Remove file:// prefix
-      print $3 " " $2
-    }' | \
+    # Parse XML to extract file paths and visited timestamps from each bookmark entry
+    awk '
+    /<bookmark href=/ {
+      href_match = match($0, /href="file:\/\/([^"]+)"/, href_arr)
+      visited_match = match($0, /visited="([^"]+)"/, visited_arr)
+      if (href_match && visited_match) {
+        print visited_arr[1] " " substr(href_arr[1], 1)
+      }
+    }
+    ' "$recent_file" | \
     sort -rn | \
     head -10 | \
     cut -d' ' -f2-
   }
+  +++++++ REPLACE
 
   # Main script logic
   main() {
