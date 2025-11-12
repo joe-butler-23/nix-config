@@ -12,10 +12,17 @@
     in
     {
       packages.${system}.default = pkgs.callPackage ./file-launcher.nix { };
+      packages.${system}.recent-files-launcher = pkgs.callPackage ./recent-files-launcher.nix { };
       
       apps.${system}.default = {
         type = "app";
         program = "${self.packages.${system}.default}/bin/fzf-file-launcher";
       };
+      
+      apps.${system}.recent-files = {
+        type = "app";
+        program = "${self.packages.${system}.recent-files-launcher}/bin/recent-files-launcher";
+      };
+  +++++++ REPLACE
     };
 }

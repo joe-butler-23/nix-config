@@ -39,7 +39,7 @@
             cmd: foot -a dirfinder -D ~ sh -lc /home/joebutler/bin/directory-finder.sh
           - key: "r"
             desc: recent files
-            cmd: foot -a filepicker -e /home/joebutler/bin/recent_files_launcher.sh
+            cmd: foot -a filepicker -e /home/joebutler/nix-config/scripts/result/bin/recent-files-launcher
 
       # clipboard
       - key: "c"
