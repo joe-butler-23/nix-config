@@ -23,6 +23,5 @@
         type = "app";
         program = "${self.packages.${system}.recent-files-launcher}/bin/recent-files-launcher";
       };
-  +++++++ REPLACE
     };
 }
