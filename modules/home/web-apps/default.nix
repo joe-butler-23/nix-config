@@ -32,7 +32,7 @@
       comment = "Twitter Web App";
       icon = "twitter";
       exec = "${pkgs.brave}/bin/brave --app=https://twitter.com";
-      categories = [ "Network" "SocialMedia" ];
+      categories = [ "Network" ];
       terminal = false;
     };
 
