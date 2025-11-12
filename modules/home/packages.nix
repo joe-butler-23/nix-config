@@ -20,6 +20,9 @@ in {
     [
       pkgsUnstable.app2unit
       pkgsUnstable.gemini-cli
+      (pkgsUnstable.anki.withAddons [
+        pkgsUnstable.ankiAddons.anki-connect
+      ])
     ]
     ++ (with pkgs; [
       ## Home Manage
@@ -111,5 +114,7 @@ in {
       obsidian
       zotero
       zathura
+
+      ## ANki 
     ]);
 }
