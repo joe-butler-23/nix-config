@@ -60,6 +60,6 @@
         submenu:
           - key: "s"
             desc: study mode
-            cmd: foot -a studyfocus -e study-focus toggle
+            cmd: study-focus toggle
               '';
 }

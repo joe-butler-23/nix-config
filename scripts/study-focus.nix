@@ -54,20 +54,69 @@ pkgs.writeShellScriptBin "study-focus" ''
       command -v ${pkgs.systemd}/bin/systemctl >/dev/null 2>&1 && ${pkgs.systemd}/bin/systemctl --user list-units >/dev/null 2>&1
   }
 
+  # Create systemd services
+  create_systemd_services() {
+      local user_config_dir="$HOME/.config/systemd/user"
+      ${pkgs.coreutils}/bin/mkdir -p "$user_config_dir"
+      
+      # Create monitor service
+      cat > "$user_config_dir/study-focus-monitor.service" << 'EOF'
+[Unit]
+Description=Study Focus Application Monitor
+WantedBy=study-focus-block.target
+
+[Service]
+Type=simple
+ExecStart=/home/joebutler/.nix-profile/bin/study-focus monitor
+Restart=always
+RestartSec=1
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Install]
+WantedBy=study-focus-block.target
+EOF
+
+      # Create target
+      cat > "$user_config_dir/study-focus-block.target" << 'EOF'
+[Unit]
+Description=Study Focus Block Target
+StopWhenUnneeded=yes
+EOF
+
+      # Create individual blocker services
+      for app in firefox google-chrome brave; do
+          cat > "$user_config_dir/study-focus-block-$app.service" << EOF
+[Unit]
+Description=Block $app during study focus
+PartOf=study-focus-block.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/true
+
+[Install]
+WantedBy=study-focus-block.target
+EOF
+      done
+      
+      ${pkgs.systemd}/bin/systemctl --user daemon-reload >/dev/null 2>&1
+  }
+
   # Start systemd blocking
   start_systemd_block() {
       if has_systemd; then
-          ${pkgs.systemd}/bin/systemctl --user daemon-reload >/dev/null 2>&1
-          ${pkgs.systemd}/bin/systemctl --user start study-focus-block.target >/dev/null 2>&1
-          ${pkgs.systemd}/bin/systemctl --user enable study-focus-block.target >/dev/null 2>&1
+          create_systemd_services
+          ${pkgs.systemd}/bin/systemctl --user start study-focus-monitor.service >/dev/null 2>&1
+          ${pkgs.systemd}/bin/systemctl --user enable study-focus-monitor.service >/dev/null 2>&1
       fi
   }
 
   # Stop systemd blocking
   stop_systemd_block() {
       if has_systemd; then
-          ${pkgs.systemd}/bin/systemctl --user stop study-focus-block.target >/dev/null 2>&1
-          ${pkgs.systemd}/bin/systemctl --user disable study-focus-block.target >/dev/null 2>&1
+          ${pkgs.systemd}/bin/systemctl --user stop study-focus-monitor.service >/dev/null 2>&1
+          ${pkgs.systemd}/bin/systemctl --user disable study-focus-monitor.service >/dev/null 2>&1
       fi
   }
 
@@ -140,7 +189,7 @@ pkgs.writeShellScriptBin "study-focus" ''
       study-focus deactivate    # Deactivate study focus
       study-focus toggle        # Toggle study focus
       study-focus               # Activate study focus (default)
-  EOF
+EOF
   }
 
   # Main function
