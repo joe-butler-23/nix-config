@@ -106,7 +106,6 @@ in {
       pavucontrol
 
       ## Apps
-      anki-bin
       espanso-wayland
       gnumeric
       obsidian
