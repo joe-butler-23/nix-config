@@ -74,91 +74,28 @@ Add your script to the packages list:
 }
 ```
 
-### 3. Update which-key Configuration
-Add to `/modules/home/dotfiles/whichkey.nix`:
-```yaml
-# category
-- key: "x"
-  desc: category
-  submenu:
-    - key: "s"
-      desc: script description
-      cmd: foot -a appname -e script-name
-```
-
-### 4. Apply Changes
+### 3. Apply Changes
 ```bash
 cd /home/joebutler/nix-config
 home-manager switch --flake .
 ```
 
-### 5. Test and Commit
+### 4. Test and Commit
 - Test the script works: `which script-name`
 - Test which-key integration
-- Commit changes with descriptive message
-
-## Common Patterns
-
-### FZF Integration
-```bash
-# Colors for consistent theming
-COLORS=(
-  --color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796
-  --color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6
-  --color=marker:#b7bdf8,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796
-)
-
-# FZF command with standard options
-selected=$(${pkgs.fzf}/bin/fzf \
-  --layout=reverse \
-  --height="80%" \
-  --border=rounded \
-  --pointer="▌" \
-  --marker="%" \
-  "${COLORS[@]}") || exit 0
-```
-
-### Clipboard Operations
-```bash
-# Wayland-first, X11 fallback
-CLIP_CMD=""
-if command -v ${pkgs.wl-clipboard}/bin/wl-copy >/dev/null 2>&1; then
-  CLIP_CMD="${pkgs.wl-clipboard}/bin/wl-copy"
-elif command -v ${pkgs.xclip}/bin/xclip >/dev/null 2>&1; then
-  CLIP_CMD="${pkgs.xclip}/bin/xclip -selection clipboard"
-else
-  echo "Error: No clipboard tool available." >&2
-  exit 1
-fi
-
-# Usage
-echo "content" | $CLIP_CMD
-```
-
-### File Operations
-```bash
-# Check file existence and readability
-if [[ -f "$filepath" && -r "$filepath" ]]; then
-  # Process file
-fi
-
-# MIME type detection
-mime="$(${pkgs.file}/bin/file --mime-type -Lb "$filepath" 2>/dev/null || echo "")"
-```
+- Commit changes to git with descriptive message
 
 ## Naming Conventions
 
 - **Script files**: `kebab-case.nix`
 - **Executable names**: `kebab-case`
 - **Foot app names**: `descriptive-name` (lowercase, no spaces)
-- **which-key descriptions**: `lowercase with spaces`
 
 ## Testing Checklist
 
 - [ ] Script builds without errors
 - [ ] Dependencies are correctly referenced
 - [ ] Script executes when called directly
-- [ ] which-key integration works
 - [ ] Foot terminal launches correctly
 - [ ] Error handling works (Ctrl+C, invalid input)
 - [ ] No hardcoded paths outside home directory
@@ -175,7 +112,7 @@ See existing scripts:
 ### Common Issues
 1. **"command not found"** - Check Nix dependency paths
 2. **"permission denied"** - Ensure script is executable via Nix
-3. **"does not exist"** - Check file is added to scripts/default.nix
+3. **"does not exist"** - Check file is added to scripts/default.nix and added to git tree
 4. **Blank windows** - Remove Kitty-specific code, use Foot
 
 ### Debug Commands
@@ -185,9 +122,6 @@ which script-name
 
 # Test script directly
 script-name
-
-# Check which-key config
-cat ~/.config/wlr-which-key/config.yaml
 
 # Rebuild if needed
 cd ~/nix-config && home-manager switch --flake .

@@ -27,6 +27,19 @@
 
     menu:
 
+      # ai
+      - key: "a"
+        desc: ai
+        submenu:
+          - key: "p"
+            desc: prompt library
+            cmd: foot -a filepicker -e copy-prompt
+     
+      # clipboard
+      - key: "c"
+        desc: clipboard
+        cmd: foot -a clipse -D ~ sh -lc clipse
+
       # files
       - key: "f"
         desc: files
@@ -36,23 +49,10 @@
             cmd: foot -a filepicker -e fzf-file-launcher
           - key: "p"
             desc: path
-            cmd: foot -a dirfinder -D ~ sh -lc /home/joebutler/bin/directory-finder.sh
+            cmd: foot -a dirfinder -e directory-finder
           - key: "r"
             desc: recent files
             cmd: foot -a filepicker -e recent-files-launcher
-
-      # clipboard
-      - key: "c"
-        desc: clipboard
-        cmd: foot -a clipse -D ~ sh -lc clipse
-
-      # ai
-      - key: "a"
-        desc: ai
-        submenu:
-          - key: "p"
-            desc: prompt library
-            cmd: foot -a aipicker -e copy-prompt
 
       # workflows
       - key: "w"
@@ -61,6 +61,5 @@
           - key: "s"
             desc: study mode
             cmd: /home/joebutler/bin/study-focus/study-focus toggle
-  +++++++ REPLACE
-  '';
+              '';
 }
