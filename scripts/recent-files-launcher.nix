@@ -1,6 +1,6 @@
 { pkgs ? import <nixpkgs> {} }:
 
-pkgs.writeShellScriptBin "recent-files-launcher" ''
+(pkgs.writeShellScriptBin "recent-files-launcher" ''
   set -euo pipefail
 
   # Colors for fzf
@@ -89,7 +89,7 @@ pkgs.writeShellScriptBin "recent-files-launcher" ''
         case "$mime" in
           text/*|application/x-shellscript|application/json|application/xml)
             # Check if we should use terminal wrapper or launch GUI directly
-            editor_cmd="${pkgs.mousepad}/bin/mousepad"
+            editor_cmd="${pkgs.xfce.mousepad}/bin/mousepad"
             editor_base="$(basename "$editor_cmd")"
             case "$editor_base" in
               nvim|vim|vi|nano|hx|helix|kak|micro)
@@ -134,4 +134,4 @@ pkgs.writeShellScriptBin "recent-files-launcher" ''
 
   # Run main function
   main
-''
+'')
