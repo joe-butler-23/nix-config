@@ -6,6 +6,7 @@
   # Smart Anki Launcher: Warns if already running
   ankiSmart = pkgs.writeShellScriptBin "anki-smart" ''
     if pgrep -x "anki" > /dev/null; then
+      echo "Anki is already running. Check your scratchpad (Special Workspace)."
       ${pkgs.libnotify}/bin/notify-send -u normal "Anki is already running" "Check your scratchpad (Special Workspace)"
     else
       anki "$@"
