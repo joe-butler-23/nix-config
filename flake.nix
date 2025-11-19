@@ -29,7 +29,7 @@
     whichkey.url = "git+file:///home/joebutler/development/whichkey";
 
     # Anki-forge from GitHub repository
-    anki-forge.url = "github:joe-butler-23/anki-card-forge/main";
+    anki-forge.url = "git+file:///home/joebutler/development/anki-forge-app";
   };
 
   outputs = {

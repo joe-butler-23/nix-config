@@ -40,7 +40,6 @@ in {
       hyprpaper
       hyprland-protocols
       # rofi-wayland removed - let Stylix handle rofi package
-      mako
       waybar
       wl-clipboard
       xdg-desktop-portal-hyprland
