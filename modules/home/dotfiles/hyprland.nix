@@ -138,7 +138,7 @@
       bind = $mainMod, B, exec, $browser
       bind = $mainMod, Y, exec, app2unit hyprshot -m region --clipboard-only
       bind = $mainMod, SPACE, exec, wlr-which-key
-      bind = $mainMod, a, exec, app2unit footclient
+      bind = $mainMod, a, exec, anki-forge-launcher
       bind = $mainMod, F, exec, app2unit foot -a filepicker -e fzf-file-launcher
       bind = $mainMod, R, exec, ~/bin/refile-mousepad.sh
       bind = $mainMod, F3, exec, hyprctl keyword monitor eDP-1,preferred,0x0,1 && hyprctl keyword monitor DP-5,disable && hyprctl dispatch moveworkspacetomonitor all eDP-1
