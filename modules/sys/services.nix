@@ -76,9 +76,14 @@
   users.users.joebutler = {
     isNormalUser = true;
     createHome = true;
-    extraGroups = ["networkmanager" "wheel"];
+    extraGroups = ["networkmanager" "wheel" "input"];
     shell = pkgs.zsh;
   };
+
+  #### Uinput for Espanso
+  services.udev.extraRules = ''
+    KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
+  '';
 
   #### Shell configuration
   programs.zsh.enable = true;

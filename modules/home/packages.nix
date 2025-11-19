@@ -16,21 +16,28 @@
   };
 in {
   #### User packages
-  home.packages =
-    [
-      pkgsUnstable.app2unit
-      pkgsUnstable.gemini-cli
-      (pkgsUnstable.anki.withAddons [
-        pkgsUnstable.ankiAddons.anki-connect
-      ])
-    ]
-    ++ (with pkgs; [
-      ## Home Manage
-      home-manager
+		home.packages = with pkgsUnstable; [
+			app2unit
+			gemini-cli
+			(anki.withAddons [
+				(ankiAddons.anki-connect.withConfig {
+				  config = {
+				    webCorsOriginList = [
+				      "http://localhost"
+				      "http://localhost:5173"
+				      "http://127.0.0.1:5173"
+				      "file://"
+				      "null"
+				    ];
+				  };
+				})
+			])
 
-      ## Wayland / Hyprland
-      hypridle
-      hyprlock
+			# Custom apps
+
+			## Wayland / Hyprland
+			hypridle
+			hyprlock
       hyprshot
       hyprpaper
       hyprland-protocols
@@ -46,6 +53,7 @@ in {
 
       ## Core desktop
       foot
+			home-manager
       capitaine-cursors
       bluetui
       blueman
@@ -59,7 +67,7 @@ in {
       desktop-file-utils
       nerd-fonts.jetbrains-mono
       font-awesome
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       yazi
       qmk
       imagemagick
@@ -109,12 +117,9 @@ in {
       pavucontrol
 
       ## Apps
-      espanso-wayland
       gnumeric
       obsidian
       zotero
       zathura
-
-      ## ANki 
-    ]);
+    ];
 }

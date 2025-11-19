@@ -1,6 +1,6 @@
 {
   imports = [
-    ./espanso.nix
+    ./anki-forge.nix
     ./foot.nix
     ./hyprland.nix
     ./hyprland-extras.nix

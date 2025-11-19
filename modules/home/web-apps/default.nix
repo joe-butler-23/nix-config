@@ -3,9 +3,9 @@
     chatgpt = {
       name = "ChatGPT";
       comment = "ChatGPT AI Assistant Web App";
-      icon = "chatgpt";
+      icon = "${builtins.getEnv "HOME"}/nix-config/modules/home/web-apps/icons/chatgpt.png";
       exec = "${pkgs.brave}/bin/brave --app=https://chat.openai.com";
-      categories = [ "Network" "Office" "Development" ];
+      categories = [ "Development" ];
       terminal = false;
     };
 

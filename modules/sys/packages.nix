@@ -13,5 +13,8 @@
     ## Shell tools (moved from home-manager to fix timing)
     zsh
     starship
+
+    ## dev
+    electron
   ];
 }

@@ -27,6 +27,9 @@
 
     # Local whichkey development flake
     whichkey.url = "git+file:///home/joebutler/development/whichkey";
+
+    # Local anki-forge development flake
+    anki-forge.url = "git+file:///home/joebutler/development/anki-forge-app";
   };
 
   outputs = {
@@ -37,6 +40,7 @@
     treefmt-nix,
     nix-vscode-extensions,
     whichkey,
+    anki-forge,
     ...
   }: let
     system = "x86_64-linux";
@@ -53,7 +57,7 @@
       # Laptop (auto-selected when hostname == "laptop-nix")
       laptop-nix = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit pkgsUnstable whichkey;};
+        specialArgs = {inherit pkgsUnstable whichkey anki-forge;};
         modules = [
           ./configuration.nix
           stylix.nixosModules.stylix
@@ -66,7 +70,7 @@
             home-manager.backupFileExtension = "hm-bak";
 
             # Pass both pkgsUnstable, vsx, and whichkey to HM modules
-            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey;};
+            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge;};
 
             home-manager.users.joebutler = import ./home.nix;
           }
@@ -79,7 +83,7 @@
       # Desktop (auto-selected when hostname == "desktop-nix")
       desktop-nix = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit pkgsUnstable whichkey;};
+        specialArgs = {inherit pkgsUnstable whichkey anki-forge;};
         modules = [
           ./configuration.nix
           stylix.nixosModules.stylix
@@ -91,7 +95,7 @@
             home-manager.backupFileExtension = "hm-bak";
 
             # Pass both pkgsUnstable, vsx, and whichkey to HM modules
-            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey;};
+            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge;};
 
             home-manager.users.joebutler = import ./home.nix;
           }
@@ -106,7 +110,7 @@
     homeConfigurations = {
       joebutler = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = {inherit pkgsUnstable vsx whichkey;};
+        extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge;};
         modules = [
           ./home.nix
           stylix.homeModules.stylix
