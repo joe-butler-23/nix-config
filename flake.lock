@@ -6,11 +6,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1763554160,
-        "narHash": "sha256-6G1j6iFUQeBBpDLR6kqIGjGiyo6/oqPdJhv5O3b43NA=",
+        "lastModified": 1763554673,
+        "narHash": "sha256-sg5em7k8dp8kl2ZZkspFmHZSadf0uUJIoLSJ/F4Dm18=",
         "ref": "refs/heads/main",
-        "rev": "783b7db2783ced38a5b91786e05557b317cf1247",
-        "revCount": 3,
+        "rev": "710db5b13206f9c6bfd2b57e1dd35cd74e8c60cb",
+        "revCount": 4,
         "type": "git",
         "url": "file:///home/joebutler/development/anki-forge-app"
       },
