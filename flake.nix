@@ -44,7 +44,10 @@
     ...
   }: let
     system = "x86_64-linux";
-    pkgsUnstable = import nixpkgs-unstable {inherit system;};
+    pkgsUnstable = import nixpkgs-unstable {
+      inherit system;
+      config.allowUnfree = true;
+    };
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
