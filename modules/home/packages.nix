@@ -33,8 +33,6 @@ in {
 				})
 			])
 
-			# Custom apps
-
 			## Wayland / Hyprland
 			hypridle
 			hyprlock
