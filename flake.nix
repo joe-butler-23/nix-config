@@ -28,8 +28,8 @@
     # Local whichkey development flake
     whichkey.url = "git+file:///home/joebutler/development/whichkey";
 
-    # Local anki-forge development flake
-    anki-forge.url = "git+file:///home/joebutler/development/anki-forge-app";
+    # Anki-forge from GitHub repository
+    anki-forge.url = "github:joe-butler-23/anki-card-forge/main";
   };
 
   outputs = {

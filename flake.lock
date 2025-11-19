@@ -8,15 +8,16 @@
       "locked": {
         "lastModified": 1763550875,
         "narHash": "sha256-ua2ng8SFXriosVPKXFCt0WuNgNWSWaiZg2Ru5w9g0X4=",
-        "ref": "refs/heads/master",
+        "owner": "joe-butler-23",
+        "repo": "anki-card-forge",
         "rev": "ffffa2e1c922961ff6d6f721cb4aae26e41ed477",
-        "revCount": 1,
-        "type": "git",
-        "url": "file:///home/joebutler/development/anki-forge-app"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/joebutler/development/anki-forge-app"
+        "owner": "joe-butler-23",
+        "ref": "main",
+        "repo": "anki-card-forge",
+        "type": "github"
       }
     },
     "base16": {
