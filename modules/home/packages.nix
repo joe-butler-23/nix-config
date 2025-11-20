@@ -16,7 +16,7 @@
   };
 
   gemini-cli = pkgs.writeShellScriptBin "gemini" ''
-    ${pkgs.nodejs}/bin/npx --yes @google/generative-ai-cli@latest "$@"
+    ${pkgs.nodejs}/bin/npx --yes @google/gemini-cli@latest "$@"
   '';
 in {
   #### User packages
