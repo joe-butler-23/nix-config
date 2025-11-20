@@ -8,13 +8,11 @@
     zram-generator
 
     ## Power management helpers
-    auto-cpufreq
 
     ## Shell tools (moved from home-manager to fix timing)
     zsh
     starship
 
     ## dev
-    electron
   ];
 }

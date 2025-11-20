@@ -1,1 +1,0 @@
-tmuxai|home-manager|nixpkgs/ tmuxai

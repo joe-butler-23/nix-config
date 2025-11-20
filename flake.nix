@@ -55,10 +55,10 @@
 
     # Generated extensions set (kept up-to-date by upstream CI)
     vsx = nix-vscode-extensions.extensions.${system}.vscode-marketplace;
-  in {
-    nixosConfigurations = {
-      # Laptop (auto-selected when hostname == "laptop-nix")
-      laptop-nix = nixpkgs.lib.nixosSystem {
+
+    # Helper function to generate a NixOS system configuration
+    mkSystem = hostName:
+      nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {inherit pkgsUnstable whichkey anki-forge;};
         modules = [
@@ -72,41 +72,20 @@
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "hm-bak";
 
-            # Pass both pkgsUnstable, vsx, and whichkey to HM modules
+            # Pass special arguments to Home Manager modules
             home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge;};
 
             home-manager.users.joebutler = import ./home.nix;
           }
 
-          # Laptop-only deltas
-          ./modules/hosts/laptop-nix.nix
+          # Host-specific configuration
+          ./modules/hosts/${hostName}.nix
         ];
       };
-
-      # Desktop (auto-selected when hostname == "desktop-nix")
-      desktop-nix = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {inherit pkgsUnstable whichkey anki-forge;};
-        modules = [
-          ./configuration.nix
-          stylix.nixosModules.stylix
-
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "hm-bak";
-
-            # Pass both pkgsUnstable, vsx, and whichkey to HM modules
-            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge;};
-
-            home-manager.users.joebutler = import ./home.nix;
-          }
-
-          # Desktop-only deltas
-          ./modules/hosts/desktop-nix.nix
-        ];
-      };
+  in {
+    nixosConfigurations = {
+      laptop-nix = mkSystem "laptop-nix";
+      desktop-nix = mkSystem "desktop-nix";
     };
 
     # Standalone home-manager configurations

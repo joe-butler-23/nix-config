@@ -76,9 +76,12 @@
   users.users.joebutler = {
     isNormalUser = true;
     createHome = true;
-    extraGroups = ["networkmanager" "wheel" "input"];
+    extraGroups = ["networkmanager" "wheel" "input" "docker"];
     shell = pkgs.zsh;
   };
+
+  #### Docker
+  virtualisation.docker.enable = true;
 
   #### Uinput for Espanso
   services.udev.extraRules = ''

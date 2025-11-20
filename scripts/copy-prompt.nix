@@ -1,6 +1,4 @@
-{ pkgs ? import <nixpkgs> {} }:
-
-(pkgs.writeShellScriptBin "copy-prompt" ''
+{pkgs ? import <nixpkgs> {}}: (pkgs.writeShellScriptBin "copy-prompt" ''
   set -euo pipefail
 
   PROMPT_DIR="/home/joebutler/Documents/prompting"

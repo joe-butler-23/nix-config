@@ -1,5 +1,5 @@
 # modules/home/services.nix
-{pkgs, ...}: {
+_: {
   #### Syncthing - file synchronization
   services.syncthing = {
     enable = true;

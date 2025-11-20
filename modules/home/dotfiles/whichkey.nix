@@ -1,7 +1,4 @@
-{
-  whichkey,
-  ...
-}: {
+{whichkey, ...}: {
   home.packages = [
     whichkey.packages.x86_64-linux.wlr-which-key
   ];
@@ -34,7 +31,7 @@
           - key: "p"
             desc: prompt library
             cmd: foot -a filepicker -e copy-prompt
-     
+
       # clipboard
       - key: "c"
         desc: clipboard
@@ -61,5 +58,5 @@
           - key: "s"
             desc: study mode
             cmd: study-focus toggle
-              '';
+  '';
 }

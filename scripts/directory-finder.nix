@@ -1,6 +1,4 @@
-{ pkgs ? import <nixpkgs> {} }:
-
-(pkgs.writeShellScriptBin "directory-finder" ''
+{pkgs ? import <nixpkgs> {}}: (pkgs.writeShellScriptBin "directory-finder" ''
   set -euo pipefail
 
   # Colors for fzf

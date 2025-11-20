@@ -1,5 +1,4 @@
-{ pkgs }:
-
+{pkgs}:
 pkgs.writeShellScriptBin "study-focus" ''
   set -euo pipefail
 

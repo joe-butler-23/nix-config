@@ -1,4 +1,7 @@
-{config, pkgs, ...}: {
+{
+  config,
+  ...
+}: {
   networking.hostName = "laptop-nix";
 
   assertions = [
@@ -24,31 +27,6 @@
 
     # Exclude specific USB devices by vendor/product (corrected device ID)
     USB_DEVICE_BLACKLIST = "4653:0004"; # Corne keyboard vendor:product (corrected)
-  };
-
-  # Udev rules to prevent USB autosuspend for input devices
-  services.udev.extraRules = ''
-    # Prevent USB autosuspend for all HID (Human Interface Device) devices
-    ACTION=="add", SUBSYSTEM=="usb", ATTR{bInterfaceClass}=="03", ATTR{bInterfaceProtocol}=="01", TEST=="power/control", ATTR{power/control}="on"
-    
-    # Prevent USB autosuspend for specific Corne keyboard
-    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="4653", ATTR{idProduct}=="0004", TEST=="power/control", ATTR{power/control}="on"
-  '';
-
-  # Systemd service to ensure USB power settings are applied on boot
-  systemd.services.usb-power-fix = {
-    description = "Ensure USB input devices stay powered on";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "tlp.service" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = [
-        # Set all HID devices to always on
-        "${pkgs.bash}/bin/bash -c 'for device in /sys/bus/usb/devices/*/power/control; do if grep -q \"03\" \"$(dirname $device)/../bInterfaceClass\" 2>/dev/null; then echo \"on\" > \"$device\"; fi; done'"
-        # Set specific Corne keyboard to always on
-        "${pkgs.bash}/bin/bash -c 'for device in /sys/bus/usb/devices/*/idVendor; do if [ \"$(cat \"$device\")\" = \"4653\" ] && [ \"$(cat \"$(dirname $device)/idProduct\")\" = \"0004\" ]; then echo \"on\" > \"$(dirname $device)/power/control\"; fi; done'"
-      ];
-    };
   };
 
   # Laptop-only Home-Manager config

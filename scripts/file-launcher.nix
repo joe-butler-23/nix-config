@@ -1,6 +1,5 @@
 # scripts/file-launcher.nix
-{ pkgs }:
-
+{pkgs}:
 pkgs.writeShellScriptBin "fzf-file-launcher" ''
   set -euo pipefail
 

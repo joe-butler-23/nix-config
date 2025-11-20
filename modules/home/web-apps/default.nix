@@ -1,11 +1,11 @@
-{ pkgs, ... }: {
+{pkgs, ...}: {
   xdg.desktopEntries = {
     chatgpt = {
       name = "ChatGPT";
       comment = "ChatGPT AI Assistant Web App";
       icon = "${builtins.getEnv "HOME"}/nix-config/modules/home/web-apps/icons/chatgpt.png";
       exec = "${pkgs.brave}/bin/brave --app=https://chat.openai.com";
-      categories = [ "Development" ];
+      categories = ["Development"];
       terminal = false;
     };
 
@@ -14,7 +14,7 @@
       comment = "Gmail Web App";
       icon = "gmail";
       exec = "${pkgs.brave}/bin/brave --app=https://gmail.com";
-      categories = [ "Network" "Email" ];
+      categories = ["Network" "Email"];
       terminal = false;
     };
 
@@ -23,7 +23,7 @@
       comment = "Spotify Web App";
       icon = "spotify";
       exec = "${pkgs.brave}/bin/brave --app=https://open.spotify.com";
-      categories = [ "AudioVideo" "Audio" ];
+      categories = ["AudioVideo" "Audio"];
       terminal = false;
     };
 
@@ -32,7 +32,7 @@
       comment = "Twitter Web App";
       icon = "twitter";
       exec = "${pkgs.brave}/bin/brave --app=https://twitter.com";
-      categories = [ "Network" ];
+      categories = ["Network"];
       terminal = false;
     };
 
@@ -41,7 +41,7 @@
       comment = "Notion Web App";
       icon = "notion";
       exec = "${pkgs.brave}/bin/brave --app=https://notion.so";
-      categories = [ "Office" "Development" ];
+      categories = ["Office" "Development"];
       terminal = false;
     };
   };
