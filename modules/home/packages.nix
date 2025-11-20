@@ -14,12 +14,15 @@
       httpgd
     ];
   };
+
+  gemini-cli = pkgs.writeShellScriptBin "gemini" ''
+    ${pkgs.nodejs}/bin/npx --yes @google/generative-ai-cli@latest "$@"
+  '';
 in {
   #### User packages
   home.packages =
     (with pkgsUnstable; [
       app2unit
-      gemini-cli
       (anki.withAddons [
         (ankiAddons.anki-connect.withConfig {
           config = {
@@ -35,6 +38,8 @@ in {
       ])
     ])
     ++ (with pkgs; [
+      gemini-cli
+
       ## Wayland / Hyprland
       hypridle
       hyprlock
