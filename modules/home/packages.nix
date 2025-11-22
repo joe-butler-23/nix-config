@@ -2,6 +2,7 @@
 {
   pkgs,
   pkgsUnstable,
+  cli-flakes,
   ...
 }: let
   # Define a custom R environment with specific packages
@@ -19,7 +20,6 @@ in {
   home.packages =
     (with pkgsUnstable; [
       app2unit
-      gemini-cli
       (anki.withAddons [
         (ankiAddons.anki-connect.withConfig {
           config = {
@@ -41,17 +41,13 @@ in {
       hyprshot
       hyprpaper
       hyprland-protocols
-      # rofi-wayland removed - let Stylix handle rofi package
-      # waybar removed - managed by modules/home/dotfiles/waybar.nix
       wl-clipboard
       xdg-desktop-portal-hyprland
       xdg-utils
       wayland-utils
       uwsm
-      # wlogout removed - managed by modules/home/dotfiles/wlogout/wlogout.nix
 
       ## Core desktop
-      # foot removed - managed by modules/home/dotfiles/foot.nix
       home-manager
       capitaine-cursors
       bluetui
@@ -67,7 +63,6 @@ in {
       nerd-fonts.jetbrains-mono
       font-awesome
       noto-fonts-color-emoji
-      # yazi removed - managed by modules/home/dotfiles/yazi.nix
       qmk
       imagemagick
       brightnessctl
@@ -119,6 +114,8 @@ in {
       gnumeric
       obsidian
       zotero
-      # zathura removed - managed by modules/home/dotfiles/zathura.nix
+
+      ## Custom apps from flakes
+      cli-flakes.packages.x86_64-linux.gemini-cli
     ]);
 }
