@@ -21,7 +21,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # NEW: generated VS Code/VSCodium extensions (Open VSX + Marketplace)
+    # VS Code/VSCodium extensions (Open VSX + Marketplace)
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -30,6 +30,9 @@
 
     # Anki-forge from GitHub repository
     anki-forge.url = "git+file:///home/joebutler/development/anki-forge-app";
+
+    # cli-flakes
+    cli-flakes.url = "git+file:///home/joebutler/development/cli-flakes";
   };
 
   outputs = {
@@ -41,6 +44,7 @@
     nix-vscode-extensions,
     whichkey,
     anki-forge,
+    cli-flakes,
     ...
   }: let
     system = "x86_64-linux";
@@ -60,7 +64,7 @@
     mkSystem = hostName:
       nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit pkgsUnstable whichkey anki-forge;};
+        specialArgs = {inherit pkgsUnstable whichkey anki-forge cli-flakes;};
         modules = [
           ./configuration.nix
           stylix.nixosModules.stylix
@@ -73,7 +77,7 @@
             home-manager.backupFileExtension = "hm-bak";
 
             # Pass special arguments to Home Manager modules
-            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge;};
+            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge cli-flakes;};
 
             home-manager.users.joebutler = import ./home.nix;
           }
@@ -92,7 +96,7 @@
     homeConfigurations = {
       joebutler = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge;};
+        extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge cli-flakes;};
         modules = [
           ./home.nix
           stylix.homeModules.stylix
