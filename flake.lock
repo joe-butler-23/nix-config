@@ -6,17 +6,17 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1763563385,
-        "narHash": "sha256-CVtp20lyPh9+NDPAC/t14pvaA/bb1HhmxJa5tfikLuo=",
-        "ref": "refs/heads/main",
-        "rev": "b9da2b6007e21a49f64857a9a2658cb00bdcd1cc",
-        "revCount": 6,
-        "type": "git",
-        "url": "file:///home/joebutler/development/anki-forge-app"
+        "lastModified": 1763833596,
+        "narHash": "sha256-YZqmkMwDdK+Xkb5migQwQEdqHlBX9dC9UIea3nKXdU8=",
+        "owner": "joe-butler-23",
+        "repo": "anki-card-forge",
+        "rev": "b9ec17ebc6536a94a025994f467a92bec4d5249a",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/joebutler/development/anki-forge-app"
+        "owner": "joe-butler-23",
+        "repo": "anki-card-forge",
+        "type": "github"
       }
     },
     "base16": {
