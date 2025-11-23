@@ -4,6 +4,7 @@
     ./core.nix
     ./servers/context7.nix
     ./targets/cline.nix
+    ./targets/opencode.nix
     ./settings.nix
   ];
 }
