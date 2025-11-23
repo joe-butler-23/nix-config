@@ -2,7 +2,6 @@
   imports = [
     ./anki-forge.nix
     ./foot.nix
-    ./opencode.nix
     ./hyprland.nix
     ./hyprland-extras.nix
     ./mako.nix

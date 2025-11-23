@@ -1,11 +1,12 @@
 ## Based on: https://github.com/lewisflude/nix/blob/main/home/nixos/mcp.nix
-
-{ config, pkgs, lib, ... }:
-
-let
-  cfg = config.services.mcp;
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
+  cfg = config.services.mcp;
+in {
   ####
   # Options
   ####
@@ -19,7 +20,7 @@ in
         Each target specifies a directory and fileName where the JSON
         file should be copied as a real file (not a symlink).
       '';
-      type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
+      type = lib.types.attrsOf (lib.types.submodule (_: {
         options = {
           directory = lib.mkOption {
             type = lib.types.str;
@@ -31,7 +32,7 @@ in
           };
         };
       }));
-      default = { };
+      default = {};
     };
 
     # MCP servers definition
@@ -40,7 +41,7 @@ in
         MCP servers available to all targets. These will appear under
         the "mcpServers" key in the generated JSON.
       '';
-      type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
+      type = lib.types.attrsOf (lib.types.submodule (_: {
         options = {
           command = lib.mkOption {
             type = lib.types.str;
@@ -48,17 +49,17 @@ in
           };
           args = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            default = [ ];
+            default = [];
             description = "Arguments passed to the MCP server.";
           };
           env = lib.mkOption {
             type = lib.types.attrsOf lib.types.str;
-            default = { };
+            default = {};
             description = "Environment variables for this MCP server.";
           };
         };
       }));
-      default = { };
+      default = {};
     };
   };
 
@@ -80,35 +81,35 @@ in
     #   }
     # }
     #
-    home.activation.mcpGenerateConfigs = lib.hm.dag.entryAfter [ "writeBoundary" ] (
+    home.activation.mcpGenerateConfigs = lib.hm.dag.entryAfter ["writeBoundary"] (
       let
         mcpJson = builtins.toJSON {
-          mcpServers = lib.mapAttrs (_name: server: {
-            inherit (server) command args env;
-          }) cfg.servers;
+          mcpServers =
+            lib.mapAttrs (_name: server: {
+              inherit (server) command args env;
+            })
+            cfg.servers;
         };
 
         mcpStoreFile = pkgs.writeText "mcp-servers.json" mcpJson;
 
         generateCommands = lib.concatStringsSep "\n" (
           lib.mapAttrsToList
-            (name: target:
-              let
-                dir  = target.directory;
-                path = "${target.directory}/${target.fileName}";
-                escDir  = lib.escapeShellArg dir;
-                escPath = lib.escapeShellArg path;
-              in
-              ''
-                mkdir -p ${escDir}
-                # Copy from Nix store -> real file, so tools that dislike symlinks are happy
-                cp ${mcpStoreFile} ${escPath}
-              ''
-            )
-            cfg.targets
+          (
+            _name: target: let
+              dir = target.directory;
+              path = "${target.directory}/${target.fileName}";
+              escDir = lib.escapeShellArg dir;
+              escPath = lib.escapeShellArg path;
+            in ''
+              mkdir -p ${escDir}
+              # Copy from Nix store -> real file, so tools that dislike symlinks are happy
+              cp ${mcpStoreFile} ${escPath}
+            ''
+          )
+          cfg.targets
         );
-      in
-      ''
+      in ''
         ${generateCommands}
       ''
     );
