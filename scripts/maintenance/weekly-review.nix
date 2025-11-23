@@ -33,7 +33,22 @@ pkgs.writeShellScriptBin "weekly-review" ''
     echo "❌ Config directory $CONFIG_DIR not found!"
   fi
 
-  # 2. File Review
+  # 2. System Health
+  echo -e "\n❤️  System Health Check"
+  echo "----------------------------------------"
+
+  echo "❌ Failed Systemd Units:"
+  systemctl --failed --no-pager
+
+  echo -e "\n💾 Disk Usage:"
+  df -h / | grep -v Filesystem
+
+  echo -e "\nsc  Critical Errors (Current Boot):"
+  # -p 3: Priority 3 (Error) and above
+  # -xb: Current boot, include catalog
+  journalctl -p 3 -xb --no-pager | tail -n 10 || echo "No critical errors found."
+
+  # 3. File Review
   echo -e "\n📂 Recent Files (Last 7 Days)..."
   echo "   Searching in: development, boox, Documents, Downloads, Pictures, utilities"
   echo "----------------------------------------"
