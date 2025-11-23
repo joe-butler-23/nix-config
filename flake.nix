@@ -26,7 +26,7 @@
     nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
 
     # Local whichkey development flake
-    whichkey.url = "github:joe-butler-23/wlr-which-key";
+    whichkey.url = "git+file:///home/joebutler/development/whichkey";
 
     # Anki-forge from GitHub repository
     anki-forge.url = "github:joe-butler-23/anki-card-forge";
