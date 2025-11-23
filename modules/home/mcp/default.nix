@@ -4,7 +4,7 @@
 {
   imports = [
     ./core.nix
-    # later: ./servers/context7.nix
+		./servers/context7.nix
     # later: ./targets/cline.nix
     # etc.
   ];
