@@ -33,6 +33,7 @@ in {
           };
         })
       ])
+      opencode
     ])
     ++ (with pkgs; [
       ## Wayland / Hyprland
@@ -97,7 +98,6 @@ in {
 
       ## Programming / build
       go
-      opencode
       R-with-packages
       rustup
       scdoc

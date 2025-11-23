@@ -27,3 +27,4 @@ hardware-*.nix
 .cache/
 .ssh/
 .gnupg/
+.gemini/
