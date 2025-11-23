@@ -4,7 +4,7 @@
 {
   services.mcp.targets = {
     cline = {
-      directory = "$HOME/.config/VSCodium/User/globalStorage/saoudrizwan.cline-nightly/settings";
+      directory = ".config/VSCodium/User/globalStorage/saoudrizwan.cline-nightly/settings";
       fileName = "cline_mcp_settings.json";
     };
   };

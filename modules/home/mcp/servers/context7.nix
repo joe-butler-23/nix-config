@@ -20,7 +20,7 @@ in
 {
   services.mcp.servers.context7 = {
     command = "${context7Wrapper}/bin/context7-mcp-wrapper";
-    args    = [ ];
+    args    = [ "--mcp" ];
     # env = { }; # nothing needed for Context7
   };
 }
