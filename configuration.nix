@@ -37,6 +37,19 @@
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
+  nix.optimise.automatic = true;
+  nix.optimise.dates = ["03:45"];
+
+  system.autoUpgrade = {
+    enable = true;
+    flake = "github:joe-butler-23/nix-config";
+    flags = [
+      "-L" # print build logs
+    ];
+    dates = "04:00";
+    randomizedDelaySec = "45min";
+    allowReboot = false;
+  };
   nixpkgs.config.allowUnfree = true;
 
   #### System state version

@@ -9,5 +9,6 @@
     (import ./copy-prompt.nix {inherit pkgs user;})
     (import ./directory-finder.nix {inherit pkgs;})
     (import ./study-focus.nix {inherit pkgs;})
+    (import ./maintenance/weekly-review.nix {inherit pkgs;})
   ];
 }
