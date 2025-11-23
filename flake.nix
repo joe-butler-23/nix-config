@@ -26,10 +26,10 @@
     nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
 
     # Local whichkey development flake
-    whichkey.url = "git+file:///home/joebutler/development/whichkey";
+    whichkey.url = "github:joe-butler-23/wlr-which-key";
 
     # Anki-forge from GitHub repository
-    anki-forge.url = "git+file:///home/joebutler/development/anki-forge-app";
+    anki-forge.url = "github:joe-butler-23/anki-card-forge";
 
     # cli-flakes
     cli-flakes.url = "git+file:///home/joebutler/development/cli-flakes";
@@ -48,6 +48,7 @@
     ...
   }: let
     system = "x86_64-linux";
+    user = "joebutler";
     pkgsUnstable = import nixpkgs-unstable {
       inherit system;
       config.allowUnfree = true;
@@ -64,7 +65,7 @@
     mkSystem = hostName:
       nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit pkgsUnstable whichkey anki-forge cli-flakes;};
+        specialArgs = {inherit pkgsUnstable whichkey anki-forge cli-flakes user;};
         modules = [
           ./configuration.nix
           stylix.nixosModules.stylix
@@ -77,9 +78,9 @@
             home-manager.backupFileExtension = "hm-bak";
 
             # Pass special arguments to Home Manager modules
-            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge cli-flakes;};
+            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge cli-flakes user;};
 
-            home-manager.users.joebutler = import ./home.nix;
+            home-manager.users.${user} = import ./home.nix;
           }
 
           # Host-specific configuration
@@ -94,9 +95,9 @@
 
     # Standalone home-manager configurations
     homeConfigurations = {
-      joebutler = home-manager.lib.homeManagerConfiguration {
+      "${user}" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge cli-flakes;};
+        extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge cli-flakes user;};
         modules = [
           ./home.nix
           stylix.homeModules.stylix

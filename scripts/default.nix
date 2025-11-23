@@ -1,8 +1,12 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  user,
+  ...
+}: {
   home.packages = [
     (import ./file-launcher.nix {inherit pkgs;})
     (import ./recent-files-launcher.nix {inherit pkgs;})
-    (import ./copy-prompt.nix {inherit pkgs;})
+    (import ./copy-prompt.nix {inherit pkgs user;})
     (import ./directory-finder.nix {inherit pkgs;})
     (import ./study-focus.nix {inherit pkgs;})
   ];

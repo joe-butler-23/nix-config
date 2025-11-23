@@ -1,5 +1,6 @@
 {
   config,
+  user,
   ...
 }: {
   networking.hostName = "laptop-nix";
@@ -30,7 +31,7 @@
   };
 
   # Laptop-only Home-Manager config
-  home-manager.users.joebutler = {
+  home-manager.users.${user} = {
     services.kanshi.enable = true;
 
     xdg.configFile."kanshi/config".text = ''

@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  user,
+  ...
+}: {
   #### Display manager and session
   services.displayManager.sddm.enable = false;
   services.displayManager.ly = {
@@ -53,7 +57,7 @@
       LoginGraceTime = 20;
     };
     extraConfig = ''
-      AllowUsers joebutler
+      AllowUsers ${user}
     '';
   };
 
@@ -73,7 +77,7 @@
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   #### User account
-  users.users.joebutler = {
+  users.users.${user} = {
     isNormalUser = true;
     createHome = true;
     extraGroups = ["networkmanager" "wheel" "input" "docker"];

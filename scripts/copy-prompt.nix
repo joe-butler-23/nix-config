@@ -1,7 +1,10 @@
-{pkgs ? import <nixpkgs> {}}: (pkgs.writeShellScriptBin "copy-prompt" ''
+{
+  pkgs ? import <nixpkgs> {},
+  user ? "joebutler",
+}: (pkgs.writeShellScriptBin "copy-prompt" ''
   set -euo pipefail
 
-  PROMPT_DIR="/home/joebutler/Documents/prompting"
+  PROMPT_DIR="/home/${user}/Documents/prompting"
 
   # Colors for fzf
   COLORS=(

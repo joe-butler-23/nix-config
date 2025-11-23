@@ -10,6 +10,13 @@ export const NixGitSync = async ({ $ }) => {
       // Check if the command is a Nix build command
       if (triggers.some(t => command.includes(t))) {
         try {
+          // Format code first
+          try {
+            await $`nix fmt`;
+          } catch (e) {
+            console.error("Formatting failed:", e);
+          }
+
           // Check for uncommitted changes
           const status = await $`git status --porcelain`.text();
           

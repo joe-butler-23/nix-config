@@ -1,4 +1,8 @@
-{config, ...}: {
+{
+  config,
+  user,
+  ...
+}: {
   programs.zsh = {
     enable = true;
 
@@ -33,9 +37,9 @@
     # Shell aliases
     shellAliases = {
       # NixOS concise aliases (work from any directory)
-      hs = "home-manager switch --flake \"$HOME/nix-config#joebutler\"";
+      hs = "home-manager switch --flake \"$HOME/nix-config#${user}\"";
       ns = "sudo nixos-rebuild switch --flake \"$HOME/nix-config\"";
-      hsdry = "home-manager build --flake \"$HOME/nix-config#joebutler\"";
+      hsdry = "home-manager build --flake \"$HOME/nix-config#${user}\"";
       nsdry = "sudo nixos-rebuild dry-build --flake \"$HOME/nix-config\"";
       hn = "home-manager news";
       hstatus = "home-manager generations";
