@@ -5,7 +5,6 @@
   imports = [
     ./core.nix
 		./servers/context7.nix
-    # later: ./targets/cline.nix
-    # etc.
+    ./targets/cline.nix
   ];
 }
