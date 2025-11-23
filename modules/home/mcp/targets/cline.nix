@@ -2,8 +2,10 @@
 { config, pkgs, lib, ... }:
 
 {
-  services.mcp.targets.cline = {
-    directory = "${config.home.homeDirectory}/VSCodium/User/globalStorage/saoudrizwan.claude-dev/settings";
-    fileName  = "cline_mcp_settings.json";
+  services.mcp.targets = {
+    cline = {
+      directory = "$HOME/.config/VSCodium/User/globalStorage/saoudrizwan.cline-nightly/settings";
+      fileName = "cline_mcp_settings.json";
+    };
   };
 }
