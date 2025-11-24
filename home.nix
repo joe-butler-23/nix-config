@@ -6,7 +6,6 @@
     ./modules/home/dotfiles
     ./modules/home/web-apps
     ./modules/home/mcp
-    ./modules/home/programs
     ./scripts
   ];
 
