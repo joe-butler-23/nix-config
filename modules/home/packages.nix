@@ -2,7 +2,6 @@
 {
   pkgs,
   pkgsUnstable,
-  cli-flakes,
   ...
 }: let
   # Define a custom R environment with specific packages
@@ -114,8 +113,5 @@ in {
       gnumeric
       obsidian
       zotero
-
-      ## Custom apps from flakes
-      cli-flakes.packages.x86_64-linux.gemini-cli
     ]);
 }
