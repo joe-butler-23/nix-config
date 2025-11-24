@@ -33,3 +33,4 @@ hardware-*.nix
 secrets/*.tmp
 secrets/*.bak
 
+secrets/sops.agekey

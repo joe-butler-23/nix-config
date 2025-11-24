@@ -58,7 +58,5 @@
   # SOPS configuration
   sops.enable = true;
   sops.defaultSopsFile = ./secrets/secrets.yaml;
-  sops.age.sshKeyPaths = ["/home/joebutler/.ssh/id_ed25519"];
-  sops.age.keyFile = "/var/lib/sops-nix/key.txt";
-  sops.age.generateKey = true;
+  sops.age.keyFile = "/home/joebutler/nix-config/secrets/sops.agekey";
 }
