@@ -53,14 +53,14 @@ def main():
 
                 # Use jq to merge
                 merge_path = client_config["mergePath"]
-                # Convert merge_path string to a jq-compatible path array string
-                jq_merge_path = '.' + '.'.join(merge_path.split('.'))
+                # Construct the jq filter string
+                jq_filter = f"setpath(\"{merge_path}\" | split("."); $mcp_content)"
 
                 # Construct the jq command
                 jq_command = [
                     "jq",
                     "--argjson", "mcp_content", json.dumps(generated_config),
-                    f"setpath(\"{jq_merge_path}\" | split("."); $mcp_content)",
+                    jq_filter,
                     str(output_file_path)
                 ]
                 
