@@ -98,7 +98,7 @@ in {
 
       ## Programming / build
       go
-			opencode
+      opencode
       R-with-packages
       rustup
       scdoc
