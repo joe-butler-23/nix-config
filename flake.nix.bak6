@@ -35,18 +35,7 @@
     cli-flakes.url = "git+file:///home/joebutler/development/cli-flakes";
   };
 
-  outputs = {
-    nixpkgs,
-    nixpkgs-unstable,
-    home-manager,
-    stylix,
-    treefmt-nix,
-    nix-vscode-extensions,
-    whichkey,
-    anki-forge,
-    cli-flakes,
-    ...
-  }: let
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, treefmt-nix, nix-vscode-extensions, whichkey, anki-forge, cli-flakes, ... }@inputs: let
     system = "x86_64-linux";
     user = "joebutler";
     pkgsUnstable = import nixpkgs-unstable {
@@ -58,7 +47,7 @@
       config.allowUnfree = true;
     };
 
-    inherit (nixpkgs) lib; # Define lib here
+    lib = nixpkgs.lib; # Define lib here
 
     # Generated extensions set (kept up-to-date by upstream CI)
     vsx = nix-vscode-extensions.extensions.${system}.vscode-marketplace;
@@ -99,6 +88,7 @@
         stylix.homeModules.stylix
       ];
     };
+
   in {
     nixosConfigurations = {
       laptop-nix = mkSystem "laptop-nix";
@@ -115,7 +105,7 @@
       type = "app";
       program = import ./modules/home/mcp/generate_configs.nix {
         inherit pkgs lib;
-        inherit (homeConfig.config.home) homeDirectory;
+        homeDirectory = homeConfig.config.home.homeDirectory;
       };
     };
 
