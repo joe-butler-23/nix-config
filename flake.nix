@@ -87,6 +87,17 @@
           ./modules/hosts/${hostName}.nix
         ];
       };
+
+    # Evaluate home-manager configuration to get homeDirectory
+    homeConfig = home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge cli-flakes user;};
+      modules = [
+        ./home.nix
+        stylix.homeModules.stylix
+      ];
+    };
+
   in {
     nixosConfigurations = {
       laptop-nix = mkSystem "laptop-nix";
@@ -95,20 +106,16 @@
 
     # Standalone home-manager configurations
     homeConfigurations = {
-      "${user}" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge cli-flakes user;};
-        modules = [
-          ./home.nix
-          stylix.homeModules.stylix
-        ];
-      };
+      "${user}" = homeConfig;
     };
 
     # Expose the generate-mcp-configs script as an app
     apps.${system}.generate-mcp-configs = {
       type = "app";
-      program = import ./modules/home/mcp/generate_configs.nix { inherit pkgs lib config; };
+      program = import ./modules/home/mcp/generate_configs.nix {
+        inherit pkgs lib;
+        homeDirectory = homeConfig.config.home.homeDirectory;
+      };
     };
 
     # formatter unchanged
