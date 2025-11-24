@@ -3,6 +3,7 @@ _: {
     opencode = {
       directory = ".config/opencode";
       fileName = "mcp.json";
+      format = "opencode";
     };
   };
 }

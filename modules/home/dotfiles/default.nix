@@ -5,6 +5,7 @@
     ./hyprland.nix
     ./hyprland-extras.nix
     ./mako.nix
+    ./opencode.nix
     ./rofi.nix
     ./starship.nix
     ./thunar.nix
