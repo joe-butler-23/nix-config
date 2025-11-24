@@ -105,6 +105,12 @@
       };
     };
 
+    # Expose the generate-mcp-configs script as an app
+    apps.${system}.generate-mcp-configs = {
+      type = "app";
+      program = (pkgs.callPackage ./modules/home/mcp/generate_configs.nix {}).generateScript;
+    };
+
     # formatter unchanged
     formatter.${system} =
       treefmt-nix.lib.mkWrapper

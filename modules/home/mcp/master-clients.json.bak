@@ -1,0 +1,19 @@
+{
+  "clients": {
+    "opencode": {
+      "directory": "${config.xdg.configHome}/opencode",
+      "fileName": "mcp.json",
+      "format": "opencode"
+    },
+    "cline": {
+      "directory": ".config/VSCodium/User/globalStorage/saoudrizwan.cline-nightly/settings",
+      "fileName": "cline_mcp_settings.json",
+      "format": "mcp"
+    },
+    "gemini-cli": {
+      "directory": "~/.config/gemini-cli",
+      "fileName": "mcp.json",
+      "format": "opencode"
+    }
+  }
+}
