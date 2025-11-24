@@ -6,12 +6,12 @@ This directory contains the new script-based system for managing MCP (Multi-Clie
 
 - `master-servers.json`: Defines all available MCP servers.
 - `master-clients.json`: Defines all clients (targets) that consume MCP configurations.
-- `generate_configs.py`: Python script to generate client-specific configuration files based on the master JSON files.
+- `generate_configs.nix`: Nix script to generate client-specific configuration files based on the master JSON files.
 - `README.md`: This documentation.
 
 ## How to Use
 
-1.  **Define Servers:** Edit `master-servers.json` to add, modify, or remove MCP server definitions. Each server should have a `command`, optional `args`, and optional `environment` variables.
+1.  **Define Servers:** Edit `master-servers.json` to add, modify, or remove MCP server definitions. Each server should have a `command` (which can be a wrapper script), optional `args`, and optional `environment` variables.
 
     Example `master-servers.json`:
     ```json
@@ -54,13 +54,12 @@ This directory contains the new script-based system for managing MCP (Multi-Clie
     }
     ```
 
-3.  **Generate Configurations:** Run the `generate_configs.py` script to generate or update all client configuration files:
+3.  **Generate Configurations:** Run the `generate_configs.nix` script to generate or update all client configuration files. You can run it using `nix run`:
 
     ```bash
-    python3 modules/home/mcp/generate_configs.py
+    nix run .#generate-mcp-configs
     ```
-
-    The script will create the necessary directories and write the JSON configuration files to the specified locations.
+    (Note: You might need to adjust the flake.nix to expose this script as an app, or run it directly with `nix build . -o result && ./result/bin/generate-mcp-configs`)
 
 ## Server Wrappers
 
