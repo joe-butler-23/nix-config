@@ -108,7 +108,7 @@
     # Expose the generate-mcp-configs script as an app
     apps.${system}.generate-mcp-configs = {
       type = "app";
-      inherit ((pkgs.callPackage ./modules/home/mcp/generate_configs.nix {}).generateScript) program;
+      program = (pkgs.callPackage ./modules/home/mcp/generate_configs.nix {}).generateScript;
     };
 
     # formatter unchanged
