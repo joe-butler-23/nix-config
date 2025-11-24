@@ -39,6 +39,7 @@
         name = clientName;
         path = outputFilePath;
         content = configContent;
+        mergePath = clientConfig.mergePath or null;
       }
     )
     clients;
@@ -49,10 +50,24 @@
     runtimeInputs = [pkgs.jq]; # Include jq for potential future validation/pretty printing
     text = lib.concatStringsSep "\n" (
       lib.mapAttrsToList (
-        _clientName: clientConfig: ''
+        _clientName: clientConfig: let
+          # Escape single quotes in configContent for shell here-string
+          escapedConfigContent = lib.replaceStrings ["'"] ["'\''"] clientConfig.content;
+        in ''
           mkdir -p "$(dirname ${clientConfig.path})"
-          echo '${clientConfig.content}' > "${clientConfig.path}"
-          echo "Generated config for ${clientConfig.name} at ${clientConfig.path}"
+          if [ -f "${clientConfig.path}" ] && [ "${clientConfig.mergePath}" != "null" ]; then
+            # Merge into existing file using jq
+            tmp_file=$(mktemp)
+            jq --argjson mcp_content '${escapedConfigContent}' \
+               --arg merge_path "${clientConfig.mergePath}" \
+               'setpath($merge_path | split("."); $mcp_content)' \
+               "${clientConfig.path}" > "$tmp_file" && mv "$tmp_file" "${clientConfig.path}"
+            echo "Merged config for ${clientConfig.name} at ${clientConfig.path}"
+          else
+            # Write or overwrite the file
+            echo '${escapedConfigContent}' > "${clientConfig.path}"
+            echo "Generated config for ${clientConfig.name} at ${clientConfig.path}"
+          fi
         ''
       )
       generatedConfigs
