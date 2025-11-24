@@ -54,4 +54,11 @@
 
   #### System state version
   system.stateVersion = "25.05";
+
+  # SOPS configuration
+  sops.enable = true;
+  sops.defaultSopsFile = ./secrets/secrets.yaml;
+  sops.age.sshKeyPaths = ["/home/joebutler/.ssh/id_ed25519"];
+  sops.age.keyFile = "/var/lib/sops-nix/key.txt";
+  sops.age.generateKey = true;
 }

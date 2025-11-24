@@ -2,8 +2,9 @@
   "clients": {
     "opencode": {
       "directory": "~/.config/opencode",
-      "fileName": "mcp.json",
-      "format": "opencode"
+      "fileName": "opencode.json",
+      "format": "opencode",
+      "mergePath": ".mcp"
     },
     "cline": {
       "directory": "~/.config/VSCodium/User/globalStorage/saoudrizwan.cline-nightly/settings",

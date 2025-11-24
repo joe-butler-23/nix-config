@@ -1,8 +1,8 @@
 {
   "servers": {
     "context7": {
-      "command": "${pkgs.nodejs}/bin/npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "command": "context7-mcp-wrapper",
+      "args": [],
       "environment": {}
     }
   }

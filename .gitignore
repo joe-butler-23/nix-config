@@ -27,4 +27,9 @@ hardware-*.nix
 .cache/
 .ssh/
 .gnupg/
-.gemini/
+  .gemini/
+
+# SOPS secrets (encrypted secrets.yaml should NOT be ignored)
+secrets/*.tmp
+secrets/*.bak
+

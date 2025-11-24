@@ -31,8 +31,9 @@
     # Anki-forge from GitHub repository
     anki-forge.url = "github:joe-butler-23/anki-card-forge";
 
-    # cli-flakes
-    cli-flakes.url = "git+file:///home/joebutler/development/cli-flakes";
+    # SOPS Nix
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -44,7 +45,7 @@
     nix-vscode-extensions,
     whichkey,
     anki-forge,
-    cli-flakes,
+    sops-nix,
     ...
   }: let
     system = "x86_64-linux";
@@ -67,10 +68,11 @@
     mkSystem = hostName:
       nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit pkgsUnstable whichkey anki-forge cli-flakes user;};
+        specialArgs = {inherit pkgsUnstable whichkey anki-forge user;};
         modules = [
           ./configuration.nix
           stylix.nixosModules.stylix
+          sops-nix.nixosModules.sops
 
           # Home Manager integration
           home-manager.nixosModules.home-manager
@@ -80,7 +82,7 @@
             home-manager.backupFileExtension = "hm-bak";
 
             # Pass special arguments to Home Manager modules
-            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge cli-flakes user;};
+            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge user;};
 
             home-manager.users.${user} = import ./home.nix;
           }
@@ -93,7 +95,7 @@
     # Evaluate home-manager configuration to get homeDirectory
     homeConfig = home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
-      extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge cli-flakes user;};
+      extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge user;};
       modules = [
         ./home.nix
         stylix.homeModules.stylix
@@ -111,14 +113,14 @@
     };
 
     # Expose the generate-mcp-configs script as an app
-    apps.${system}.generate-mcp-configs = {
-      type = "app";
-      program =
-        (import ./modules/home/mcp/generate_configs.nix {
-          inherit pkgs lib;
-          homeDirectory = "/home/${user}"; # Directly use user's home directory
-        }).outPath;
-    };
+    # apps.${system}.generate-mcp-configs = {
+    #   type = "app";
+    #   program =
+    #     (import ./modules/home/mcp/generate_configs.nix {
+    #       inherit pkgs lib;
+    #       homeDirectory = "/home/${user}"; # Directly use user's home directory
+    #     }).outPath;
+    # };
 
     # formatter unchanged
     formatter.${system} =
