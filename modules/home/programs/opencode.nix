@@ -1,9 +1,8 @@
 {
-  config,
   lib,
-  pkgs,
   ...
-}: with lib; {
+}:
+with lib; {
   options.programs.opencode = {
     enable = mkEnableOption "OpenCode program";
 
