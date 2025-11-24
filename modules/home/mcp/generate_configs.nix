@@ -73,6 +73,5 @@
       generatedConfigs
     );
   };
-in {
-  inherit generateScript;
-}
+in
+  generateScript
