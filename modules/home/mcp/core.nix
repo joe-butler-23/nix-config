@@ -12,6 +12,7 @@ with lib; let
     transformServer = _name: server: {
       type = "local";
       inherit (server) command;
+      inherit (server) args;
       enabled = true;
       # Add environment variables if they exist
       environment = server.environment or {};
@@ -44,12 +45,26 @@ in {
   options.services.mcp = {
     enable = mkEnableOption "MCP service";
 
+    # Expose the generated config for other modules to use
+    openCodeConfig = mkOption {
+      type = types.attrs;
+      internal = true;
+      readOnly = true;
+      default = generateOpenCodeConfig cfg.servers;
+      description = "Generated OpenCode configuration";
+    };
+
     servers = mkOption {
       type = types.attrsOf (types.submodule {
         options = {
           command = mkOption {
-            type = types.listOf types.str;
+            type = types.str;
             description = "Command to run the MCP server";
+          };
+          args = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = "Arguments for the MCP server command";
           };
           environment = mkOption {
             type = types.attrsOf types.str;
