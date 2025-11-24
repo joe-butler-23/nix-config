@@ -99,6 +99,7 @@
       modules = [
         ./home.nix
         stylix.homeModules.stylix
+        sops-nix.homeManagerModules.sops
       ];
     };
   in {

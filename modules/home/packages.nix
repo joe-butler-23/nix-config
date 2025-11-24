@@ -33,6 +33,7 @@ in {
         })
       ])
       opencode
+      gemini-cli
     ])
     ++ (with pkgs; [
       ## Wayland / Hyprland
@@ -94,6 +95,7 @@ in {
       brave
       iwd
       sshpass
+      networkmanagerapplet
 
       ## Programming / build
       go

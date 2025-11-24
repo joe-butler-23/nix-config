@@ -6,6 +6,7 @@
     ./modules/home/dotfiles
     ./modules/home/web-apps
     ./scripts
+    ./modules/home/sops.nix
   ];
 
   #### User identity
