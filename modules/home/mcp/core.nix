@@ -1,117 +1,91 @@
-## Based on: https://github.com/lewisflude/nix/blob/main/home/nixos/mcp.nix
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: let
+{ config, lib, pkgs, ... }:
+with lib;
+let
   cfg = config.services.mcp;
-in {
-  ####
-  # Options
-  ####
-  options.services.mcp = {
-    enable = lib.mkEnableOption "declarative MCP configuration";
-
-    # Where to write config files (e.g. Cline, Cursor, Claude, Gemini)
-    targets = lib.mkOption {
-      description = ''
-        Targets that should receive a generated MCP JSON config.
-        Each target specifies a directory and fileName where the JSON
-        file should be copied as a real file (not a symlink).
-      '';
-      type = lib.types.attrsOf (lib.types.submodule (_: {
-        options = {
-          directory = lib.mkOption {
-            type = lib.types.str;
-            description = "Directory where the MCP JSON file will be written.";
-          };
-          fileName = lib.mkOption {
-            type = lib.types.str;
-            description = "File name for the MCP JSON file (e.g. mcp.json).";
-          };
-        };
-      }));
-      default = {};
+  
+  # Transform MCP server definitions to OpenCode format
+  generateOpenCodeConfig = servers: 
+    let
+      transformServer = name: server: {
+        type = "local";
+        command = server.command;
+        enabled = true;
+        # Add environment variables if they exist
+        environment = server.environment or {};
+      };
+      
+      transformedServers = mapAttrs transformServer servers;
+    in {
+      "$schema" = "https://opencode.ai/config.json";
+      mcp = transformedServers;
     };
+  
+  # Generate configuration files for each target
+  generateTargetConfigs = targets: 
+    mapAttrs (name: target: {
+      "${target.directory}/${target.fileName}" = {
+        text = if target.format == "opencode" 
+          then builtins.toJSON (generateOpenCodeConfig cfg.servers)
+          else builtins.toJSON cfg.servers;
+        onChange = ''
+          ${pkgs.jq}/bin/jq '.' "${target.directory}/${target.fileName}" > /dev/null || {
+            echo "Invalid JSON generated for ${name}"
+            exit 1
+          }
+        '';
+      };
+    }) targets;
 
-    # MCP servers definition
-    servers = lib.mkOption {
-      description = ''
-        MCP servers available to all targets. These will appear under
-        the "mcpServers" key in the generated JSON.
-      '';
-      type = lib.types.attrsOf (lib.types.submodule (_: {
+in {
+  options.services.mcp = {
+    enable = mkEnableOption "MCP service";
+    
+    servers = mkOption {
+      type = types.attrsOf (types.submodule {
         options = {
-          command = lib.mkOption {
-            type = lib.types.str;
-            description = "Executable to run for this MCP server.";
+          command = mkOption {
+            type = types.listOf types.str;
+            description = "Command to run the MCP server";
           };
-          args = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [];
-            description = "Arguments passed to the MCP server.";
-          };
-          env = lib.mkOption {
-            type = lib.types.attrsOf lib.types.str;
+          environment = mkOption {
+            type = types.attrsOf types.str;
             default = {};
-            description = "Environment variables for this MCP server.";
+            description = "Environment variables for the MCP server";
           };
         };
-      }));
+      });
       default = {};
+      description = "MCP server configurations";
+    };
+    
+    targets = mkOption {
+      type = types.attrsOf (types.submodule {
+        options = {
+          directory = mkOption {
+            type = types.str;
+            description = "Directory to write the configuration file";
+          };
+          fileName = mkOption {
+            type = types.str;
+            description = "Name of the configuration file";
+          };
+          format = mkOption {
+            type = types.enum ["mcp" "opencode"];
+            default = "mcp";
+            description = "Output format for the configuration";
+          };
+        };
+      });
+      default = {};
+      description = "Target configurations for different tools";
     };
   };
 
-  ####
-  # Implementation
-  ####
-  config = lib.mkIf cfg.enable {
-    # Generate one canonical JSON blob in the Nix store
-    #
-    # Shape:
-    # {
-    #   "mcpServers": {
-    #     "<name>": {
-    #       "command": "...",
-    #       "args": [...],
-    #       "env": { ... }
-    #     },
-    #     ...
-    #   }
-    # }
-    #
-    home.activation.mcpGenerateConfigs = lib.hm.dag.entryAfter ["writeBoundary"] (
-      let
-        mcpJson = builtins.toJSON {
-          mcpServers =
-            lib.mapAttrs (_name: server: {
-              inherit (server) command args env;
-            })
-            cfg.servers;
-        };
-
-        mcpStoreFile = pkgs.writeText "mcp-servers.json" mcpJson;
-
-        generateCommands = lib.concatStringsSep "\n" (
-          lib.mapAttrsToList
-          (
-            _name: target: let
-              dir = target.directory;
-              path = "${target.directory}/${target.fileName}";
-              escDir = lib.escapeShellArg dir;
-              escPath = lib.escapeShellArg path;
-            in ''
-              mkdir -p ${escDir}
-              # Copy from Nix store -> real file, so tools that dislike symlinks are happy
-              cp ${mcpStoreFile} ${escPath}
-            ''
-          )
-          cfg.targets
-        );
-      in ''
-        ${generateCommands}
-      ''
-    );
+  config = mkIf cfg.enable {
+    # Ensure jq is available for JSON validation
+    home.packages = [ pkgs.jq ];
+    
+    # Generate configuration files for all targets
+    home.file = generateTargetConfigs cfg.targets;
   };
 }
