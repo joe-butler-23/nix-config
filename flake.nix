@@ -116,7 +116,7 @@
       program =
         (import ./modules/home/mcp/generate_configs.nix {
           inherit pkgs lib;
-          inherit (homeConfig.config.home) homeDirectory;
+          homeDirectory = "/home/${user}"; # Directly use user's home directory
         }).outPath;
     };
 
