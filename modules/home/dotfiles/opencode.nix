@@ -1,4 +1,7 @@
-{ pkgs, lib, config, ... }: {
+{
+  config,
+  ...
+}: {
   programs.opencode = {
     enable = true;
     settings = {

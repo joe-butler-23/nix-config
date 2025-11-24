@@ -1,30 +1,34 @@
-{ config, lib, pkgs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.mcp;
-  
+
   # Transform MCP server definitions to OpenCode format
-  generateOpenCodeConfig = servers: 
-    let
-      transformServer = name: server: {
-        type = "local";
-        command = server.command;
-        enabled = true;
-        # Add environment variables if they exist
-        environment = server.environment or {};
-      };
-      
-      transformedServers = mapAttrs transformServer servers;
-    in {
-      "$schema" = "https://opencode.ai/config.json";
-      mcp = transformedServers;
+  generateOpenCodeConfig = servers: let
+    transformServer = _name: server: {
+      type = "local";
+      inherit (server) command;
+      enabled = true;
+      # Add environment variables if they exist
+      environment = server.environment or {};
     };
-  
+
+    transformedServers = mapAttrs transformServer servers;
+  in {
+    "$schema" = "https://opencode.ai/config.json";
+    mcp = transformedServers;
+  };
+
   # Generate configuration files for each target
-  generateTargetConfigs = targets: 
+  generateTargetConfigs = targets:
     mapAttrs (name: target: {
       "${target.directory}/${target.fileName}" = {
-        text = if target.format == "opencode" 
+        text =
+          if target.format == "opencode"
           then builtins.toJSON (generateOpenCodeConfig cfg.servers)
           else builtins.toJSON cfg.servers;
         onChange = ''
@@ -34,12 +38,12 @@ let
           }
         '';
       };
-    }) targets;
-
+    })
+    targets;
 in {
   options.services.mcp = {
     enable = mkEnableOption "MCP service";
-    
+
     servers = mkOption {
       type = types.attrsOf (types.submodule {
         options = {
@@ -57,7 +61,7 @@ in {
       default = {};
       description = "MCP server configurations";
     };
-    
+
     targets = mkOption {
       type = types.attrsOf (types.submodule {
         options = {
@@ -83,8 +87,8 @@ in {
 
   config = mkIf cfg.enable {
     # Ensure jq is available for JSON validation
-    home.packages = [ pkgs.jq ];
-    
+    home.packages = [pkgs.jq];
+
     # Generate configuration files for all targets
     home.file = generateTargetConfigs cfg.targets;
   };
