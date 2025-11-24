@@ -56,7 +56,6 @@
   system.stateVersion = "25.05";
 
   # SOPS configuration
-  sops.enable = true;
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.age.keyFile = "/home/joebutler/nix-config/secrets/sops.agekey";
 }

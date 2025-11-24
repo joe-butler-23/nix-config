@@ -112,16 +112,6 @@
       "${user}" = homeConfig;
     };
 
-    # Expose the generate-mcp-configs script as an app
-    # apps.${system}.generate-mcp-configs = {
-    #   type = "app";
-    #   program =
-    #     (import ./modules/home/mcp/generate_configs.nix {
-    #       inherit pkgs lib;
-    #       homeDirectory = "/home/${user}"; # Directly use user's home directory
-    #     }).outPath;
-    # };
-
     # formatter unchanged
     formatter.${system} =
       treefmt-nix.lib.mkWrapper
