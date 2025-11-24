@@ -113,10 +113,11 @@
     # Expose the generate-mcp-configs script as an app
     apps.${system}.generate-mcp-configs = {
       type = "app";
-      program = import ./modules/home/mcp/generate_configs.nix {
-        inherit pkgs lib;
-        inherit (homeConfig.config.home) homeDirectory;
-      };
+      program =
+        (import ./modules/home/mcp/generate_configs.nix {
+          inherit pkgs lib;
+          inherit (homeConfig.config.home) homeDirectory;
+        }).outPath;
     };
 
     # formatter unchanged

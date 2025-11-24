@@ -35,18 +35,7 @@
     cli-flakes.url = "git+file:///home/joebutler/development/cli-flakes";
   };
 
-  outputs = {
-    nixpkgs,
-    nixpkgs-unstable,
-    home-manager,
-    stylix,
-    treefmt-nix,
-    nix-vscode-extensions,
-    whichkey,
-    anki-forge,
-    cli-flakes,
-    ...
-  }: let
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, treefmt-nix, nix-vscode-extensions, whichkey, anki-forge, cli-flakes, ... }@inputs: let
     system = "x86_64-linux";
     user = "joebutler";
     pkgsUnstable = import nixpkgs-unstable {
@@ -57,6 +46,8 @@
       inherit system;
       config.allowUnfree = true;
     };
+
+    lib = nixpkgs.lib; # Define lib here
 
     # Generated extensions set (kept up-to-date by upstream CI)
     vsx = nix-vscode-extensions.extensions.${system}.vscode-marketplace;
@@ -112,10 +103,10 @@
     # Expose the generate-mcp-configs script as an app
     apps.${system}.generate-mcp-configs = {
       type = "app";
-      program = import ./modules/home/mcp/generate_configs.nix {
+      program = (import ./modules/home/mcp/generate_configs.nix {
         inherit pkgs lib;
         homeDirectory = homeConfig.config.home.homeDirectory;
-      };
+      }).outPath;
     };
 
     # formatter unchanged
