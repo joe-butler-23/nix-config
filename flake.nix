@@ -84,7 +84,12 @@
             # Pass special arguments to Home Manager modules
             home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge user;};
 
-            home-manager.users.${user} = import ./home.nix;
+            home-manager.users.${user} = {
+              imports = [
+                ./home.nix
+                sops-nix.homeManagerModules.sops
+              ];
+            };
           }
 
           # Host-specific configuration

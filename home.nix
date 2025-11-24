@@ -7,6 +7,7 @@
     ./modules/home/web-apps
     ./scripts
     ./modules/home/sops.nix
+    ./modules/home/mcp/wrappers
   ];
 
   #### User identity
