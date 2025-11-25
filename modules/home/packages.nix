@@ -32,8 +32,6 @@ in {
           };
         })
       ])
-      opencode
-      gemini-cli
       zsh-powerlevel10k
     ])
     ++ (with pkgs; [
