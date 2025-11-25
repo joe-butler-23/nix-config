@@ -44,3 +44,27 @@ nix eval --raw '(import ./. { }).opencode.passthru.updateScript' | bash
 ```
 
 This script will automatically fetch the latest release version and its corresponding `sha256` hash, then update `modules/overlays/default.nix` accordingly. You will then need to commit the changes and apply the new configuration (`sudo nixos-rebuild switch --flake .`).
+
+## Gemini CLI Overlay (`gemini-cli`)
+
+### Problem Statement
+
+The `gemini-cli` package in `nixpkgs` is often behind the rapid release cycle of the official GitHub repository. The goal was to provide the latest version directly from the official binary/script releases.
+
+### Approach and Solution
+
+*   **Source**: Fetches the pre-bundled `gemini.js` executable from the official `google-gemini/gemini-cli` GitHub Releases.
+*   **Wrapper**: Wraps the JavaScript file with the system's `nodejs` runtime using `makeWrapper` to create an executable `gemini` command.
+*   **Automation**: Includes an `updateScript` to automate version bumping.
+
+### How to Use
+
+The `gemini-cli` package is available through `pkgsUnstable`.
+
+### How to Update `gemini-cli`
+
+To update `gemini-cli` to the latest release:
+
+```bash
+nix-shell -p nix-update --run "nix eval --raw '.#overlays.gemini-cli.passthru.updateScript' | bash"
+```
