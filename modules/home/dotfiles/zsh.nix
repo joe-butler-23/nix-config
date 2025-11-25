@@ -2,22 +2,12 @@
   config,
   user,
   lib,
-  pkgs,
   ...
 }: {
   programs.zsh = {
     enable = true;
 
-    ############################
-    # Powerlevel10k theme (plugin)
-    ############################
-    plugins = [
-      {
-        name = "powerlevel10k";
-        src = "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k";
-        file = "powerlevel10k.zsh-theme";
-      }
-    ];
+    plugins = [];
 
     ############################
     # History configuration
@@ -81,20 +71,12 @@
     ############################
     # Main interactive init
     ############################
+
     initContent = lib.mkBefore ''
       ####################
-      # CRITICAL: Set PROMPT_EOL_MARK before ANYTHING else
-      # This prevents blue tilde artifacts on resize
+      # Minimal Prompt
       ####################
-      PROMPT_EOL_MARK=""
-
-      ############################
-      # Powerlevel10k Instant Prompt
-      # Must come before any console output
-      ############################
-      if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
-        source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
-      fi
+      PROMPT='%B%~%b %# '
 
       ####################
       # Options
@@ -102,16 +84,6 @@
       setopt correct extendedglob nocaseglob rcexpandparam nocheckjobs \
              numericglobsort nobeep appendhistory histignorealldups \
              autocd inc_append_history histignorespace interactivecomments
-
-      ####################
-      # Handle terminal resize - clear screen to prevent artifacts
-      ####################
-      TRAPWINCH() {
-        # Clear screen and scrollback on resize to prevent ghost characters
-        printf '\e[2J\e[3J\e[H'
-        # Let zsh redraw the prompt
-        zle && zle reset-prompt
-      }
 
       ####################
       # 1Password Injection
@@ -193,9 +165,9 @@
         activate() { _lazy_conda_bootstrap; command activate "$@"; }
       fi
 
-      ############################################
+      #################################
       # Foot: mark start/end of command output (OSC-133)
-      ############################################
+      #################################
       autoload -Uz add-zsh-hook
 
       foot_precmd() {
@@ -212,12 +184,7 @@
       add-zsh-hook precmd foot_precmd
       add-zsh-hook preexec foot_preexec
 
-      ####################
-      # Powerlevel10k user config
-      ####################
-      if [[ -r "$HOME/.p10k.zsh" ]]; then
-        source "$HOME/.p10k.zsh"
-      fi
+
     '';
   };
 
@@ -228,9 +195,4 @@
     enable = true;
     enableZshIntegration = true;
   };
-
-  ############################
-  # Declarative file management
-  ############################
-  home.file.".p10k.zsh".source = ./p10k.zsh;
 }
