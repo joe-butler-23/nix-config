@@ -17,6 +17,7 @@
     ];
 
     sourceRoot = ".";
+    dontStrip = true;
 
     installPhase = ''
       runHook preInstall
