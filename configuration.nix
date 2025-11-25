@@ -53,8 +53,6 @@
     randomizedDelaySec = "45min";
     allowReboot = false;
   };
-  nixpkgs.config.allowUnfree = true;
-
   #### System state version
   system.stateVersion = "25.05";
 

@@ -76,11 +76,14 @@
     mkSystem = hostName:
       nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit pkgs pkgsUnstable whichkey anki-forge user;};
+        specialArgs = {inherit pkgsUnstable whichkey anki-forge user;};
         modules = [
           ./configuration.nix
           stylix.nixosModules.stylix
           sops-nix.nixosModules.sops
+
+          # Use readOnlyPkgs to properly inject our custom pkgs with overlays
+          { nixpkgs.pkgs = pkgs; }
 
           # Home Manager integration
           home-manager.nixosModules.home-manager
@@ -90,7 +93,7 @@
             home-manager.backupFileExtension = "hm-bak";
 
             # Pass special arguments to Home Manager modules
-            home-manager.extraSpecialArgs = {inherit pkgs pkgsUnstable vsx whichkey anki-forge user;};
+            home-manager.extraSpecialArgs = {inherit pkgsUnstable vsx whichkey anki-forge user;};
 
             home-manager.users.${user} = {
               imports = [
