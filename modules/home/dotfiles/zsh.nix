@@ -86,13 +86,17 @@
              autocd inc_append_history histignorespace interactivecomments
 
       ####################
-      # 1Password Injection
+      # 1Password Injection (Lazy)
       ####################
-      if command -v op >/dev/null 2>&1 && [ -S "/run/user/$UID/1password/agent.sock" ]; then
-        if timeout 1s op account list >/dev/null 2>&1; then
+      auth() {
+        if command -v op >/dev/null 2>&1 && [ -S "/run/user/$UID/1password/agent.sock" ]; then
+          echo "Injecting 1Password secrets..."
           eval "$(op inject --in-file "$HOME/.dotfiles/secrets.zsh")"
+          echo "Secrets injected."
+        else
+          echo "Error: 1Password CLI (op) not found or agent socket missing."
         fi
-      fi
+      }
 
       ####################
       # Completion Configuration

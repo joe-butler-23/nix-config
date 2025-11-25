@@ -104,7 +104,7 @@ in {
       texlive.combined.scheme-full
       pandoc
       uv
-      
+
       ## Custom overlay packages
       opencode
       gemini

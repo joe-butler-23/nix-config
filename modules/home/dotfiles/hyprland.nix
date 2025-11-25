@@ -49,24 +49,7 @@
       };
 
       animations = {
-        enabled = "yes";
-        bezier = [
-          "linear,0,0,1,1"
-        ];
-        animation = [
-          "windows, 1, 1, linear"
-          "windowsIn, 1, 1, linear, popin 87%"
-          "windowsOut, 1, 1, linear, fade"
-          "fadeOut,   1, 1, linear"
-          "fadeIn, 1, 1, linear"
-          "fade, 1, 1, linear"
-          "layers, 1, 1, linear"
-          "layersIn, 1, 1, linear, fade"
-          "layersOut, 1, 1, linear, fade"
-          "fadeLayersIn, 1, 1, linear"
-          "fadeLayersOut, 1, 1, linear"
-          "workspaces, 0, 0, linear" # Keep workspace switching instant
-        ];
+        enabled = "no";
       };
 
       dwindle = {
@@ -116,93 +99,93 @@
     };
 
     extraConfig = ''
-         $mainMod = SUPER
-         $terminal = foot
-         $menu = rofi -show drun -matching regex -no-tokenize -drun-match-fields 'name' -drun-display-format '{name}' -display-drun "" -theme-str 'textbox-prompt-colon { enabled: false; }' -run-command "app2unit -- {cmd}"
-         $browser = app2unit brave
-         $fileManager = app2unit foot -a yazi -D ~ sh -lc 'TMPFILE=$(mktemp); yazi --chooser-file="$TMPFILE"; if [ -s "$TMPFILE" ]; then xdg-open "$(cat "$TMPFILE")"; fi; rm -f "$TMPFILE"'
+      $mainMod = SUPER
+      $terminal = foot
+      $menu = rofi -show drun -matching regex -no-tokenize -drun-match-fields 'name' -drun-display-format '{name}' -display-drun "" -theme-str 'textbox-prompt-colon { enabled: false; }' -run-command "app2unit -- {cmd}"
+      $browser = app2unit brave
+      $fileManager = app2unit foot -a yazi -D ~ sh -lc 'TMPFILE=$(mktemp); yazi --chooser-file="$TMPFILE"; if [ -s "$TMPFILE" ]; then xdg-open "$(cat "$TMPFILE")"; fi; rm -f "$TMPFILE"'
 
-         bind = $mainMod, Return, exec, $terminal
-         bind = $mainMod, C, killactive,
-         bind = $mainMod, E, exec, $fileManager
-         bind = $mainMod, V, togglefloating,
-         bindr = $mainMod, SUPER_L, exec, $menu
-         bind = $mainMod, P, pseudo, # dwindle
-         bind = $mainMod, U, togglesplit, # dwindle
-         bind = $mainMod, B, exec, $browser
-         bind = $mainMod, Y, exec, app2unit hyprshot -m region --clipboard-only
-         bind = $mainMod, SPACE, exec, wlr-which-key
-         bind = $mainMod, a, exec, anki-forge-launcher
-         bind = $mainMod, F, exec, app2unit foot -a filepicker -e fzf-file-launcher
-         bind = $mainMod, R, exec, ~/bin/refile-mousepad.sh
-         bind = $mainMod, F3, exec, hyprctl keyword monitor eDP-1,preferred,0x0,1 && hyprctl keyword monitor DP-5,disable && hyprctl dispatch moveworkspacetomonitor all eDP-1
-         bind = $mainMod, m, exec, ~/.config/hypr/toggle_eDP1.sh
-         bind = $mainMod, n, exec, hyprctl keyword monitor eDP-1,enable
+      bind = $mainMod, Return, exec, $terminal
+      bind = $mainMod, C, killactive,
+      bind = $mainMod, E, exec, $fileManager
+      bind = $mainMod, V, togglefloating,
+      bindr = $mainMod, SUPER_L, exec, $menu
+      bind = $mainMod, P, pseudo, # dwindle
+      bind = $mainMod, U, togglesplit, # dwindle
+      bind = $mainMod, B, exec, $browser
+      bind = $mainMod, Y, exec, app2unit hyprshot -m region --clipboard-only
+      bind = $mainMod, SPACE, exec, wlr-which-key
+      bind = $mainMod, a, exec, anki-forge-launcher
+      bind = $mainMod, F, exec, app2unit foot -a filepicker -e fzf-file-launcher
+      bind = $mainMod, R, exec, ~/bin/refile-mousepad.sh
+      bind = $mainMod, F3, exec, hyprctl keyword monitor eDP-1,preferred,0x0,1 && hyprctl keyword monitor DP-5,disable && hyprctl dispatch moveworkspacetomonitor all eDP-1
+      bind = $mainMod, m, exec, ~/.config/hypr/toggle_eDP1.sh
+      bind = $mainMod, n, exec, hyprctl keyword monitor eDP-1,enable
 
-         bind = $mainMod, h, movefocus, l
-         bind = $mainMod, l, movefocus, r
-         bind = $mainMod, k, movefocus, u
-         bind = $mainMod, j, movefocus, d
+      bind = $mainMod, h, movefocus, l
+      bind = $mainMod, l, movefocus, r
+      bind = $mainMod, k, movefocus, u
+      bind = $mainMod, j, movefocus, d
 
-         bind = $mainMod, 1, workspace, 1
-         bind = $mainMod, 2, workspace, 2
-         bind = $mainMod, 3, workspace, 3
-         bind = $mainMod, 4, workspace, 4
-         bind = $mainMod, 5, workspace, 5
-         bind = $mainMod, 6, workspace, 6
-         bind = $mainMod, 7, workspace, 7
-         bind = $mainMod, 8, workspace, 8
-         bind = $mainMod, 9, workspace, 9
-         bind = $mainMod, 0, workspace, 10
-         bind = $mainMod SHIFT, h, workspace, e-1
-         bind = $mainMod SHIFT, l, workspace, e+1
+      bind = $mainMod, 1, workspace, 1
+      bind = $mainMod, 2, workspace, 2
+      bind = $mainMod, 3, workspace, 3
+      bind = $mainMod, 4, workspace, 4
+      bind = $mainMod, 5, workspace, 5
+      bind = $mainMod, 6, workspace, 6
+      bind = $mainMod, 7, workspace, 7
+      bind = $mainMod, 8, workspace, 8
+      bind = $mainMod, 9, workspace, 9
+      bind = $mainMod, 0, workspace, 10
+      bind = $mainMod SHIFT, h, workspace, e-1
+      bind = $mainMod SHIFT, l, workspace, e+1
 
-         bind = $mainMod SHIFT, 1, movetoworkspace, 1
-         bind = $mainMod SHIFT, 2, movetoworkspace, 2
-         bind = $mainMod SHIFT, 3, movetoworkspace, 3
-         bind = $mainMod SHIFT, 4, movetoworkspace, 4
-         bind = $mainMod SHIFT, 5, movetoworkspace, 5
-         bind = $mainMod SHIFT, 6, movetoworkspace, 6
-         bind = $mainMod SHIFT, 7, movetoworkspace, 7
-         bind = $mainMod SHIFT, 8, movetoworkspace, 8
-         bind = $mainMod SHIFT, 9, movetoworkspace, 9
-         bind = $mainMod SHIFT, 0, movetoworkspace, 10
+      bind = $mainMod SHIFT, 1, movetoworkspace, 1
+      bind = $mainMod SHIFT, 2, movetoworkspace, 2
+      bind = $mainMod SHIFT, 3, movetoworkspace, 3
+      bind = $mainMod SHIFT, 4, movetoworkspace, 4
+      bind = $mainMod SHIFT, 5, movetoworkspace, 5
+      bind = $mainMod SHIFT, 6, movetoworkspace, 6
+      bind = $mainMod SHIFT, 7, movetoworkspace, 7
+      bind = $mainMod SHIFT, 8, movetoworkspace, 8
+      bind = $mainMod SHIFT, 9, movetoworkspace, 9
+      bind = $mainMod SHIFT, 0, movetoworkspace, 10
 
-         bind = $mainMod, S, togglespecialworkspace, magic
-         bind = $mainMod SHIFT, S, movetoworkspace, special:magic
+      bind = $mainMod, S, togglespecialworkspace, magic
+      bind = $mainMod SHIFT, S, movetoworkspace, special:magic
 
-         bind = $mainMod, mouse_down, workspace, e+1
-         bind = $mainMod, mouse_up, workspace, e-1
-         bind = , mouse:275, workspace, e-1
-         bind = , mouse:276, workspace, e+1
+      bind = $mainMod, mouse_down, workspace, e+1
+      bind = $mainMod, mouse_up, workspace, e-1
+      bind = , mouse:275, workspace, e-1
+      bind = , mouse:276, workspace, e+1
 
-         bindm = $mainMod, mouse:272, movewindow
-         bindm = $mainMod, mouse:273, resizewindow
+      bindm = $mainMod, mouse:272, movewindow
+      bindm = $mainMod, mouse:273, resizewindow
 
-         bindel = ,XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
-         bindel = ,XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-         bindel = ,XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-         bindel = ,XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
-         bindel = ,XF86MonBrightnessUp, exec, brightnessctl s 10%+
-         bindel = ,XF86MonBrightnessDown, exec, brightnessctl s 10%-
+      bindel = ,XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
+      bindel = ,XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+      bindel = ,XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+      bindel = ,XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+      bindel = ,XF86MonBrightnessUp, exec, brightnessctl s 10%+
+      bindel = ,XF86MonBrightnessDown, exec, brightnessctl s 10%-
 
-         bind = $mainMod SHIFT, SPACE, exec, app2unit $HOME/bin/obsidian_capture.sh
+      bind = $mainMod SHIFT, SPACE, exec, app2unit $HOME/bin/obsidian_capture.sh
 
-         windowrulev2 = suppressevent maximize, class:.*
-         windowrulev2 = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
-         windowrulev2 = float, class:filepicker
-         windowrulev2 = center, class:filepicker
-         windowrulev2 = size 70% 40%, class:filepicker
-         windowrulev2 = stayfocused, class:filepicker
-         windowrulev2 = float, class:dirfinder
-         windowrulev2 = center, class:dirfinder
-         windowrulev2 = size 600 120, class:dirfinder
-         windowrulev2 = opacity 0.9, class:dirfinder
-         windowrulev2 = float, class:clipse
-         windowrulev2 = center, class:clipse
-         windowrulev2 = size 70% 40%, class:clipse
-         windowrulev2 = stayfocused, class:clipse
-         windowrulev2 = float, persistentsize, class:blueman-manager
+      windowrulev2 = suppressevent maximize, class:.*
+      windowrulev2 = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
+      windowrulev2 = float, class:filepicker
+      windowrulev2 = center, class:filepicker
+      windowrulev2 = size 70% 40%, class:filepicker
+      windowrulev2 = stayfocused, class:filepicker
+      windowrulev2 = float, class:dirfinder
+      windowrulev2 = center, class:dirfinder
+      windowrulev2 = size 600 120, class:dirfinder
+      windowrulev2 = opacity 0.9, class:dirfinder
+      windowrulev2 = float, class:clipse
+      windowrulev2 = center, class:clipse
+      windowrulev2 = size 70% 40%, class:clipse
+      windowrulev2 = stayfocused, class:clipse
+      windowrulev2 = float, persistentsize, class:blueman-manager
     '';
   };
 }
