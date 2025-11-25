@@ -34,6 +34,10 @@
     # SOPS Nix
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    # OpenCode (latest from GitHub)
+    opencode.url = "github:sst/opencode";
+    opencode.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -47,16 +51,24 @@
     anki-forge,
     sops-nix,
     ...
-  }: let
+  } @ inputs: let
     system = "x86_64-linux";
     user = "joebutler";
+
+    # Import overlays
+    overlays = [
+      (import ./modules/overlays/default.nix {inherit inputs;})
+    ];
+
     pkgsUnstable = import nixpkgs-unstable {
       inherit system;
       config.allowUnfree = true;
+      inherit overlays;
     };
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
+      inherit overlays;
     };
 
     inherit (nixpkgs) lib; # Define lib here

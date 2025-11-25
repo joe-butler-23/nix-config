@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   ankiMcpWrapper = pkgs.writeShellApplication {
     name = "anki-mcp-wrapper";
     runtimeInputs = [pkgs.nodejs pkgs.nodePackages.ts-node];
@@ -11,9 +8,9 @@
       # The source code is now part of the main config repo.
       # We use the absolute path to it.
       SRC_DIR="/home/joebutler/nix-config/modules/home/mcp/repos/anki-mcp"
-      
+
       cd "$SRC_DIR"
-      
+
       echo "Installing dependencies from package-lock.json..." >&2
       ${pkgs.nodejs}/bin/npm ci
 
@@ -27,5 +24,3 @@
 in {
   home.packages = [ankiMcpWrapper];
 }
-
-

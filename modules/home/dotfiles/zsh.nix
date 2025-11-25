@@ -1,6 +1,10 @@
-{ config, user, lib, pkgs, ... }:
-
 {
+  config,
+  user,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.zsh = {
     enable = true;
 
@@ -10,7 +14,7 @@
     plugins = [
       {
         name = "powerlevel10k";
-        src  = "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k";
+        src = "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k";
         file = "powerlevel10k.zsh-theme";
       }
     ];
@@ -34,8 +38,8 @@
     syntaxHighlighting.enable = true;
 
     autosuggestion = {
-      enable   = true;
-      strategy = [ "completion" "history" ];
+      enable = true;
+      strategy = ["completion" "history"];
     };
 
     historySubstringSearch.enable = true;
@@ -44,11 +48,11 @@
     # Shell aliases
     ############################
     shellAliases = {
-      hs     = "home-manager switch --flake \"$HOME/nix-config#${user}\"";
-      ns     = "sudo nixos-rebuild switch --flake \"$HOME/nix-config\"";
-      hsdry  = "home-manager build --flake \"$HOME/nix-config#${user}\"";
-      nsdry  = "sudo nixos-rebuild dry-build --flake \"$HOME/nix-config\"";
-      hn     = "home-manager news";
+      hs = "home-manager switch --flake \"$HOME/nix-config#${user}\"";
+      ns = "sudo nixos-rebuild switch --flake \"$HOME/nix-config\"";
+      hsdry = "home-manager build --flake \"$HOME/nix-config#${user}\"";
+      nsdry = "sudo nixos-rebuild dry-build --flake \"$HOME/nix-config\"";
+      hn = "home-manager news";
       hstatus = "home-manager generations";
     };
 
@@ -74,7 +78,7 @@
       bindkey '^I' _lazy_compinit
     '';
 
-############################
+    ############################
     # Main interactive init
     ############################
     initContent = lib.mkBefore ''

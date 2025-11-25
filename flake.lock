@@ -324,6 +324,26 @@
         "type": "github"
       }
     },
+    "opencode": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1764092745,
+        "narHash": "sha256-T7ptHn2ZTiSsKaPTeRAyoY2tXxfj9WY8I/XJF81E/Pc=",
+        "owner": "sst",
+        "repo": "opencode",
+        "rev": "b9b1e92788b40048d75eee33abb4b11b4ed034e7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sst",
+        "repo": "opencode",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "anki-forge": "anki-forge",
@@ -331,6 +351,7 @@
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "opencode": "opencode",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
         "treefmt-nix": "treefmt-nix_2",

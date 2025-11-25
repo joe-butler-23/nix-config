@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   serenaWrapper = pkgs.writeShellApplication {
     name = "serena-mcp-wrapper";
     runtimeInputs = [pkgs.uv pkgs.python312];
