@@ -3,19 +3,18 @@
     "opencode": {
       "directory": "~/.config/opencode",
       "fileName": "opencode.json",
-      "format": "opencode",
-      "mergePath": ".mcp"
+      "mergePath": "mcp",
+      "project_config_path": "opencode.json"
     },
     "cline": {
       "directory": "~/.config/VSCodium/User/globalStorage/saoudrizwan.cline-nightly/settings",
-      "fileName": "cline_mcp_settings.json",
-      "format": "mcp"
+      "fileName": "cline_mcp_settings.json"
     },
     "gemini-cli": {
       "directory": "~/.gemini",
       "fileName": "settings.json",
-      "format": "opencode",
-      "mergePath": ".mcp"
+      "mergePath": "mcpServers",
+      "project_config_path": ".gemini/settings.json"
     }
   }
 }
