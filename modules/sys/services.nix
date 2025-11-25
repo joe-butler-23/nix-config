@@ -100,6 +100,9 @@
     enable = true;
   };
 
+  #### Firmware updates
+  services.fwupd.enable = true;
+
   #### Networking
   networking.networkmanager.enable = true;
   networking.firewall = {

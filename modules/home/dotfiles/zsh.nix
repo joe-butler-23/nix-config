@@ -85,6 +85,16 @@
       fi
 
       ####################
+      # zsh-defer initialization
+      ####################
+      if command -v zsh-defer >/dev/null 2>&1; then
+        source <(zsh-defer --init-zsh)
+        
+        # Example deferred initializations
+        zsh-defer -c "echo 'zsh-defer loaded successfully'"
+      fi
+
+      ####################
       # 1Password Injection
       ####################
       if command -v op >/dev/null 2>&1 && [ -S "/run/user/$UID/1password/agent.sock" ]; then

@@ -40,6 +40,9 @@
   nix.optimise.automatic = true;
   nix.optimise.dates = ["03:45"];
 
+  # Enable nix-ld for better binary compatibility
+  programs.nix-ld.enable = true;
+
   system.autoUpgrade = {
     enable = true;
     flake = "github:joe-butler-23/nix-config";

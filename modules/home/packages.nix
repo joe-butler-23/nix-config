@@ -34,6 +34,7 @@ in {
       ])
       opencode
       gemini-cli
+      zsh-defer
     ])
     ++ (with pkgs; [
       ## Wayland / Hyprland
