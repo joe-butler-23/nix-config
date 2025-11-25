@@ -49,7 +49,24 @@
       };
 
       animations = {
-        enabled = "no";
+        enabled = "yes";
+        bezier = [
+          "linear,0,0,1,1"
+        ];
+        animation = [
+          "windows, 1, 1, linear"
+          "windowsIn, 1, 1, linear, popin 87%"
+          "windowsOut, 1, 1, linear, fade"
+          "fadeOut,   1, 1, linear"
+          "fadeIn, 1, 1, linear"
+          "fade, 1, 1, linear"
+          "layers, 1, 1, linear"
+          "layersIn, 1, 1, linear, fade"
+          "layersOut, 1, 1, linear, fade"
+          "fadeLayersIn, 1, 1, linear"
+          "fadeLayersOut, 1, 1, linear"
+          "workspaces, 0, 0, linear" # Keep workspace switching instant
+        ];
       };
 
       dwindle = {

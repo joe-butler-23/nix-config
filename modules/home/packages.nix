@@ -88,6 +88,8 @@ in {
       unzip
       wget
       zoxide
+      opencode
+      gemini-cli
 
       ## Networking / internet
       brave
