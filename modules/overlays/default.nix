@@ -53,4 +53,53 @@
       platforms = platforms.linux;
     };
   };
+
+  gemini-cli = prev.stdenv.mkDerivation rec {
+    pname = "gemini-cli";
+    version = "0.18.0-preview.2";
+
+    src = prev.fetchurl {
+      url = "https://github.com/google-gemini/gemini-cli/releases/download/v${version}/gemini.js";
+      sha256 = "1bbw8p6pvj73arpmy5a4vpgjhhj9mwri2s50x89d3y2g3x3b7xh1";
+    };
+
+    dontUnpack = true;
+
+    nativeBuildInputs = [ prev.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/libexec $out/bin
+      cp $src $out/libexec/gemini.js
+      makeWrapper ${prev.nodejs}/bin/node $out/bin/gemini \
+        --add-flags "$out/libexec/gemini.js"
+    '';
+
+    passthru.updateScript = prev.writeShellScript "update-gemini-cli" ''
+      set -euo pipefail
+      
+      # Get latest version
+      LATEST=$(curl -s https://api.github.com/repos/google-gemini/gemini-cli/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+      
+      echo "Latest version: $LATEST"
+      
+      # Update version in file
+      sed -i "s/version = \".*\";/version = \"$LATEST\";/" modules/overlays/default.nix
+      
+      # Calculate new hash
+      URL="https://github.com/google-gemini/gemini-cli/releases/download/v$LATEST/gemini.js"
+      HASH=$(nix-prefetch-url "$URL")
+      
+      # Update hash in file
+      sed -i "s|sha256 = \".*\";|sha256 = \"$HASH\";|" modules/overlays/default.nix
+      
+      echo "Updated gemini-cli to $LATEST with hash $HASH"
+    '';
+
+    meta = with prev.lib; {
+      description = "Gemini CLI";
+      homepage = "https://github.com/google-gemini/gemini-cli";
+      license = licenses.asl20;
+      platforms = platforms.all;
+    };
+  };
 }
