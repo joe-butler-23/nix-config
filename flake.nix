@@ -34,10 +34,6 @@
     # SOPS Nix
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-
-    # OpenCode (latest from GitHub)
-    opencode.url = "github:sst/opencode";
-    opencode.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
