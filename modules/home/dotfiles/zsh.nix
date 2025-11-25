@@ -1,15 +1,23 @@
+{ config, user, lib, pkgs, ... }:
+
 {
-  config,
-  user,
-  ...
-}: {
   programs.zsh = {
     enable = true;
 
-    # Shell options
-    defaultKeymap = "emacs";
+    ############################
+    # Powerlevel10k theme (plugin)
+    ############################
+    plugins = [
+      {
+        name = "powerlevel10k";
+        src  = "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k";
+        file = "powerlevel10k.zsh-theme";
+      }
+    ];
 
+    ############################
     # History configuration
+    ############################
     history = {
       size = 10000;
       save = 10000;
@@ -20,32 +28,33 @@
       extended = false;
     };
 
-    # Enable plugins via home-manager
-    syntaxHighlighting = {
-      enable = true;
-    };
+    ############################
+    # Built-in plugin helpers
+    ############################
+    syntaxHighlighting.enable = true;
 
     autosuggestion = {
-      enable = true;
-      strategy = ["completion" "history"];
+      enable   = true;
+      strategy = [ "completion" "history" ];
     };
 
-    historySubstringSearch = {
-      enable = true;
-    };
+    historySubstringSearch.enable = true;
 
+    ############################
     # Shell aliases
+    ############################
     shellAliases = {
-      # NixOS concise aliases (work from any directory)
-      hs = "home-manager switch --flake \"$HOME/nix-config#${user}\"";
-      ns = "sudo nixos-rebuild switch --flake \"$HOME/nix-config\"";
-      hsdry = "home-manager build --flake \"$HOME/nix-config#${user}\"";
-      nsdry = "sudo nixos-rebuild dry-build --flake \"$HOME/nix-config\"";
-      hn = "home-manager news";
+      hs     = "home-manager switch --flake \"$HOME/nix-config#${user}\"";
+      ns     = "sudo nixos-rebuild switch --flake \"$HOME/nix-config\"";
+      hsdry  = "home-manager build --flake \"$HOME/nix-config#${user}\"";
+      nsdry  = "sudo nixos-rebuild dry-build --flake \"$HOME/nix-config\"";
+      hn     = "home-manager news";
       hstatus = "home-manager generations";
     };
 
-    # Completion initialization
+    ############################
+    # Completion initialisation
+    ############################
     enableCompletion = true;
     completionInit = ''
       # Lazy completion initialization
@@ -65,8 +74,24 @@
       bindkey '^I' _lazy_compinit
     '';
 
-    # Interactive shell initialization
-    initContent = ''
+############################
+    # Main interactive init
+    ############################
+    initContent = lib.mkBefore ''
+      ####################
+      # CRITICAL: Set PROMPT_EOL_MARK before ANYTHING else
+      # This prevents blue tilde artifacts on resize
+      ####################
+      PROMPT_EOL_MARK=""
+
+      ############################
+      # Powerlevel10k Instant Prompt
+      # Must come before any console output
+      ############################
+      if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+        source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
+      fi
+
       ####################
       # Options
       ####################
@@ -74,25 +99,15 @@
              numericglobsort nobeep appendhistory histignorealldups \
              autocd inc_append_history histignorespace interactivecomments
 
-      export TERM=xterm-256color
-      export COLORTERM=truecolor
-
       ####################
-      # Starship Prompt (now system-level)
+      # Handle terminal resize - clear screen to prevent artifacts
       ####################
-      if command -v starship >/dev/null 2>&1; then
-        eval "$(starship init zsh)"
-      fi
-
-      ####################
-      # zsh-defer initialization
-      ####################
-      if command -v zsh-defer >/dev/null 2>&1; then
-        source <(zsh-defer --init-zsh)
-        
-        # Example deferred initializations
-        zsh-defer -c "echo 'zsh-defer loaded successfully'"
-      fi
+      TRAPWINCH() {
+        # Clear screen and scrollback on resize to prevent ghost characters
+        printf '\e[2J\e[3J\e[H'
+        # Let zsh redraw the prompt
+        zle && zle reset-prompt
+      }
 
       ####################
       # 1Password Injection
@@ -102,11 +117,6 @@
           eval "$(op inject --in-file "$HOME/.dotfiles/secrets.zsh")"
         fi
       fi
-
-      ####################
-      # Autosuggestions Strategy
-      ####################
-      ZSH_AUTOSUGGEST_STRATEGY=(completion history)
 
       ####################
       # Completion Configuration
@@ -182,57 +192,41 @@
       ############################################
       # Foot: mark start/end of command output (OSC-133)
       ############################################
-      function precmd() {
+      autoload -Uz add-zsh-hook
+
+      foot_precmd() {
         if ! builtin zle; then
           print -n "\e]133;D\e\\"
         fi
       }
 
-      function preexec() {
+      foot_preexec() {
         print -n "\e]133;C\e\\"
-        # Remember last command exactly as it will be run
         LAST_CMD="$ZSH_COMMAND"
       }
 
-      ############################################
-      # Copy last terminal output
-      ############################################
-      # Clipboard helper (Wayland/X11/mac/OSC52 fallback)
-      to_clipboard() {
-        if command -v wl-copy >/dev/null 2>&1; then wl-copy -n
-        elif command -v xclip >/dev/null 2>&1; then xclip -selection clipboard
-        elif command -v pbcopy >/dev/null 2>&1; then pbcopy
-        else
-          local data
-          data=$(base64 -w0 2>/dev/null || base64 | tr -d '\n')
-          printf '\033]52;c;%s\007' "$data"
-        fi
-      }
+      add-zsh-hook precmd foot_precmd
+      add-zsh-hook preexec foot_preexec
 
-      # Re-run last command, mirror to screen, copy full output
-      copy_last_output() {
-        if [ -z "$LAST_CMD" ]; then
-          zle -M "No previous command"
-          return 1
-        fi
-
-        local tmp status
-        tmp=$(mktemp) || return 1
-        { eval -- "$LAST_CMD" } > >(tee "$tmp") 2> >(tee -a "$tmp" >&2)
-        status=$?
-        to_clipboard < "$tmp"
-        rm -f -- "$tmp"
-        return $status
-      }
-
-      zle -N copy_last_output
-      bindkey '^[c' copy_last_output
+      ####################
+      # Powerlevel10k user config
+      ####################
+      if [[ -r "$HOME/.p10k.zsh" ]]; then
+        source "$HOME/.p10k.zsh"
+      fi
     '';
   };
 
+  ############################
   # Zoxide integration
+  ############################
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
   };
+
+  ############################
+  # Declarative file management
+  ############################
+  home.file.".p10k.zsh".source = ./p10k.zsh;
 }

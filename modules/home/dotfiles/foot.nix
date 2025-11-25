@@ -5,6 +5,7 @@ _: {
     settings = {
       main = {
         font = "JetBrainsMono Nerd Font:size=10";
+        resize-by-cells = "no"; # <-- Add this line here
       };
 
       scrollback = {

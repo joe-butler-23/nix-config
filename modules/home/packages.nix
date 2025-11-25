@@ -34,7 +34,7 @@ in {
       ])
       opencode
       gemini-cli
-      zsh-defer
+      zsh-powerlevel10k
     ])
     ++ (with pkgs; [
       ## Wayland / Hyprland
@@ -89,8 +89,7 @@ in {
       tmux
       unzip
       wget
-      # starship moved to system packages to fix timing issue
-      # zoxide moved to system packages to fix timing issue
+      zoxide
 
       ## Networking / internet
       brave

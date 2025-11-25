@@ -6,7 +6,6 @@
     ./hyprland-extras.nix
     ./mako.nix
     ./rofi.nix
-    ./starship.nix
     ./thunar.nix
     ./waybar.nix
     ./wlogout/wlogout.nix
