@@ -1,23 +1,30 @@
 _: {
   programs.foot = {
     enable = true;
-
     settings = {
       main = {
         font = "JetBrainsMono Nerd Font:size=10";
-        resize-by-cells = "no"; # <-- Add this line here
+        resize-by-cells = "no";
+        # Add these:
+        pad = "0x0"; # Remove padding that might cause flashing
+        initial-window-mode = "windowed";
+        dpi-aware = "no"; # Can help with rendering issues
       };
-
       scrollback = {
         lines = 10000;
       };
-
       cursor = {
         style = "beam";
+      };
+      # Try adding this section:
+      tweak = {
+        grapheme-shaping = "yes"; # Better rendering
+        render-timer = "none"; # May reduce flashing
       };
 
       # Nord dark theme - overrides Stylix theming
       colors = {
+        alpha = "1.0";
         foreground = "d8dee9";
         background = "2e3440";
 
