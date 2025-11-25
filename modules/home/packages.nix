@@ -88,8 +88,6 @@ in {
       unzip
       wget
       zoxide
-      opencode
-      gemini-cli
 
       ## Networking / internet
       brave
@@ -106,6 +104,10 @@ in {
       texlive.combined.scheme-full
       pandoc
       uv
+      
+      ## Custom overlay packages
+      opencode
+      gemini
 
       ## Sound / power
       alsa-utils
