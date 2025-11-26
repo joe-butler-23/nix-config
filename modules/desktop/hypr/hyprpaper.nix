@@ -5,9 +5,7 @@ in {
   services.hyprpaper = {
     enable = true;
     settings = {
-      ipc = {
-        on_shutdown = ["hyprctl dispatch dpms on"];
-      };
+      ipc = {on      };
       preload = [wallpaper];
       wallpaper = [",${wallpaper}"];
     };

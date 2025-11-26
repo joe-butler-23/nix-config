@@ -1,5 +1,4 @@
 _: {
-  # Hypridle - idle management daemon
   services.hypridle = {
     enable = true;
     settings = {

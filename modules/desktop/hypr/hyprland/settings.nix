@@ -60,7 +60,7 @@ _: {
       force_default_wallpaper = 0;
       disable_hyprland_logo = true;
       vfr = true;
-      vrr = 2; # Disable VRR globally
+      vrr = 2;
     };
 
     input = {
@@ -82,10 +82,9 @@ _: {
     };
 
     exec-once = [
-      "hyprctl dispatch dpms on"
       "waybar"
+      "hyprlock"
       "hyprpaper"
-      "hypridle"
     ];
   };
 }

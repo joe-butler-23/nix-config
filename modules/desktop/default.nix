@@ -1,4 +1,4 @@
-{...}: {
+{pkgs, ...}: {
   imports = [
     ./gtk.nix
     ./hypr
@@ -8,7 +8,4 @@
     ./whichkey.nix
     ./wlogout/wlogout.nix
   ];
-
-  services.blueman-applet.enable = true;
-  services.clipse.enable = true;
 }
