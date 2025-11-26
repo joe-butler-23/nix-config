@@ -82,7 +82,6 @@ _: {
     };
 
     exec-once = [
-      "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
       "hyprctl dispatch dpms on"
       "waybar"
       "hyprpaper"
