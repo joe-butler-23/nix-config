@@ -5,5 +5,6 @@
     ./kitty.nix
     ./yazi.nix
     ./sops.nix
+    ./xdg.nix
   ];
 }

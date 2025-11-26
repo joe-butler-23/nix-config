@@ -10,6 +10,8 @@
     snapper
     zram-generator
     pre-commit
+    deadnix
+    statix
   ];
 
   # thunar dotfiles in modules/apps/thunar.nix
