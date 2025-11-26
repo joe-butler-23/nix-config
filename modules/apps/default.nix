@@ -9,7 +9,8 @@
     ./utils.nix
     ./zathura.nix
     ./syncthing.nix
-    ./services.nix
     ./web-apps
   ];
+
+  systemd.user.startServices = "sd-switch";
 }

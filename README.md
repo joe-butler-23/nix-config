@@ -79,7 +79,7 @@ This configuration uses NixOS with Home Manager integrated as a module. This mea
 ### Practical Usage
 
 #### Installing a New Tool
-1.  Add the package to `modules/apps/default.nix` (or a specific category file).
+1.  Add the package to `modules/apps/utils.nix` (for general tools) or `modules/apps/apps.nix` (for GUI apps).
 2.  Run `nsdry` to test.
 3.  Run `ns` to apply.
 
@@ -97,4 +97,3 @@ To install a local project (e.g., `wlr-which-key`) as a Nix package:
     inputs.whichkey.url = "git+file:///home/user/dev/whichkey";
     ```
 3.  **Import & Use**: Pass the input to specialArgs and add to `home.packages` in a module.
-
