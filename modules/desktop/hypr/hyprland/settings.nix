@@ -82,12 +82,7 @@ _: {
     };
 
     exec-once = [
-      "app2unit waybar"
-      "app2unit hyprpaper"
       "hyprctl dispatch dpms on"
-      "app2unit blueman-applet"
-      "sleep 2 && app2unit kanshi &"
-      "app2unit clipse -listen"
     ];
   };
 }

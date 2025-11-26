@@ -1,12 +1,14 @@
 {...}: {
   imports = [
+    ./gtk.nix
     ./hypr
-    ./waybar.nix
     ./mako.nix
     ./rofi.nix
-    ./gtk.nix
-    ./thunar.nix
+    ./waybar.nix
     ./whichkey.nix
     ./wlogout/wlogout.nix
   ];
+
+  services.blueman-applet.enable = true;
+  services.clipse.enable = true;
 }

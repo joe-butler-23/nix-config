@@ -36,7 +36,6 @@
       };
       modules = [
         ../modules/core
-        ../modules/desktop/system.nix
 
         # System Modules (Enable System-wide Features)
         inputs.stylix.nixosModules.stylix

@@ -1,23 +1,19 @@
-{ pkgs, ... }:
+_: {
+  # ============================================================================
+  # THUNAR USER CONFIGURATION
+  # The system-level package installation and services (gvfs, tumbler) are in:
+  # modules/core/sys-apps.nix
+  # ============================================================================
 
-{
-  # Enable Xfconf (required for Thunar settings)
-programs.xfconf.enable = true;
-programs.thunar.enable = true;
-
-
-  # Thunar preferences via Xfconf
+  # Thunar preferences via Xfconf (Home Manager)
   xfconf.settings = {
     thunar = {
-      # Show hidden files by default
       "last-show-hidden" = true;
-
-      # Remember directory-specific view settings
       "misc-directory-specific-settings" = true;
     };
   };
 
-  # Thunar config files
+  # Thunar Custom Actions & Keybinds
   xdg.configFile = {
     "Thunar/uca.xml".text = ''
       <?xml version="1.0" encoding="UTF-8"?>

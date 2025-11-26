@@ -51,6 +51,7 @@
   imports = [
     ./hardware.nix
     ./sys-apps.nix
+    ./system.nix
   ];
 
   # ========================================

@@ -15,7 +15,6 @@
   # Laptop-specific power management services
   services.thermald.enable = true;
   services.tlp.enable = true;
-  powerManagement.powertop.enable = false;
 
   # TLP configuration - prevent keyboard standby when plugged in
   services.tlp.settings = {
