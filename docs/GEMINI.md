@@ -2,6 +2,8 @@
 
 This document provides specific instructions for you, a Gemini agent, to manage this NixOS configuration for the user `joebutler`. Your primary directive is to make all changes declaratively by editing the Nix files in this repository, adhering to its established structure and conventions.
 
+For additional agent-specific guidelines and technical details (e.g., pre-commit hooks), please refer to `AGENTS.md`.
+
 ## 1. Core Principles & Safety
 
 ### 1.1. Declarative & Modular
@@ -19,7 +21,7 @@ When a user asks you for edits or changes, you must present them with a clear an
 - **Incremental Changes**: Implement changes incrementally where possible.
 - **No Destructive Operations**: Never execute destructive operations without explicit user confirmation.
 - **Backup Awareness**: The user is responsible for backups. Your role is to avoid breaking the system.
-- **Official documentation**: Do not base important decisions on guesses or conjecture. Ensure that you are accessing up to date and official documentation where possible to inform your decisions. 
+- **Official documentation**: Do not base important decisions on guesses or conjecture. Ensure that you are accessing up to date and official documentation where possible to inform your decisions.
 
 ### 1.3. Git & Change Management Workflow
 You must follow this ordered process for making and applying configuration changes to ensure safety and maintain a clean history.
