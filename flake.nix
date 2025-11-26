@@ -25,8 +25,12 @@
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
 
+    # personal dev apps
     whichkey.url = "git+file:///home/joebutler/development/whichkey";
     anki-forge.url = "github:joe-butler-23/anki-card-forge";
+
+    # ai utilities
+    ai-utilities.url = "git+file:///home/joebutler/utilities/ai";
 
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
