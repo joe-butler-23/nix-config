@@ -94,31 +94,29 @@
         "hyprctl dispatch dpms on"
         "app2unit blueman-applet"
         "sleep 2 && app2unit kanshi &"
-        "app2unit foot --server"
         "app2unit clipse -listen"
       ];
     };
 
     extraConfig = ''
       $mainMod = SUPER
-      $terminal = foot
+      $terminal = kitty --single-instance
       $menu = rofi -show drun -matching regex -no-tokenize -drun-match-fields 'name' -drun-display-format '{name}' -display-drun "" -theme-str 'textbox-prompt-colon { enabled: false; }' -run-command "app2unit -- {cmd}"
       $browser = app2unit brave
-      $fileManager = app2unit foot -a yazi -D ~ sh -lc 'TMPFILE=$(mktemp); yazi --chooser-file="$TMPFILE"; if [ -s "$TMPFILE" ]; then xdg-open "$(cat "$TMPFILE")"; fi; rm -f "$TMPFILE"'
+      $fileManager = app2unit kitty -a yazi -D ~ sh -lc 'TMPFILE=$(mktemp); yazi --chooser-file="$TMPFILE"; if [ -s "$TMPFILE" ]; then xdg-open "$(cat "$TMPFILE")"; fi; rm -f "$TMPFILE"'
 
       bind = $mainMod, Return, exec, $terminal
       bind = $mainMod, C, killactive,
       bind = $mainMod, E, exec, $fileManager
       bind = $mainMod, V, togglefloating,
       bindr = $mainMod, SUPER_L, exec, $menu
-      bind = $mainMod, P, pseudo, # dwindle
-      bind = $mainMod, U, togglesplit, # dwindle
+      bind = $mainMod, P, pseudo,
+      bind = $mainMod, U, togglesplit,
       bind = $mainMod, B, exec, $browser
       bind = $mainMod, Y, exec, app2unit hyprshot -m region --clipboard-only
       bind = $mainMod, SPACE, exec, wlr-which-key
       bind = $mainMod, a, exec, anki-forge-launcher
-      bind = $mainMod, F, exec, app2unit foot -a filepicker -e fzf-file-launcher
-      bind = $mainMod, R, exec, ~/bin/refile-mousepad.sh
+      bind = $mainMod, F, exec, app2unit kitty -a filepicker -e fzf-file-launcher
       bind = $mainMod, F3, exec, hyprctl keyword monitor eDP-1,preferred,0x0,1 && hyprctl keyword monitor DP-5,disable && hyprctl dispatch moveworkspacetomonitor all eDP-1
       bind = $mainMod, m, exec, ~/.config/hypr/toggle_eDP1.sh
       bind = $mainMod, n, exec, hyprctl keyword monitor eDP-1,enable
@@ -188,10 +186,10 @@
       windowrulev2 = stayfocused, class:clipse
       windowrulev2 = float, persistentsize, class:blueman-manager
 
-			# Border for foot terminal
-			windowrulev2 = decorate, class:^foot$
-			windowrulev2 = bordercolor 0xffffffff, class:^foot$
-			windowrulev2 = bordersize 1, class:^foot$
+			# Border for terminal
+			windowrulev2 = decorate, class:^kitty$
+			windowrulev2 = bordercolor 0xffffffff, class:^kitty$
+			windowrulev2 = bordersize 1, class:^kitty$
     '';
   };
 }

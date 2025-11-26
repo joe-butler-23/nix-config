@@ -7,13 +7,17 @@
       font_family = "JetBrainsMono Nerd Font";
       font_size = "10.0";
       cursor_shape = "beam";
-      scrollback_lines = 10000;
-      enable_audio_bell = false;
+      scrollback_lines = 1000;
+			text_composition_strategy = "legacy";
       
-      # Fixes the "ghost window" animation glitch on exit
+      # Options
       confirm_os_window_close = 0;
+			update_check_interval = 0;
+			enable_audio_bell = false;
+ 			window_alert_on_bell = false;
+			wayland_enable_ime = "no";
 
-      # --- Nord Theme (Matched to your Foot config) ---
+      # --- Nord Theme ---
       background = "#2e3440";
       foreground = "#d8dee9";
       selection_background = "#d8dee9";
