@@ -25,7 +25,7 @@
 
   # ========================================
   # NIXOS SYSTEM CONFIGURATION (mkSystem)
-  # Builds the full operating system (Bootloader, Kernel, Services + User Home)
+  # Builds the full operating system
   # ========================================
   mkSystem = hostName:
     inputs.nixpkgs.lib.nixosSystem {
@@ -69,8 +69,13 @@
               ../modules/apps
               ../modules/scripts
 
-              # User Modules (Enable User-level Features)
+              ## User Modules
+
+              # sops
               inputs.sops-nix.homeManagerModules.sops
+
+              # ai tools
+              inputs.ai-utilities.homeManagerModules.default
             ];
           };
         }
