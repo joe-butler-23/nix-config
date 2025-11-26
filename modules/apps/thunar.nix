@@ -1,9 +1,5 @@
 _: {
-  # ============================================================================
-  # THUNAR USER CONFIGURATION
-  # The system-level package installation and services (gvfs, tumbler) are in:
-  # modules/core/sys-apps.nix
-  # ============================================================================
+  # Thunar package installation and services (gvfs, tumbler) are in modules/core/sys-apps.nix
 
   # Thunar preferences via Xfconf (Home Manager)
   xfconf.settings = {

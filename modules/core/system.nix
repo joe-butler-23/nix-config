@@ -18,10 +18,6 @@
     enable = true;
   };
 
-  #### Desktop plumbing
-  services.gvfs.enable = true;
-  services.tumbler.enable = true;
-
   #### XDG Portals for Wayland (Hyprland + GTK)
   xdg.portal = {
     enable = true;

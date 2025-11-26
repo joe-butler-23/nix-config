@@ -11,11 +11,7 @@
     zram-generator
   ];
 
-  # ============================================================================
-  # THUNAR FILE MANAGER (System Level)
-  # User-specific configuration (actions, keybinds) is handled in:
-  # modules/apps/thunar.nix
-  # ============================================================================
+  # thunar dotfiles in modules/apps/thunar.nix
   programs.thunar.enable = true;
   programs.xfconf.enable = true; # Required for settings storage
 
