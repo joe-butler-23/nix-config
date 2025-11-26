@@ -1,4 +1,9 @@
-_: {
+{pkgs, ...}: {
+  # Install Thunar itself so this module is self-contained
+  home.packages = [
+    pkgs.xfce.thunar
+  ];
+
   # Configure Thunar settings via Xfconf
   xfconf.settings = {
     thunar = {
