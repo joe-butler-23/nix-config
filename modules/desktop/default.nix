@@ -5,6 +5,7 @@
     ./mako.nix
     ./rofi.nix
     ./gtk.nix
+    ./thunar.nix
     ./whichkey.nix
     ./wlogout/wlogout.nix
   ];
