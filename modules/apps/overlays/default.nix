@@ -16,7 +16,7 @@
 # - _final: The "future" package set (unused here)
 # - prev: The "current" package set (used to build our new tools)
 # ========================================
-_final: prev: {
+_: _final: prev: {
   opencode = prev.stdenv.mkDerivation rec {
     pname = "opencode";
     version = "1.0.110";
