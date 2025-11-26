@@ -20,3 +20,10 @@ When attempting to commit changes, `pre-commit` will automatically execute these
 ### Installation and Management:
 
 The `pre-commit` framework is installed system-wide via NixOS. The hooks are set up by running `pre-commit install` in the repository root. This command creates hooks in your `.git/hooks` directory.
+
+## Git & Flakes Workflow
+
+**Crucial Rule:** When using Nix Flakes, the `nixos-rebuild` command **only sees files that are tracked by Git**.
+
+1.  **New Files:** If you create a new file (e.g., `modules/new-service.nix`), you **MUST** stage it (`git add`) before running `nixos-rebuild` (aliases `ns`, `nsdry`). If you do not, Nix will report that the file does not exist.
+2.  **Best Practice:** Always commit your changes (or at least stage them) before applying the configuration. This ensures the system state matches the version control history.
