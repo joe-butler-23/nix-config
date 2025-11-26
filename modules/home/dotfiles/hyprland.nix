@@ -1,6 +1,8 @@
-{
+{ pkgsUnstable, ... }: {
   wayland.windowManager.hyprland = {
     enable = true;
+		package = pkgsUnstable.hyprland;
+
     xwayland = {
       enable = true;
     };
@@ -90,7 +92,6 @@
         "app2unit waybar"
         "app2unit hyprpaper"
         "hyprctl dispatch dpms on"
-        "app2unit nm-applet"
         "app2unit blueman-applet"
         "sleep 2 && app2unit kanshi &"
         "app2unit foot --server"

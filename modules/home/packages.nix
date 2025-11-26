@@ -4,6 +4,7 @@
   pkgsUnstable,
   ...
 }: let
+
   # Define a custom R environment with specific packages
   R-with-packages = pkgs.rWrapper.override {
     packages = with pkgs.rPackages; [
@@ -14,11 +15,21 @@
       httpgd
     ];
   };
+
 in {
   #### User packages
   home.packages =
     (with pkgsUnstable; [
       app2unit
+
+      ## Wayland / Hyprland
+      hyprshot
+      hyprland-protocols
+      wl-clipboard
+      xdg-utils
+      wayland-utils
+      uwsm
+
       (anki.withAddons [
         (ankiAddons.anki-connect.withConfig {
           config = {
@@ -32,23 +43,12 @@ in {
           };
         })
       ])
-      zsh-powerlevel10k
     ])
     ++ (with pkgs; [
-      ## Wayland / Hyprland
-      hypridle
-      hyprlock
-      hyprshot
-      hyprpaper
-      hyprland-protocols
-      wl-clipboard
-      xdg-desktop-portal-hyprland
-      xdg-utils
-      wayland-utils
-      uwsm
 
       ## Core desktop
       home-manager
+			alacritty
       capitaine-cursors
       bluetui
       blueman

@@ -7,8 +7,6 @@
     snapper
     zram-generator
 
-    ## Power management helpers
-
     ## Shell tools (moved from home-manager to fix timing)
     zsh
   ];

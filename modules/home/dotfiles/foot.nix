@@ -1,14 +1,11 @@
-_: {
+{ pkgsUnstable, ... }: {
   programs.foot = {
     enable = true;
+		package = pkgsUnstable.foot; 
     settings = {
       main = {
         font = "JetBrainsMono Nerd Font:size=10";
         resize-by-cells = "no";
-        # Add these:
-        pad = "0x0"; # Remove padding that might cause flashing
-        initial-window-mode = "windowed";
-        dpi-aware = "no"; # Can help with rendering issues
       };
       scrollback = {
         lines = 10000;
@@ -16,13 +13,8 @@ _: {
       cursor = {
         style = "beam";
       };
-      # Try adding this section:
-      tweak = {
-        grapheme-shaping = "yes"; # Better rendering
-        render-timer = "none"; # May reduce flashing
-      };
 
-      # Nord dark theme - overrides Stylix theming
+      # Nord dark theme
       colors = {
         alpha = "1.0";
         foreground = "d8dee9";

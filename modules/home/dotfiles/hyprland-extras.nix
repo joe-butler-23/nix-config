@@ -3,7 +3,6 @@
   lib,
   ...
 }: let
-  # One absolute path for everything (avoids $HOME expansion issues)
   wallpaper = "${config.home.homeDirectory}/nix-config/wallpaper.jpeg";
 in {
   # Hyprpaper - wallpaper management
