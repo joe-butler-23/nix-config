@@ -98,13 +98,21 @@
       ];
     };
 
-    extraConfig = ''
+extraConfig = ''
+			# mod
       $mainMod = SUPER
+      
+      # terminal
       $terminal = kitty --single-instance
+
+      # menu
       $menu = rofi -show drun -matching regex -no-tokenize -drun-match-fields 'name' -drun-display-format '{name}' -display-drun "" -theme-str 'textbox-prompt-colon { enabled: false; }' -run-command "app2unit -- {cmd}"
       $browser = app2unit brave
-      $fileManager = app2unit kitty -a yazi -D ~ sh -lc 'TMPFILE=$(mktemp); yazi --chooser-file="$TMPFILE"; if [ -s "$TMPFILE" ]; then xdg-open "$(cat "$TMPFILE")"; fi; rm -f "$TMPFILE"'
+      
+      # file manager
+      $fileManager = app2unit $terminal --class yazi --directory ~ -e sh -lc 'TMPFILE=$(mktemp); yazi --chooser-file="$TMPFILE"; if [ -s "$TMPFILE" ]; then xdg-open "$(cat "$TMPFILE")"; fi; rm -f "$TMPFILE"'
 
+      # apps
       bind = $mainMod, Return, exec, $terminal
       bind = $mainMod, C, killactive,
       bind = $mainMod, E, exec, $fileManager
@@ -116,10 +124,9 @@
       bind = $mainMod, Y, exec, app2unit hyprshot -m region --clipboard-only
       bind = $mainMod, SPACE, exec, wlr-which-key
       bind = $mainMod, a, exec, anki-forge-launcher
-      bind = $mainMod, F, exec, app2unit kitty -a filepicker -e fzf-file-launcher
-      bind = $mainMod, F3, exec, hyprctl keyword monitor eDP-1,preferred,0x0,1 && hyprctl keyword monitor DP-5,disable && hyprctl dispatch moveworkspacetomonitor all eDP-1
-      bind = $mainMod, m, exec, ~/.config/hypr/toggle_eDP1.sh
-      bind = $mainMod, n, exec, hyprctl keyword monitor eDP-1,enable
+      
+      # fzf launcher
+      bind = $mainMod, F, exec, app2unit $terminal --class filepicker -e fzf-file-launcher
 
       bind = $mainMod, h, movefocus, l
       bind = $mainMod, l, movefocus, r
@@ -167,11 +174,11 @@
       bindel = ,XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
       bindel = ,XF86MonBrightnessUp, exec, brightnessctl s 10%+
       bindel = ,XF86MonBrightnessDown, exec, brightnessctl s 10%-
-
-      bind = $mainMod SHIFT, SPACE, exec, app2unit $HOME/bin/obsidian_capture.sh
-
+      
+      # window rules
       windowrulev2 = suppressevent maximize, class:.*
       windowrulev2 = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
+
       windowrulev2 = float, class:filepicker
       windowrulev2 = center, class:filepicker
       windowrulev2 = size 70% 40%, class:filepicker
@@ -186,10 +193,9 @@
       windowrulev2 = stayfocused, class:clipse
       windowrulev2 = float, persistentsize, class:blueman-manager
 
-			# Border for terminal
-			windowrulev2 = decorate, class:^kitty$
-			windowrulev2 = bordercolor 0xffffffff, class:^kitty$
-			windowrulev2 = bordersize 1, class:^kitty$
+      # terminal border
+      windowrulev2 = bordersize 1, class:^kitty$
+      windowrulev2 = bordercolor rgb(ffffff), class:^kitty$
     '';
   };
 }
