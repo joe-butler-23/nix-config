@@ -37,6 +37,8 @@
 
   programs.nix-ld.enable = true;
 
+  systemd.user.startServices = "sd-switch";
+
   system.autoUpgrade = {
     enable = true;
     flake = "github:joe-butler-23/nix-config";

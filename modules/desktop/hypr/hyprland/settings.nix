@@ -82,9 +82,15 @@ _: {
     };
 
     exec-once = [
+      "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE"
+      "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE"
+      "systemctl --user start graphical-session.target"
+
+      # Apps
       "waybar"
-      "hyprlock"
       "hyprpaper"
+      "nm-applet"
+      "blueman-applet"
     ];
   };
 }
