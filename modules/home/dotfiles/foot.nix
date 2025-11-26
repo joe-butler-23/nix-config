@@ -48,6 +48,11 @@
         dim7 = "aeb3bb"; # dim white
       };
 
+      csd = {
+        border-width = 1;
+        border-color = "ffffffff";
+      };
+
       "key-bindings" = {
         # Copy last command output to clipboard with Ctrl+Space
         "pipe-command-output" = "[wl-copy] Control+Shift+b";

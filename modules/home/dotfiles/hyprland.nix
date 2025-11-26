@@ -50,8 +50,8 @@
         };
       };
 
-      animations = {
-        enabled = "no";
+			animations = {
+        enabled = false;
       };
 
       dwindle = {
@@ -66,7 +66,7 @@
       misc = {
         force_default_wallpaper = 0;
         disable_hyprland_logo = true;
-        vfr = false; # Variable Frame Rate - can help with tearing
+        vfr = true;
         vrr = 2; # Disable VRR globally
       };
 
@@ -187,6 +187,11 @@
       windowrulev2 = size 70% 40%, class:clipse
       windowrulev2 = stayfocused, class:clipse
       windowrulev2 = float, persistentsize, class:blueman-manager
+
+			# Border for foot terminal
+			windowrulev2 = decorate, class:^foot$
+			windowrulev2 = bordercolor 0xffffffff, class:^foot$
+			windowrulev2 = bordersize 1, class:^foot$
     '';
   };
 }
