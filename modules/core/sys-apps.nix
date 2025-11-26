@@ -9,6 +9,7 @@
     sbctl
     snapper
     zram-generator
+    pre-commit
   ];
 
   # thunar dotfiles in modules/apps/thunar.nix

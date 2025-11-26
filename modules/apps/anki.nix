@@ -1,7 +1,4 @@
-{
-  pkgsUnstable,
-  ...
-}: {
+{pkgsUnstable, ...}: {
   home.packages = with pkgsUnstable; [
     (anki.withAddons [
       (ankiAddons.anki-connect.withConfig {
