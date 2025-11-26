@@ -9,6 +9,7 @@
     ./utils.nix
     ./zathura.nix
     ./syncthing.nix
+    ./services.nix
     ./web-apps
   ];
 }
