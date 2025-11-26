@@ -1,4 +1,4 @@
-_: {
+{config, ...}: {
   wayland.windowManager.hyprland.settings = {
     monitor = [
       ",preferred,auto,auto"
@@ -88,7 +88,7 @@ _: {
 
       # Apps
       "waybar"
-      "hyprpaper"
+      "swaybg -i ${config.home.homeDirectory}/nix-config/assets/wallpaper.jpeg -m fill"
       "nm-applet"
       "blueman-applet"
     ];

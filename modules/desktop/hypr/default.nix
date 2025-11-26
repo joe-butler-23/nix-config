@@ -1,8 +1,9 @@
-{...}: {
+{pkgs, ...}: {
   imports = [
     ./hyprland
-    ./hyprpaper.nix
     ./hypridle.nix
     ./hyprlock.nix
   ];
+
+  home.packages = [pkgs.swaybg];
 }
