@@ -89,7 +89,7 @@
 
   # SOPS Secrets
   sops.defaultSopsFile = ../../secrets/secrets.yaml;
-  sops.age.keyFile = "/home/joebutler/nix-config/secrets/sops.agekey";
+  sops.age.keyFile = "/home/${user}/nix-config/secrets/sops.agekey";
 
   # Uinput for Espanso
   services.udev.extraRules = ''
