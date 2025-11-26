@@ -49,7 +49,7 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "hm-bak";
+          home-manager.backupFileExtension = "backup";
 
           # Pass special arguments to Home Manager modules
           home-manager.extraSpecialArgs = {
@@ -57,7 +57,7 @@
             inherit (inputs) whichkey anki-forge;
           };
 
-          # User Configuration (The "Home")
+          # User Configuration ("Home")
           home-manager.users.${user} = {
             home.username = user;
             home.homeDirectory = "/home/${user}";
