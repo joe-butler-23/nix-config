@@ -42,6 +42,7 @@
       imports = [
         ./parts/systems.nix
         ./parts/formatting.nix
+        ./parts/devshell.nix
       ];
     };
 }

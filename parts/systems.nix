@@ -53,7 +53,7 @@
 
           # Pass special arguments to Home Manager modules
           home-manager.extraSpecialArgs = {
-            inherit pkgsUnstable vsx user;
+            inherit inputs pkgsUnstable vsx user;
             inherit (inputs) whichkey anki-forge;
           };
 
