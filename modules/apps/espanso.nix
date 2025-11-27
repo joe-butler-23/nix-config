@@ -1,7 +1,13 @@
 {
   pkgs,
+  config,
   ...
 }: {
+  sops.secrets."secrets.yml" = {
+    key = "espanso_matches";
+    path = "${config.xdg.configHome}/espanso/match/secrets.yml";
+  };
+
   services.espanso = {
     enable = true;
     package = pkgs.espanso-wayland;
@@ -9,7 +15,8 @@
     # Basic Configuration (config/default.yml)
     configs = {
       default = {
-        toggle_key = "OFF"; # We use the trigger prefix approach instead of a global toggle key
+        toggle_key = "OFF";
+        backend = "Clipboard";
       };
     };
 
@@ -30,12 +37,6 @@
                 };
               }
             ];
-          }
-
-          # Email Example (Placeholder)
-          {
-            trigger = ":email";
-            replace = "my.email@example.com";
           }
         ];
       };

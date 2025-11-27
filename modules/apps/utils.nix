@@ -42,4 +42,7 @@
       alsa-utils
       pavucontrol
     ]);
+
+  xdg.dataFile."gtksourceview-4/language-specs/nix.lang".source = ./nix.lang;
+  xdg.dataFile."gtksourceview-3.0/language-specs/nix.lang".source = ./nix.lang;
 }

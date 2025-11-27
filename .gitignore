@@ -34,3 +34,4 @@ secrets/*.tmp
 secrets/*.bak
 
 secrets/sops.agekey
+secrets.yml

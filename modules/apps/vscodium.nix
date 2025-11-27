@@ -15,6 +15,7 @@
         vsx.saoudrizwan.cline-nightly
         # Tokyo Night theme from nixpkgs
         pkgs.vscode-extensions.enkia.tokyo-night
+        pkgs.vscode-extensions.bbenoist.nix
         vsx.reditorsupport.r
         vsx.reditorsupport."r-syntax"
       ];
