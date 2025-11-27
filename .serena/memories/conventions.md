@@ -2,7 +2,7 @@
 
 ## General
 *   **Language**: Nix
-*   **Format**: Code must be formatted using the standard formatter defined in the flake (likely `alejandra` or `nixpkgs-fmt`, triggered via `nix fmt`).
+*   **Format**: Code must be formatted using the standard formatter defined in the flake, triggered via `nix fmt`.
 *   **Modularity**: Prefer small, focused modules imported via `default.nix` or explicit imports lists.
 
 ## Flake Structure
