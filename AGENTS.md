@@ -60,3 +60,9 @@ Before ending a session:
 1.  **Sync State**: `bd close <id>` or `bd update <id> --status blocked`.
 2.  **Sync Memory**: `bd sync`.
 3.  **Clean Up**: Ensure no dirty git state unless explicitly intended.
+
+## 4. Project Context
+*   **Modules**: `modules/` contains reusable NixOS/Home Manager modules.
+*   **Hosts**: `modules/hosts/` contains machine-specific configurations.
+*   **Systems**: `flake.nix` defines the entry points for hosts.
+*   **Secrets**: `secrets/` contains SOPS encrypted secrets.
