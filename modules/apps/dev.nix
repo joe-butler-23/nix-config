@@ -34,5 +34,6 @@ in {
       # Custom AI Tools
       opencode
       gemini
+      claude-code
     ]);
 }
