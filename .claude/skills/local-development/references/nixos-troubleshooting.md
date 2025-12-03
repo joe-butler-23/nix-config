@@ -52,3 +52,20 @@
 6. **Incremental Addition**: Add complexity only after basics work
 
 This sequence prevents assumption-based debugging and reduces iteration time.
+
+## Verification Patterns
+
+### Option Verification Strategy
+
+**Problem:** Applying configuration snippets from web searches that contain hallucinated or deprecated NixOS options (e.g., `services.hardware.lm-sensors.enable`).
+
+**The Trap:**
+- "It looks correct" is not a valid validation.
+- LLMs and older forum posts often invent options that *sound* plausible but don't exist.
+
+**The Fix:**
+1.  **Authoritative Search**: Use the [NixOS Options Search](https://search.nixos.org/options) or `man configuration.nix` locally.
+2.  **Package vs Module**: If an option doesn't exist, the tool often just needs to be added to `environment.systemPackages` (e.g., `lm_sensors`, `htop`).
+3.  **Schema Check**: If unsure, check the defining module in `nixpkgs` source to see available options.
+
+**Rule:** never blindly apply a `services.*` or `programs.*` configuration without confirming the option key exists.
