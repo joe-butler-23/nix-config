@@ -7,11 +7,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1764781104,
-        "narHash": "sha256-nUcucDQUu9LkOO9STIRtrwqmiSJ9K+hFVNvNTsM0tUs=",
+        "lastModified": 1764782429,
+        "narHash": "sha256-v0+AfszVL1rWPjgW/jlZlioSi1f4cEkPCpxDiNap03w=",
         "ref": "refs/heads/main",
-        "rev": "5d7623500b1b47acfc79e81a2eb74cf870c959cd",
-        "revCount": 27,
+        "rev": "aea781383fd983cd0ebac7636d376d8ca733b996",
+        "revCount": 29,
         "type": "git",
         "url": "file:///home/joebutler/utilities/ai"
       },
