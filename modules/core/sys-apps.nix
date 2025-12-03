@@ -13,6 +13,7 @@
     deadnix
     statix
     nixd
+    lm_sensors
   ];
 
   # thunar dotfiles in modules/apps/thunar.nix

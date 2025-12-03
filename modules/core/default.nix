@@ -113,7 +113,6 @@
   # ========================================
   # HARDWARE SENSORS
   # ========================================
-  services.hardware.lm-sensors.enable = true;
   # NOTE: You might need to run `sensors-detect` and add suggested kernel modules here.
 
   # ========================================
