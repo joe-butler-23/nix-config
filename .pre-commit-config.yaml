@@ -3,8 +3,8 @@
 repos:
   - repo: local
     hooks:
-      - id: nixpkgs-fmt
-        name: nixpkgs-fmt
+      - id: nix-fmt
+        name: nix-fmt
         entry: nix fmt
         language: system
         files: \.nix$
