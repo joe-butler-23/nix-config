@@ -111,6 +111,13 @@
   };
 
   # ========================================
+  # HARDWARE SENSORS
+  # ========================================
+  services.hardware.lm-sensors.enable = true;
+  # NOTE: You might need to run `sudo sensors-detect` and add suggested kernel modules here.
+  # Example: boot.kernelModules = [ "coretemp" "nct6775" ];
+
+  # ========================================
   # SERVICES
   # ========================================
   # Audio
