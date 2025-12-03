@@ -1,6 +1,6 @@
 {pkgs}:
 pkgs.writeShellScriptBin "weekly-review" ''
-  export PATH="${pkgs.gum}/bin:${pkgs.fd}/bin:${pkgs.git}/bin:${pkgs.coreutils}/bin:${pkgs.systemd}/bin:${pkgs.gnugrep}/bin:$PATH"
+  export PATH="${pkgs.gum}/bin:${pkgs.fd}/bin:${pkgs.git}/bin:${pkgs.coreutils}/bin:${pkgs.systemd}/bin:${pkgs.gnugrep}/bin:${pkgs.nix-info}/bin:${pkgs.networkmanager}/bin:${pkgs.mods}/bin:$PATH"
 
   # ==========================================
   # STYLING
@@ -104,13 +104,33 @@ pkgs.writeShellScriptBin "weekly-review" ''
   check_health() {
     gum style --foreground $COLOR_SECONDARY --bold --margin "1 0" "❤️ System Health"
 
-    FAILED_UNITS=$(systemctl --failed --no-pager)
-    DISK_USAGE=$(df -h / | grep -v Filesystem)
+    # System Overview
+    SYSTEM_INFO=$(nix-info -m)
+    gum style --border normal --padding "0 1" --title "System Info" "$SYSTEM_INFO"
 
+    # Failed Systemd Units
+    FAILED_UNITS=$(systemctl --failed --no-pager)
     gum style --border normal --padding "0 1" --title "Failed Units" "$FAILED_UNITS"
+
+    # Disk Usage
+    DISK_USAGE=$(df -h / | grep -v Filesystem)
     gum style --border normal --padding "0 1" --title "Disk Usage" "$DISK_USAGE"
 
-    gum confirm "View System Logs (Errors)?" && journalctl -p 3 -xb | gum pager
+    # Network Status
+    NETWORK_STATUS=$(nmcli device status)
+    gum style --border normal --padding "0 1" --title "Network Status" "$NETWORK_STATUS"
+
+    # Nix Store GC Roots (what's preventing garbage collection)
+    GC_ROOTS=$(nix-store --gc --print-roots || echo "No explicit GC roots found.")
+    gum style --border normal --padding "0 1" --title "Nix Store GC Roots" "$GC_ROOTS"
+
+    # Journal Logs (Warnings & Errors)
+    if gum confirm "View System Logs (Warnings & Errors)?"; then
+      journalctl -p 4 -xb | gum pager
+    fi
+
+    gum input --placeholder "Press Enter to continue..."
+
   }
 
   garbage_collect() {
@@ -121,6 +141,30 @@ pkgs.writeShellScriptBin "weekly-review" ''
        gum style --foreground 76 "✅ Garbage collected."
     fi
 
+    gum input --placeholder "Press Enter to continue..."
+  }
+
+  analyze_logs() {
+    gum style --foreground $COLOR_SECONDARY --bold --margin "1 0" "🧠 AI Log Analysis"
+
+    if [ -z "$OPENAI_API_KEY" ] && [ -z "$ANTHROPIC_API_KEY" ]; then
+      gum style --foreground 196 "❌ No AI API key found."
+      gum style --foreground 220 "Please set OPENAI_API_KEY or ANTHROPIC_API_KEY environment variable."
+      gum input --placeholder "Press Enter to continue..."
+      return
+    fi
+
+    gum spin --spinner dot --title "Gathering logs for AI analysis..." -- journalctl -p 3 -xb > /tmp/journal_errors.log
+    FAILED_UNITS=$(systemctl --failed --no-pager)
+
+    if [ -s /tmp/journal_errors.log ] || [ -n "$FAILED_UNITS" ]; then
+      gum style --foreground 220 "Sending logs to AI for analysis..."
+      (echo "Systemd Failed Units:\n$FAILED_UNITS\n\nJournalctl Errors:\n" && cat /tmp/journal_errors.log) | mods -m gpt-4o -p "As a senior Linux system administrator, analyze these system logs and failed units. Identify critical issues, potential causes, and suggest actionable solutions. Be concise and prioritize stability and security." | gum pager
+    else
+      gum style --foreground 76 "✅ No critical errors or failed units found in logs."
+    fi
+
+    rm -f /tmp/journal_errors.log
     gum input --placeholder "Press Enter to continue..."
   }
 
@@ -136,6 +180,7 @@ pkgs.writeShellScriptBin "weekly-review" ''
       "🧹 Clean Recent Files" \
       "❤️ Check Health" \
       "🗑️ Garbage Collection" \
+      "🧠 Analyze Logs" \
       "👋 Exit")
 
     case "$CHOICE" in
@@ -150,6 +195,9 @@ pkgs.writeShellScriptBin "weekly-review" ''
         ;;
       "🗑️ Garbage Collection")
         garbage_collect
+        ;;
+      "🧠 Analyze Logs")
+        analyze_logs
         ;;
       "👋 Exit")
         echo "See you next week!"
