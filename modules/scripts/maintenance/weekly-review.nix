@@ -9,8 +9,6 @@ pkgs.writeShellScriptBin "weekly-review" ''
   COLOR_SECONDARY="99"
   COLOR_TEXT="255"
 
-
-
   # ==========================================
   # FUNCTIONS
   # ==========================================
@@ -137,7 +135,7 @@ pkgs.writeShellScriptBin "weekly-review" ''
       "📦 Update System" \
       "🧹 Clean Recent Files" \
       "❤️ Check Health" \
-      "🗑️ Garbage Collect" \
+      "🗑️ Garbage Collection" \
       "👋 Exit")
 
     case "$CHOICE" in
@@ -150,7 +148,7 @@ pkgs.writeShellScriptBin "weekly-review" ''
       "❤️ Check Health")
         check_health
         ;;
-      "🗑️ Garbage Collect")
+      "🗑️ Garbage Collection")
         garbage_collect
         ;;
       "👋 Exit")
