@@ -85,4 +85,12 @@ When learning opportunity detected:
 - Plan implementation in future sessions
 - Gather additional examples before acting
 
-# Self-Learning Skill
+### 5. Quality Assurance (The "Lesson" vs "Log" Test)
+
+Before committing any learning update, ask:
+- **Is this descriptive?** ("I failed to install X because Y option was missing") -> **REJECT**. This is just a log.
+- **Is this predictive?** ("Always verify options for hardware tools in authoritative docs before using") -> **ACCEPT**. This prevents future errors.
+- **Is this generalized?** Does it apply to other similar tools/contexts, or just this specific package?
+- **Does it change behavior?** Will reading this actually alter how the agent approaches the next task?
+
+**Rule:** We do not want a history of *what happened*. We want a playbook of *how to act better next time*.
