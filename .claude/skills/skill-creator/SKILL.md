@@ -1,7 +1,6 @@
 ---
 name: skill-creator
-description: Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.
-license: Complete terms in LICENSE.txt
+description: Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends AI's capabilities with specialized knowledge, workflows, or tool integrations.
 ---
 
 # Skill Creator
@@ -30,7 +29,7 @@ The context window is a public good. Skills share the context window with everyt
 
 **Default assumption: Claude is already very smart.** Only add context Claude doesn't already have. Challenge each piece of information: "Does Claude really need this explanation?" and "Does this paragraph justify its token cost?"
 
-Prefer concise examples over verbose explanations.
+Prefer concise examples over verbose explanations. And try and start with a basic version of the Skill. For example, if the user wants a skill that covers best practices for coding, it should be concentrated around a few relevant examples that can be built up over time rather than an attempt to cover all possible tips and tricks.
 
 ### Set Appropriate Degrees of Freedom
 
@@ -46,7 +45,7 @@ Think of Claude as exploring a path: a narrow bridge with cliffs needs specific 
 
 ### Anatomy of a Skill
 
-Every skill consists of a required SKILL.md file and optional bundled resources:
+Every skill consists of a required SKILL.md file and optional bundled resources. Please remember: bundled resources are optional. Use only when they add value. A single SKILL.md file is perfectly fine.
 
 ```
 skill-name/
@@ -68,7 +67,7 @@ Every SKILL.md consists of:
 - **Frontmatter** (YAML): Contains `name` and `description` fields. These are the only fields that Claude reads to determine when the skill gets used, thus it is very important to be clear and comprehensive in describing what the skill is, and when it should be used.
 - **Body** (Markdown): Instructions and guidance for using the skill. Only loaded AFTER the skill triggers (if at all).
 
-#### Bundled Resources (optional)
+#### Bundled Resources (optional, only include when required)
 
 ##### Scripts (`scripts/`)
 

@@ -12,6 +12,7 @@
     pre-commit
     deadnix
     statix
+    nixd
   ];
 
   # thunar dotfiles in modules/apps/thunar.nix

@@ -1,0 +1,3 @@
+packages/mcp-project-init.nix
+packages/default.nix
+root

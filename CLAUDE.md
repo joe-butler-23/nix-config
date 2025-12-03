@@ -23,6 +23,8 @@ This repository manages the NixOS configuration for optimal system stability, pe
 
 ## 5. Testing and Validation
 - **Local Builds**: Always test configuration changes locally using `nixos-rebuild switch --flake .#yourhostname` or `home-manager switch --flake .#yourusername` before committing.
+- **Type Checking**: Before adding new Nix options, verify expected types using `nixos-option` or documentation to prevent build errors.
+- **System Capability Check**: Before adding custom configurations, check if NixOS already provides the required functionality out-of-the-box.
 - **Linting**: Ensure Nix expressions are formatted and linted (e.g., using `nixpkgs-fmt` or `alejandra`).
 
 ## 6. Version Control
@@ -36,7 +38,7 @@ This repository manages the NixOS configuration for optimal system stability, pe
 
 ## Project Management Philosophy
 
-This project uses an AI-first approach where Claude actively manages workflows rather than passively responding to requests. The system is built on three pillars:
+This document defines the standard operating procedures for AI Agents working within this repo. It integrates **Memory (`beads`)** and **Procedures (skills)** into a unified, self-correcting workflow that enforces good practices and a robust workflow. The user has a Nix Os machine with a zsh-p10k-kitty shell setup. Be vigilant to the fact you are running on a Nix machine and all that entails, in particular mainitaining a clean and tracked git tree at all times (or Nix may not be aware a file exists, or the changes made to it), and the need to use nix develop or nix-shell instead of npm/pip/etc install since it is a read only system. When working in this repo, you MUST work within the following system:
 
 ### 1. Beads (bd) - Task Tracking
 - **All work flows through beads issues** - no exceptions

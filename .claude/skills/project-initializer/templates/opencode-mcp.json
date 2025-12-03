@@ -1,0 +1,23 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "context7": {
+      "type": "local",
+      "command": ["context7-mcp-wrapper"],
+      "enabled": true,
+      "environment": {}
+    },
+    "anki-mcp": {
+      "type": "local",
+      "command": ["anki-mcp-wrapper"],
+      "enabled": true,
+      "environment": {}
+    },
+    "serena": {
+      "type": "local",
+      "command": ["serena-mcp-wrapper"],
+      "enabled": true,
+      "environment": {}
+    }
+  }
+}

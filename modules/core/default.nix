@@ -35,6 +35,9 @@
   nix.optimise.automatic = true;
   nix.optimise.dates = ["03:45"];
 
+  # nixd LSP configuration
+  nix.nixPath = ["nixpkgs=${pkgs.path}"];
+
   programs.nix-ld.enable = true;
 
   system.autoUpgrade = {

@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "context7-mcp-wrapper",
+      "args": [],
+      "environment": {}
+    },
+    "anki-mcp": {
+      "command": "anki-mcp-wrapper",
+      "args": [],
+      "environment": {},
+      "model": "anki-connect",
+      "base_url": "http://localhost:8765"
+    },
+    "serena": {
+      "command": "serena-mcp-wrapper",
+      "args": [],
+      "environment": {}
+    }
+  }
+}

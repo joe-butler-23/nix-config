@@ -1,6 +1,6 @@
 # Project guidelines
 
-This repository manages the NixOS configuration for optimal system stability, performance, and reproducibility. All contributions and modifications must adhere to the following principles:
+This repository manages the NixOS configuration for optimal system stability, performance, and reproducibility. All contributions and modifications must adhere to the following principles.
 
 ## 1. Modularity and Organization
 - **Flake-based Structure**: Maintain a well-organized `flake.nix` and `flake.lock` for reproducible builds.
@@ -11,6 +11,7 @@ This repository manages the NixOS configuration for optimal system stability, pe
 - **Nix Purity**: Prioritize pure functions and avoid imperative shell scripting within Nix expressions where declarative alternatives exist.
 - **Immutability**: Embrace the immutable nature of NixOS. Avoid direct system modifications; all changes must be reflected in the configuration.
 - **Declarative Approach**: Strive for a fully declarative system configuration.
+- **Documentation first**: Nix can be a difficult and niche language. Always rely on documentation (either through web searches, or using the context7 mcp tools) rather than making guesses.
 
 ## 3. Security and Secrets Management
 - **SOPS Integration**: All sensitive information (passwords, API keys) must be managed using `sops-nix` and encrypted. Never commit unencrypted secrets.
@@ -22,8 +23,8 @@ This repository manages the NixOS configuration for optimal system stability, pe
 - **Inline Comments**: Use comments sparingly to explain complex logic or non-obvious choices, focusing on "why" rather than "what."
 
 ## 5. Testing and Validation
-- **Local Builds**: Always test configuration changes locally using `nixos-rebuild switch --flake .#yourhostname` or `home-manager switch --flake .#yourusername` before committing.
-- **Linting**: Ensure Nix expressions are formatted and linted (e.g., using `nixpkgs-fmt` or `alejandra`).
+- **Local Builds**: Always ask the user to test configuration changes locally using `nixos-rebuild switch --flake .#yourhostname` before committing (user has to run because it requires sudo)
+- **Linting**: Ensure Nix expressions are formatted and linted using `nix fmt`.
 
 ## 6. Version Control
 - **Atomic Commits**: Each commit should represent a single, logical change.
@@ -32,7 +33,7 @@ This repository manages the NixOS configuration for optimal system stability, pe
 
 # Agent Operating System (AOS)
 
-This document defines the standard operating procedures for AI Agents. It integrates **Memory (`beads`)** and **Procedures (skills)** into a unified, self-correcting workflow that enforces good practices and a robust workflow.
+This document defines the standard operating procedures for AI Agents working within this repo. It integrates **Memory (`beads`)** and **Procedures (skills)** into a unified, self-correcting workflow that enforces good practices and a robust workflow. The user has a Nix Os machine with a zsh-p10k-kitty shell setup. Be vigilant to the fact you are running on a Nix machine and all that entails, in particular mainitaining a clean and tracked git tree at all times (or Nix may not be aware a file exists, or the changes made to it), and the need to use nix develop or nix-shell instead of npm/pip/etc install since it is a read only system. When working in this repo, you MUST work within the following system:
 
 ## System Architecture
 
