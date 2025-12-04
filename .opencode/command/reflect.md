@@ -2,7 +2,7 @@
 description: Trigger self-learning skill to reflect on recent work and identify process improvements
 ---
 
-# Task: Reflection and Self-Learning Analysis
+#Task: Reflection and Self-Learning Analysis
 
 Please pause for a moment and activate the **self-learning skill** and conduct a comprehensive reflection on the work we just completed.
 

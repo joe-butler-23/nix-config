@@ -5,16 +5,14 @@
   user,
   ...
 }: {
-  # 1. Symlink P10k Config (Must be outside programs.zsh)
-  # This takes the file from your repo and puts it at ~/.p10k.zsh
+  # 1. Symlink P10k Config
+  # Take file from repo and place at ~/.p10k.zsh
   home.file.".p10k.zsh".source = ./p10k.zsh;
 
   programs.zsh = {
     enable = true;
 
-    # 2. Optimize Startup
-    # We enable completion installation but DISABLE the slow default initialization.
-    # Your _lazy_compinit script below handles it much faster.
+    # 2. Completion
     enableCompletion = true;
 
     # 3. Plugins (Powerlevel10k)
@@ -59,8 +57,7 @@
     initContent = lib.mkMerge [
       # --- PART A: INSTANT PROMPT (Must run first) ---
       (lib.mkBefore ''
-        # Enable Powerlevel10k instant prompt.
-        # Should stay close to the top of ~/.zshrc.
+        # Enable Powerlevel10k instant prompt - should stay close to the top of ~/.zshrc.
         if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
           source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
         fi
@@ -68,7 +65,7 @@
 
       # --- PART B: MAIN CONFIGURATION ---
       (lib.mkOrder 1200 ''
-        # Load the p10k config (via the symlink we created above)
+        # Load p10k config
         source ~/.p10k.zsh
 
         # Core options
@@ -102,8 +99,6 @@
           fi
           rm -f -- "$tmp_cwd" "$tmp_pick"
         }
-
-        # --- LAZY LOADING OPTIMIZATIONS ---
 
         # Ensure cache directory exists
         [[ -d "$HOME/.zsh/cache" ]] || mkdir -p "$HOME/.zsh/cache"
