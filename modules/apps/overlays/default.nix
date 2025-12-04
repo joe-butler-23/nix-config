@@ -19,11 +19,11 @@
 _: _final: prev: {
   opencode = prev.stdenv.mkDerivation rec {
     pname = "opencode";
-    version = "1.0.124";
+    version = "1.0.132";
 
     src = prev.fetchurl {
       url = "https://github.com/sst/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      sha256 = "1ry3qc5l6sqw3iaknwp4cppch3dhcz3363dvp36ijs0s8fl269q1";
+      sha256 = "1gqjhpgci82rs0j780a00h6af05bbbgbqnp30gnqbply12w9gmj0";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
@@ -75,11 +75,11 @@ _: _final: prev: {
 
   gemini = prev.stdenv.mkDerivation rec {
     pname = "gemini-cli";
-    version = "0.20.0-nightly.20251127.5bed97064";
+    version = "0.19.1";
 
     src = prev.fetchurl {
       url = "https://github.com/google-gemini/gemini-cli/releases/download/v${version}/gemini.js";
-      sha256 = "1slpabi34kljskdn2qam610y6q147siamz7sg9ps9skzq23c5vxd";
+      sha256 = "0sxlwfxkbhdsh96gqw04bvxpqjdq6r24d06ch2c180rpvd0yqaqf";
     };
 
     dontUnpack = true;

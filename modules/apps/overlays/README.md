@@ -6,7 +6,7 @@ This directory contains custom Nixpkgs overlays used in this configuration. Over
 
 ### Problem Statement
 
-The `opencode` package available in standard `nixpkgs` was significantly outdated, and direct integration of the upstream `opencode` flake (`github:sst/opencode`) resulted in build failures related to `bun` dependency resolution (`catalog:` protocol errors). The goal was to provide the latest functional version of `opencode`.
+The `opencode` package available in standard `nixpkgs` is significantly outdated, and direct integration of the upstream `opencode` flake (`github:sst/opencode`) resulted in build failures related to `bun` dependency resolution (`catalog:` protocol errors). The goal was to provide the latest functional version of `opencode`.
 
 ### Approach and Solution
 
@@ -32,18 +32,23 @@ The `opencode` overlay (`modules/overlays/default.nix`) now defines a custom der
 
 The `opencode` package is now available through `pkgsUnstable` (as defined in `flake.nix` and `modules/home/packages.nix`). Simply reference `pkgsUnstable.opencode` where needed in your Home Manager or NixOS configurations.
 
-### How to Update `opencode`
+### How to Update `opencode` (Agent Instructions)
 
-To update `opencode` to its latest binary release, you can run the following command, which utilizes the `updateScript` provided in the overlay:
+To update `opencode`, you must follow this procedure:
 
-```bash
-# This command needs `nix-update` or similar shell environment setup
-nix-shell -p nix-update --run "nix eval --raw '.#overlays.opencode.passthru.updateScript' | bash"
-# Alternatively, if nix-update is not set up, run the script directly:
-nix eval --raw '(import ./. { }).opencode.passthru.updateScript' | bash
-```
-
-This script will automatically fetch the latest release version and its corresponding `sha256` hash, then update `modules/overlays/default.nix` accordingly. You will then need to commit the changes and apply the new configuration (`sudo nixos-rebuild switch --flake .`).
+1.  **Get Latest Version**:
+    ```bash
+    curl -s https://api.github.com/repos/sst/opencode/releases/latest | jq -r '.tag_name' | sed 's/^v//'
+    ```
+2.  **Get New Hash**:
+    Run `nix-prefetch-url` with the new version number found above:
+    ```bash
+    nix-prefetch-url "https://github.com/sst/opencode/releases/download/v<VERSION>/opencode-linux-x64.tar.gz"
+    ```
+3.  **Update File**:
+    Edit `modules/apps/overlays/default.nix`:
+    *   Update `version = "..."` with the new version.
+    *   Update `sha256 = "..."` in the `opencode` section with the new hash.
 
 ## Gemini CLI Overlay (`gemini-cli`)
 
@@ -59,12 +64,28 @@ The `gemini-cli` package in `nixpkgs` is often behind the rapid release cycle of
 
 ### How to Use
 
-The `gemini-cli` package is available through `pkgsUnstable`.
+The `gemini-cli` package is now available through `pkgsUnstable`.
 
-### How to Update `gemini-cli`
+### How to Update Overlays
 
-To update `gemini-cli` to the latest release:
+To update these packages, follow this procedure:
 
-```bash
-nix-shell -p nix-update --run "nix eval --raw '.#overlays.gemini-cli.passthru.updateScript' | bash"
-```
+1.  **Get Latest Versions**:
+    ```bash
+    curl -s https://api.github.com/repos/google-gemini/gemini-cli/releases/latest | jq -r '.tag_name' | sed 's/^v//'
+    curl -s https://api.github.com/repos/sst/opencode/releases/latest | jq -r '.tag_name' | sed 's/^v//'
+    ```
+2.  **Get New Hash**:
+    Run `nix-prefetch-url` with the new version number found above:
+    ```bash
+    nix-prefetch-url "https://github.com/google-gemini/gemini-cli/releases/download/v<VERSION>/gemini.js"
+    nix-prefetch-url "https://github.com/sst/opencode/releases/download/v<VERSION>/opencode-linux-x64.tar.gz"
+    ```
+3.  **Update Files**:
+    Edit `modules/apps/overlays/default.nix`:
+    *   Update `version = "..."` with the new version.
+    *   Update `sha256 = "..."` in the `gemini` section with the new hash.
+
+    Edit `modules/apps/overlays/default.nix`:
+    *   Update `version = "..."` with the new version.
+    *   Update `sha256 = "..."` in the `opencode` section with the new hash.
