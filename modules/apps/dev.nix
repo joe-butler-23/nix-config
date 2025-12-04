@@ -9,7 +9,6 @@
       tidyverse
       rmarkdown
       knitr
-      httpgd
     ];
   };
 in {
