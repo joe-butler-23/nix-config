@@ -159,20 +159,6 @@ Add support for specific programming languages.
   - LSP: `pyright`, `pylsp`, or `ruff-lsp`
   - Formatting: `black` or `ruff`
 
-- [ ] **JavaScript/TypeScript**
-  - Mode: `js-mode`, `typescript-mode`, or tree-sitter variants
-  - LSP: `typescript-language-server`
-  - Formatting: `prettier`
-
-- [ ] **Rust** (if needed)
-  - Mode: `rust-mode` or `rust-ts-mode`
-  - LSP: `rust-analyzer`
-  - Cargo integration: `cargo-mode`
-
-- [ ] **Go** (if needed)
-  - Mode: `go-mode` or `go-ts-mode`
-  - LSP: `gopls`
-
 ### Phase 10: Org Mode
 Note-taking, task management, literate programming.
 
@@ -204,10 +190,6 @@ Advanced text manipulation.
   - `yasnippet` - Snippet engine
   - `yasnippet-snippets` - Common snippet collection
 
-- [ ] **Dashboard** - Startup screen
-  - `dashboard` - Shows recent files, projects
-  - Low priority (Evil users typically start with files directly)
-
 - [ ] **Which-key Enhancements**
   - Already included, but could add custom prefix descriptions
   - Configure leader key system (SPC-based like Doom)
@@ -216,12 +198,13 @@ Advanced text manipulation.
 
 For each addition:
 
-1. **Research**: Check Doom Emacs configuration for reference patterns
+1. **Research**: Understand existing approaches, e.g. Doom Emacs configuration for reference patterns
 2. **Minimal First**: Add package with minimal config, test startup time
 3. **Lazy Load**: Use `:defer`, `:hook`, `:commands`, `:mode` aggressively
 4. **Document**: Update README.md with new features
 5. **Test**: Verify `emacs-init-time` stays < 1.5 seconds
 6. **Commit**: Atomic commits per feature/module
+7. **Incremental**: Pursue one thing at a time, confirm it works before moving on
 
 ## Performance Targets
 
@@ -231,18 +214,6 @@ As packages are added:
 - **LSP latency**: < 100ms for code actions
 - **File opening**: < 50ms for typical files
 - **gptel response**: < 3s initial response (depends on API)
-
-## Notes
-
-- **which-key**: Already included in core configuration ✅
-- **Leader Key**: `general.el` is Doom's keybinding framework, superior to `evil-leader`
-- **Completion System**: Vertico is significantly faster than Helm/Ivy
-- **AI Integration**: `gptel` is lightweight and multi-provider; agent shells may need custom integration
-- **LSP vs Eglot**: `lsp-mode` is more feature-rich but heavier; `eglot` is built-in and lighter
-- **Tree-sitter**: Prefer `-ts-mode` variants when available for better performance
-- **Ripgrep/fd**: System packages, just need Elisp integration via `consult` or dedicated packages
-- **Smartparens vs electric-pair**: electric-pair is built-in and sufficient for most use cases
-- **Agent Shells**: May require custom Elisp if no packages exist for opencode/claude-code
 
 ## References
 

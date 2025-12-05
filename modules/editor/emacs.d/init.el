@@ -21,6 +21,7 @@
 ;;; 3. Load Core Modules
 ;; Each module is self-contained and focused
 (load (concat user-emacs-directory "modules/core-perf.el"))
+(load (concat user-emacs-directory "modules/core-theme.el"))
 (load (concat user-emacs-directory "modules/core-ui.el"))
 (load (concat user-emacs-directory "modules/core-evil.el"))
 

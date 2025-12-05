@@ -27,6 +27,12 @@ Minimal, performance-optimized Emacs configuration incorporating Doom Emacs perf
 ### Discovery
 - **which-key**: Shows available key bindings after partial key sequence
 
+### Theme
+- **doom-nord**: Nord color scheme matching Kitty terminal
+- Doom Emacs theme package with visual bell and org-mode support
+- Dark background (#2e3440) with Nord palette
+- Optimized for programming with syntax highlighting
+
 ### UI
 - Minimal chrome (no toolbars, menubars, scrollbars)
 - Relative line numbers in programming/text modes
@@ -66,13 +72,14 @@ To add a new package:
 ```
 /modules/editor/
 ├── default.nix              # Module aggregator
-├── emacs.nix               # Nix config (programs.emacs + packages)
-├── README.md            # This file
-└── emacs.d/                # Emacs Lisp configuration
-    ├── early-init.el         # Performance foundation (runs before GUI)
-    ├── init.el                 # Entry point + use-package setup
+├── emacs.nix                # Nix config (programs.emacs + packages)
+├── README.md                # This file
+└── emacs.d/                 # Emacs Lisp configuration
+    ├── early-init.el        # Performance foundation (runs before GUI)
+    ├── init.el              # Entry point + use-package setup
     └── modules/
         ├── core-perf.el     # Runtime performance (GCMH, scrolling)
+        ├── core-theme.el    # Nord theme (doom-nord)
         ├── core-ui.el       # Minimal UI + which-key
         └── core-evil.el     # Complete Evil mode setup
 ```

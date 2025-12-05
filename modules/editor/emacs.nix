@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   # Symlink Emacs configuration directory
   home.file.".emacs.d" = {
     source = ./emacs.d;
@@ -27,6 +24,9 @@
 
         # Discovery
         which-key
+
+        # Theme
+        doom-themes # Doom Emacs themes including doom-nord
 
         # use-package is built-in on Emacs 29+, but we ensure it's available
         use-package
