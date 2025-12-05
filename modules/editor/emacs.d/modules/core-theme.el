@@ -12,10 +12,19 @@
   ;; Load the Nord theme
   (load-theme 'doom-nord t)
 
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
+  ;; Optional: Enable visual bell and org-mode improvements if functions exist
+  (when (fboundp 'doom-themes-visual-bell-config)
+    (doom-themes-visual-bell-config))
 
-  ;; Corrects and improves org-mode's fontification
-  (doom-themes-org-config))
+  (when (fboundp 'doom-themes-org-config)
+    (doom-themes-org-config)))
+
+;; Ensure theme loads in emacsclient frames
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                (with-selected-frame frame
+                  (load-theme 'doom-nord t))))
+  (load-theme 'doom-nord t))
 
 ;;; core-theme.el ends here
