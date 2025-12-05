@@ -4,6 +4,7 @@
 
   # Import overlays
   overlays = [
+    inputs.emacs-overlay.overlays.default
     (import ../modules/apps/overlays/default.nix {inherit inputs;})
   ];
 
@@ -17,8 +18,6 @@
     config.allowUnfree = true;
     inherit overlays;
   };
-
-  inherit (inputs.nixpkgs) lib;
 
   # Generated extensions set
   vsx = inputs.nix-vscode-extensions.extensions.${system}.vscode-marketplace;
@@ -68,6 +67,7 @@
               ../modules/desktop
               ../modules/apps
               ../modules/scripts
+              ../modules/editor
 
               ## User Modules
 
