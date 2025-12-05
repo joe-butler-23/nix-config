@@ -27,7 +27,28 @@ These are the most critical additions for daily development work.
   - Requires: `all-the-icons` fonts (can be installed via Nix)
   - Package: `doom-modeline`
 
-### Phase 2: Completion Framework
+### Phase 2: Keybindings & Leader Key System
+Ergonomic, mnemonic keybindings for efficient workflow.
+
+- [ ] **General.el** - Spacemacs-style leader key system
+  - Package: `general.el` (Doom's keybinding system)
+  - SPC as leader key in normal mode (Spacemacs/Doom convention)
+  - , as local leader for mode-specific bindings
+  - Mnemonic key structure:
+    - `SPC f` - File operations (find, save, recent)
+    - `SPC b` - Buffer operations (switch, kill, list)
+    - `SPC p` - Project operations (find file, search, switch)
+    - `SPC g` - Git operations (status, commit, push)
+    - `SPC w` - Window operations (split, delete, navigate)
+    - `SPC h` - Help operations (describe, info, apropos)
+    - `SPC t` - Toggle operations (line numbers, theme, etc.)
+    - `SPC o` - Open operations (terminal, dired, etc.)
+    - `SPC i` - Insert/AI operations (snippet, AI assist)
+    - `SPC a` - AI operations (gptel, agent shell)
+  - Integrates with which-key for discoverability
+  - Alternative: `evil-leader` (simpler, less flexible)
+
+### Phase 3: Completion Framework
 Critical for efficient navigation and command execution.
 
 - [ ] **Completion System** - Minibuffer completion
@@ -41,7 +62,7 @@ Critical for efficient navigation and command execution.
     - `embark` - Contextual actions on completions
   - Vertico is significantly faster than Helm/Ivy for large candidate lists
 
-### Phase 3: Color Themes
+### Phase 4: Color Themes
 Visual customization and consistency.
 
 - [ ] **Theme Framework**
@@ -50,7 +71,31 @@ Visual customization and consistency.
   - Consider: Integration with existing Stylix theming
   - Recommended: Start with `modus-themes` (already available), add `doom-themes` if desired
 
-### Phase 4: Code Intelligence (LSP & Tree-sitter)
+### Phase 5: AI Integration
+LLM-powered assistance and coding tools.
+
+- [ ] **gptel** - ChatGPT/LLM integration
+  - Package: `gptel`
+  - Multi-provider support: OpenAI, Anthropic (Claude), local models, OpenAI-compatible APIs
+  - Simple interface: Select region, send to LLM, receive response
+  - Streaming responses
+  - Can be bound to leader key: `SPC a g` for gptel
+  - Custom prompts/templates for code review, refactoring, documentation
+  - More lightweight than alternatives (ellama, copilot.el)
+
+- [ ] **Agent Shell Integration** - Agentic AI in Emacs
+  - Options:
+    - `opencode.el` - OpenCode integration (if available as Emacs package)
+    - `agent-shell` or custom shell integration
+    - Direct subprocess/comint-mode integration with opencode/claude-code CLI
+  - Potential bindings:
+    - `SPC a o` - Open OpenCode session
+    - `SPC a c` - Open Claude Code session
+    - `SPC a s` - Send region to agent shell
+  - Note: May need custom Elisp for CLI integration if no packages exist
+  - Alternative: Use vterm with agent shells directly
+
+### Phase 6: Code Intelligence (LSP & Tree-sitter)
 Language-aware editing and navigation.
 
 - [ ] **LSP Mode** - Language Server Protocol
@@ -71,7 +116,7 @@ Language-aware editing and navigation.
   - Recommended: `flycheck` for comprehensive coverage
   - Integrates with LSP mode automatically
 
-### Phase 5: Project Management & Navigation
+### Phase 7: Project Management & Navigation
 Fast file and project navigation.
 
 - [ ] **Project Management**
@@ -89,7 +134,7 @@ Fast file and project navigation.
   - Optional: `dirvish` for modern dired UI
   - Optional: `dired-sidebar` for IDE-like sidebar
 
-### Phase 6: Terminal Integration
+### Phase 8: Terminal Integration
 In-editor terminal access.
 
 - [ ] **Terminal Emulator**
@@ -101,7 +146,7 @@ In-editor terminal access.
   - Requires: `libvterm` system package (available via Nix)
   - Evil integration: `evil-collection-vterm`
 
-### Phase 7: Language-Specific Modules
+### Phase 9: Language-Specific Modules
 Add support for specific programming languages.
 
 - [ ] **Nix** - Essential for NixOS configuration
@@ -128,7 +173,7 @@ Add support for specific programming languages.
   - Mode: `go-mode` or `go-ts-mode`
   - LSP: `gopls`
 
-### Phase 8: Org Mode
+### Phase 10: Org Mode
 Note-taking, task management, literate programming.
 
 - [ ] **Org Mode Enhancement**
@@ -138,7 +183,7 @@ Note-taking, task management, literate programming.
   - Optional: `org-roam` for Zettelkasten note-taking
   - Optional: `org-babel` for literate programming
 
-### Phase 9: Smart Editing
+### Phase 11: Smart Editing
 Advanced text manipulation.
 
 - [ ] **Smartparens** - Intelligent parenthesis handling
@@ -148,7 +193,7 @@ Advanced text manipulation.
   - Note: Evil-surround already provides some functionality
   - Recommended: Start with built-in `electric-pair-mode`, add `smartparens` if needed
 
-### Phase 10: Additional Enhancements (Lower Priority)
+### Phase 12: Additional Enhancements (Lower Priority)
 
 - [ ] **Company Mode** - Text completion frontend
   - Alternative to built-in `completion-at-point`
@@ -182,23 +227,29 @@ For each addition:
 
 As packages are added:
 - **Startup time**: < 1.5 seconds with all Phase 1-5 additions
-- **Startup time**: < 2.0 seconds with all Phase 1-8 additions
+- **Startup time**: < 2.0 seconds with all Phase 1-10 additions
 - **LSP latency**: < 100ms for code actions
 - **File opening**: < 50ms for typical files
+- **gptel response**: < 3s initial response (depends on API)
 
 ## Notes
 
 - **which-key**: Already included in core configuration ✅
+- **Leader Key**: `general.el` is Doom's keybinding framework, superior to `evil-leader`
 - **Completion System**: Vertico is significantly faster than Helm/Ivy
+- **AI Integration**: `gptel` is lightweight and multi-provider; agent shells may need custom integration
 - **LSP vs Eglot**: `lsp-mode` is more feature-rich but heavier; `eglot` is built-in and lighter
 - **Tree-sitter**: Prefer `-ts-mode` variants when available for better performance
 - **Ripgrep/fd**: System packages, just need Elisp integration via `consult` or dedicated packages
 - **Smartparens vs electric-pair**: electric-pair is built-in and sufficient for most use cases
+- **Agent Shells**: May require custom Elisp if no packages exist for opencode/claude-code
 
 ## References
 
 - [Doom Emacs Modules](https://github.com/doomemacs/doomemacs/tree/master/modules) - Reference implementation
+- [General.el](https://github.com/noctuid/general.el) - Keybinding framework
 - [Vertico](https://github.com/minad/vertico) - Vertical completion
+- [gptel](https://github.com/karthink/gptel) - LLM integration
 - [LSP Mode](https://emacs-lsp.github.io/lsp-mode/) - Language Server Protocol
 - [Magit](https://magit.vc/) - Git porcelain
 - [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) - Incremental parsing
