@@ -1,8 +1,5 @@
 {
-  perSystem = {
-    pkgs,
-    ...
-  }: {
+  perSystem = {pkgs, ...}: {
     devShells.default = pkgs.mkShell {
       buildInputs = [
         pkgs.git

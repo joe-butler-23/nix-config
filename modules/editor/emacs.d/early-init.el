@@ -9,6 +9,10 @@
 (setq gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6)
 
+;; Redirect Emacs' variable files to 'var/'
+(setq user-emacs-directory (expand-file-name "var/" user-emacs-directory))
+(setq package-user-dir (expand-file-name "elpa" user-emacs-directory))
+
 ;;; 2. File Name Handler Optimization
 ;; Temporarily disable file handlers for faster startup
 ;; These handle remote files, compression, encryption, etc.
