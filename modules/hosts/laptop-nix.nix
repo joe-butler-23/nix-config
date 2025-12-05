@@ -25,8 +25,8 @@
     # Exclude input devices from USB autosuspend
     USB_EXCLUDE_INPUT = 1;
 
-    # Exclude specific USB devices by vendor/product (corrected device ID)
-    USB_DEVICE_BLACKLIST = "4653:0004"; # Corne keyboard vendor:product (corrected)
+    # Exclude specific USB devices by vendor/product
+    USB_DEVICE_BLACKLIST = "4653:0004"; # Corne keyboard vendor:product
   };
 
   # Laptop-only Home-Manager config
@@ -41,13 +41,6 @@
 
       profile docked {
         output "Dell Inc. DELL S2721HSX 1991Q83" enable position 0,0 mode 1920x1080
-        output eDP-1 disable
-        exec hyprctl reload
-      }
-
-      profile "double docked" {
-        output "Acer Technologies KA240Y 4129031E83W01" enable position 0,0 mode 1920x1080
-        output "Dell Inc. DELL S2721HSX 1991Q83" enable position 1920,0 mode 1920x1080
         output eDP-1 disable
         exec hyprctl reload
       }

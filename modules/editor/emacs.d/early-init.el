@@ -42,7 +42,10 @@
         (menu-bar-lines . 0)
         (vertical-scroll-bars . nil)
         (horizontal-scroll-bars . nil)
-        (alpha-background . 95)))
+        (alpha-background . 100)
+        (background-color . "#2E3440")
+        (foreground-color . "#D8DEE9")
+        (font . "Monospace-10")))
 
 ;; Disable unnecessary UI modes early
 (when (fboundp 'tool-bar-mode)
