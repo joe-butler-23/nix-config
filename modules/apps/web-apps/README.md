@@ -61,6 +61,7 @@ This module includes the following web applications:
 | **Spotify Web** | `https://open.spotify.com` | Audio | Music Streaming |
 | **Twitter** | `https://twitter.com` | Social Media | Social Network |
 | **Notion** | `https://notion.so` | Office | Productivity Suite |
+| **Math Academy** | `https://www.mathacademy.com/learn` | Education | Mathematics Learning Platform |
 
 ## Adding New Web Apps
 
@@ -69,7 +70,7 @@ To add a new web app, edit `modules/home/web-apps/default.nix`:
 ```nix
 xdg.desktopEntries = {
   # Existing apps...
-  
+
   your-app = {
     name = "Your App";
     comment = "Your App Description";

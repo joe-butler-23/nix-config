@@ -44,5 +44,14 @@
       categories = ["Office" "Development"];
       terminal = false;
     };
+
+    mathacademy = {
+      name = "Math Academy";
+      comment = "Math Academy Web App";
+      icon = "${builtins.getEnv "HOME"}/nix-config/modules/apps/web-apps/icons/mathacademy.png";
+      exec = "${pkgs.brave}/bin/brave --app=https://www.mathacademy.com/learn";
+      categories = ["Education" "Science"];
+      terminal = false;
+    };
   };
 }
