@@ -1,9 +1,13 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   xdg.desktopEntries = {
     chatgpt = {
       name = "ChatGPT";
       comment = "ChatGPT AI Assistant Web App";
-      icon = "${builtins.getEnv "HOME"}/nix-config/modules/apps/web-apps/icons/chatgpt.png";
+      icon = "${config.home.homeDirectory}/nix-config/modules/apps/web-apps/icons/chatgpt.png";
       exec = "${pkgs.brave}/bin/brave --app=https://chat.openai.com";
       categories = ["Development"];
       terminal = false;
@@ -48,7 +52,7 @@
     mathacademy = {
       name = "Math Academy";
       comment = "Math Academy Web App";
-      icon = "${builtins.getEnv "HOME"}/nix-config/modules/apps/web-apps/icons/mathacademy.png";
+      icon = "${config.home.homeDirectory}/nix-config/modules/apps/web-apps/icons/mathacademy.png";
       exec = "${pkgs.brave}/bin/brave --app=https://www.mathacademy.com/learn";
       categories = ["Education" "Science"];
       terminal = false;
