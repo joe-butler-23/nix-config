@@ -60,10 +60,15 @@ A distraction-blocking mode for deep work sessions.
 ### `weekly-review`
 **Source:** `maintenance/weekly-review.nix`
 
-An interactive Terminal User Interface (TUI) for routine system maintenance, built with `gum`.
+An interactive Terminal User Interface (TUI) for routine system maintenance, built with `gum` and styled with Nord colors.
+
 - **Menu Options:**
-  - **📦 Update System:** Updates flake inputs, checks `flake.lock` changes, commits changes, and runs `nixos-rebuild switch`.
-  - **🧹 Clean Recent Files:** Scans specific directories for files changed in the last 7 days and offers a multi-select interface to delete them.
-  - **❤️ Check Health:** Displays system info, failed systemd units, disk usage, network status, and GC roots. Includes an optional journal log viewer.
-  - **🗑️ Garbage Collection:** Runs `nix-collect-garbage -d` to remove old generations.
-  - **🧠 Analyze Logs:** (Requires API Key) Sends system logs and failed units to an AI model (via `mods`) for analysis and troubleshooting.
+  - **sys_update:** Updates flake inputs, checks `flake.lock` changes, commits changes, and runs `nixos-rebuild switch`. Each step requires manual confirmation for safety.
+  - **clean_recent_files:** Scans specific directories for files changed in the last 7 days and offers a multi-select interface to delete them.
+  - **ai_system_review:** Gathers comprehensive system diagnostics (system info, failed units, disk usage, network status, journal errors/warnings) and opens an interactive Claude Code session for analysis. User can discuss findings, ask follow-up questions, and take actions directly with Claude's assistance. Diagnostics cached in `~/.cache/weekly-review/`.
+
+- **Features:**
+  - Nord color palette throughout for consistent UX
+  - Automatic weekly garbage collection configured at system level (no manual GC needed)
+  - Diagnostic history kept (last 10 runs)
+  - Interactive Claude Code integration for intelligent troubleshooting and remediation

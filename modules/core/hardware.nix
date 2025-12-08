@@ -12,7 +12,7 @@
     initrd.availableKernelModules = ["nvme" "xhci_pci" "usbhid" "usb_storage" "sd_mod"];
     initrd.kernelModules = ["dm-snapshot" "cryptd"];
     initrd.luks.devices."cryptroot".device = "/dev/disk/by-label/NIXOS_LUKS";
-    kernelModules = ["kvm-amd"];
+    kernelModules = ["kvm-intel"];
     extraModulePackages = [];
   };
 
@@ -59,7 +59,7 @@
   networking.useDHCP = lib.mkDefault true;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.enableRedistributableFirmware = true;
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   # QMK keyboard firmware support
   hardware.keyboard.qmk.enable = true;

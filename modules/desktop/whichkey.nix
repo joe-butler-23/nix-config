@@ -52,6 +52,20 @@
             cmd: foot -a filepicker -e recent-files-launcher
 
       # workflows
+      - key: "p"
+        desc: projects
+        submenu:
+          - key: "e"
+            desc: emacs
+            cmd: emacs-project
+          - key: "n"
+            desc: nix
+            cmd: nix-project
+          - key: "s"
+            desc: study
+            cmd: study-project
+
+      # workflows
       - key: "w"
         desc: workflows
         submenu:

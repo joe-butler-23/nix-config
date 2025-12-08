@@ -5,6 +5,7 @@
     fd
     fzf
     git
+    gum
     htop
     jq
     lazygit

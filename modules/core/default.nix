@@ -136,6 +136,12 @@
   };
   services.blueman.enable = true;
 
+  # Windows network discovery
+  services.samba-wsdd = {
+    enable = true;
+    openFirewall = true;
+  };
+
   # Perf & Power
   services.irqbalance.enable = true;
   services.fstrim.enable = true;
