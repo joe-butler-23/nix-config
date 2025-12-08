@@ -1,0 +1,275 @@
+From the official wiki: https://wiki.nixos.org/wiki/Emacs
+
+Emacs is a free and open-source text editor known for its exceptional extensibility and adaptability. It can be customized into anything from a simple editor to a full development environment or productivity tool. Emacs features built-in self-documentation, syntax-aware editing, and a vast ecosystem of community-developed packages.[1]
+
+## System setup
+To install Emacs system-wide, making it available to all users, add the following to your configuration:
+
+# Example for /etc/nixos/configuration.nix
+environment.systemPackages = [
+  pkgs.emacs
+];
+
+# User-specific installation (in ~/.config/nixpkgs/home.nix)
+home.packages = [
+  pkgs.emacs
+];
+After rebuilding your system with nixos-rebuild switch or home-manager switch, Emacs will be installed and accessible.
+
+Configuration
+Note: Currently, configuring Emacs is possible by using Home Manager. A workaround for a global configuration is highlighted in the advanced section.
+Basic
+programs.emacs = {
+   enable = true;
+   defaultEditor = true;
+};
+Advanced
+# Global Configuration
+# Emacs is running as a daemon here, accesible via the "emacsclient" command
+services.emacs = {
+  enable = true;
+  package = pkgs.emacs;
+};
+
+# Home Configuration
+programs.emacs = {
+  enable = true;
+  package = pkgs.emacs;  # replace with pkgs.emacs-gtk if desired
+  defaultEditor = true;
+  extraConfig = ''
+    (setq standard-indent 2)
+  '';
+};
+Tips and Tricks
+Installing Packages
+Note: Emacs, much like NixOS can rebuild and re-fetch all of its packages based on its initialization file alone, if one chooses to use an extension called "use-package". Such a configuration file can be version controlled and used in all compatible operating systems.
+One can mix and match whether Emacs packages are installed by Nix or Emacs. This can be particularly useful for Emacs packages that need to be built, such as vterm. One way to install Emacs packages through Nix is by the following, replacing emacs-pgtk with the variant in use:
+
+environment.systemPackages = with pkgs;
+[ ...
+  ((emacsPackagesFor emacs-pgtk).emacsWithPackages (
+    epkgs: [ epkgs.vterm ]
+  ))
+  ...
+];
+
+# To make the packages available to emacsclient, one can do the following:
+services.emacs.package = with pkgs; (
+  (emacsPackagesFor emacs-pgtk).emacsWithPackages (
+    epkgs: [ epkgs.vterm ]
+  )
+);
+
+# Some packages have characters like + that Nix considers a syntax error.
+# To fix this, write the package name in quotes and specify the package set, even if using with epkgs;.
+# For example, use epkgs."ido-completing-read+".
+Note that if the expression (emacsPackagesFor emacs-pgtk) is present, emacs-pgtk need not be listed separately in the list environment.systemPackages. Indeed, if one does that, nixos-rebuild will warn about link collisions when the configuration is rebuilt.
+
+Tree-sitter
+Emacs 29 supports Tree-sitter parsers when built with the --with-tree-sitter option. The emacsPackages.treesit-grammars fake package makes them accessible to Emacs when using emacs29.pkgs.withPackages:[2]
+
+{
+  pkgs ? import <nixpkgs> { },
+}:
+pkgs.emacs29.pkgs.withPackages (epkgs: [
+  (epkgs.treesit-grammars.with-grammars (grammars: [ grammars.tree-sitter-bash ]))
+])
+When using Emacs with tree-sitter support, it's recommended to install both epkgs.tree-sitter-langs and epkgs.treesit-grammars. While treesit-grammars handles the registration of grammars with Emacs's native tree-sitter interface, the actual grammar files will come from tree-sitter-langs. tree-sitter-langs being a MELPA package means it receives regular updates when new grammar versions are released, whereas the grammars in the tree-sitter-grammars package may lag behind in nixpkgs. The combination ensures you get both up-to-date grammars and proper integration with Emacs's built-in tree-sitter support.
+
+Bonus Tip:
+
+emacs.pkgs.pretty-sha-path is quality of life improvement for Nix, Guix users.
+
+Allows toggling Guix/Nix store paths by replacing SHA-sequences with ellipsis, i.e.:
+
+/gnu/store/72f54nfp6g1hz873w8z3gfcah0h4nl9p-foo-0.1  →  /gnu/store/…-foo-0.1
+/nix/store/nh4n4yzb1bx7nss2rg342dz44g14m06x-bar-0.2  →  /nix/store/…-bar-0.2
+located at https://github.com/alezost/pretty-sha-path.el
+
+Automatic Package Management
+If you use use-package or leaf in your configuration, the community overlay can manage your Emacs packages automatically by using emacsWithPackagesFromUsePackage. First, install the overlay (instructions above), then add the following to your configuration.nix:
+
+{
+  environment.systemPackages = [
+    (pkgs.emacsWithPackagesFromUsePackage {
+      package = pkgs.emacsGit;  # replace with pkgs.emacsPgtk, or another version if desired.
+      config = path/to/your/config.el;
+      # config = path/to/your/config.org; # Org-Babel configs also supported
+
+      # Optionally provide extra packages not in the configuration file.
+      extraEmacsPackages = epkgs: [
+        epkgs.use-package
+      ];
+
+      # Optionally override derivations.
+      override = epkgs: epkgs // {
+        somePackage = epkgs.melpaPackages.somePackage.overrideAttrs(old: {
+           # Apply fixes here
+        });
+      };
+    })
+  ];
+}
+See the overlay README for a full list of options.
+
+Adding packages from outside ELPA/MELPA
+Some packages may require more sophisticated derivation, but the following is a good starting point for adding external packages:
+
+❄︎ lambda-line.nix
+{
+  melpaBuild,
+  fetchFromGitHub,
+  all-the-icons,
+}:
+melpaBuild {
+  pname = "lambda-line";
+  version = "0-unstable-2022-11-23";
+  src = fetchFromGitHub {
+    owner = "Lambda-Emacs";
+    repo = "lambda-line";
+    rev = "22186321a7442f1bd3b121f739007bd809cb38f8";
+    hash = "sha256-2tOXMqpmd14ohzmrRoV5Urf0HlnRPV1EVHm/d8OBSGE=";
+  };
+  # elisp dependencies
+  packageRequires = [
+    all-the-icons
+  ];
+}
+Copy
+You can then use the new package with automatic package management like so:
+
+❄︎ configuration.nix
+{
+  environment.systemPackages = [
+    (pkgs.emacsWithPackagesFromUsePackage {
+      ...
+      override = epkgs: epkgs // {
+        lambda-line = callPackage ./lambda-line.nix {
+          inherit (pkgs) fetchFromGitHub;
+          inherit (epkgs) melpaBuild all-the-icons;
+        };
+      };
+    })
+  ];
+}
+Copy
+or manual package management like so:
+
+❄︎ configuration.nix
+{
+  environment.systemPackages = with pkgs;
+    [ ...
+      ((emacsPackagesFor emacs-pgtk).emacsWithPackages (epkgs: [
+          epkgs.vterm
+          (callPackage ./lambda-line.nix {
+            inherit (pkgs) fetchFromGitHub;
+            inherit (epkgs) melpaBuild all-the-icons;
+          };)
+       ]))
+      ...
+    ];
+}
+Copy
+Packaging and testing Emacs nixpkgs
+Emacs packages can be defined and tested like other nixpkgs. They can be obtained from melpa, elpa or other sources such as github.
+
+❄︎ default.nix
+{ melpaBuild
+, lib
+, fetchFromGitHub
+...
+}:
+
+melpaBuild {
+  pname = "...";
+  version = "...";
+
+  src = fetchFromGitHub {
+    owner = "...";
+    repo = "...";
+    rev = "...";
+    hash = "...";
+  };
+
+  packageRequires = [ ... ];
+
+  patches = [ ... ];
+
+  meta = {
+    description = "...";
+    license = lib.licenses.gpl3Plus;
+  };
+}
+Copy
+They are located at pkgs/applications/editors/emacs/elisp-packages/manual-packages/ [2] and a new pkg must be added under pkgs/applications/editors/elisp-packages/manual-packages.nix [3]. Once the nixpkg is ready, it can be tested using the following command. This inserts the nixpkg into the load-path of Emacs.
+
+$ nix-shell -I nixpkgs=&lt;path_to_nixpkgs_copy&gt; -p "(emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [ epkgs.&lt;package&gt; ])"
+Copy
+Window Manager Integration
+Out of the box, non-"Mac Port" versions of Emacs will not be picked up properly by window managers like Yabai because Emacs does not set the correct macOS window role. This can be fixed with a patch (e.g. the first patch in the example above). However, even with the patch, Yabai may not correctly pick up Emacs if you invoke the emacs binary directly from a shell. For Emacs to work properly with window managers you must invoke it by running the macOS app that is generated when you install Emacs with nix. You can setup an alias to do this like so (replace pkgs.emacs with the package you are using):
+
+programs.zsh = {
+  enable = true;
+  shellAliases = {
+    emacs = "${pkgs.emacs}/Applications/Emacs.app/Contents/MacOS/Emacs";
+  };
+};
+Available Emacs Variants
+⚠︎
+Warning: Certain issues are possible, when mixing different versions of Emacs, in particular a configuration file tailored towards emacs with native compilation, may misbehave on non-native compiling versions, unless only the emacs lisp code is shared between them.
+Stable (nixpkgs)
+Emacs is available in nixpkgs under the names emacs and emacs-gtk.
+
+Since 2022-09, the package called emacs now installs the lucid toolkit instead of gtk. The reason is that Emacs is less stable with gtk especially in daemon mode. However, the lucid flavor of Emacs will not take into account the GTK theme (since it is not even GTK) and looks quite… ugly (see comparisons here). If you still prefer the GTK version of Emacs, you can instead install emacs-gtk (before 2022-09 this package does not exist and Emacs defaults to the gtk version).
+
+Unstable (community overlay)
+The community overlay provides nightly versions of the Emacs unstable branches, ELPA/MELPA packages, and EXWM + its dependencies. To use these, first apply the overlay (instructions below), which will make the packages available in nixpkgs. Then you can follow the normal nixpkgs installation instructions (above), but use your package of choice from the overlay (e.g. pkgs.emacsGit) in place of pkgs.emacs. See the README for a complete list of packages provided, and their differences.
+
+With flakes
+Using a system flake, one can specify the specific revision of the overlay as a flake input, for example:
+
+inputs.emacs-overlay.url = "github:nix-community/emacs-overlay/da2f552d133497abd434006e0cae996c0a282394";
+This can then be used in the system configuration by using the self argument:
+
+nixpkgs.overlays = [ (import self.inputs.emacs-overlay) ];
+Without flakes
+For installing one of the unstable branches of Emacs, add the following lines to your configuration file:
+
+❄︎ configuration.nix
+{
+  nixpkgs.overlays = [
+    (import (builtins.fetchGit {
+      url = "https://github.com/nix-community/emacs-overlay.git";
+      ref = "master";
+      rev = "bfc8f6edcb7bcf3cf24e4a7199b3f6fed96aaecf"; # change the revision
+    }))
+  ];
+}
+
+Troubleshooting
+Plasma taskbar grouping
+To fix/workaround Plasma grouping Emacs incorrectly (confusing emacs.desktop with emacsclient.desktop), perform the following:
+
+Open Emacs
+Right click title bar
+More Actions > Configure Special Window Settings
+Add Property > Desktop File Name
+Set desktop file name to "/home/<USERNAME>/.nix-profile/share/applications/emacs.desktop"
+Apply the changes
+Restart Emacs if need
+All Emacs instances should now be grouped together, allowing you to pin it and reliably switch to it with Super+<number>
+
+Spell checking
+Because Emacs expects the dictionaries to be on the same directory as aspell, they won't be picked up. To fix it install the aspellWithDicts package, specifying the dictionaries you want to use:
+
+❄︎ configuration.nix
+{
+  environment.systemPackages = with pkgs; [
+    (aspellWithDicts (dicts: with dicts; [ en en-computers en-science es]))
+  ];
+}
+
+emacs - overlay: https://github.com/nix-community/emacs-overlay
+emacs.nix https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/services/editors/emacs.nix
+
+c

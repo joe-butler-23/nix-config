@@ -1,71 +1,77 @@
 # Editor Module - Emacs Configuration
 
-Minimal, performance-optimized Emacs configuration incorporating Doom Emacs performance principles with a Nix approach as far as possible.
+Minimal, performance-optimized Emacs configuration based on [minimal-emacs.d](https://github.com/jamescherti/minimal-emacs.d) principles, integrated with Nix.
 
 ## Philosophy
 
-- **Start Minimal**: Core performance + Evil mode only
-- **Build Incrementally**: Add features as needed, not speculatively
-- **Doom Performance**: Sub-second startup via lazy loading and GC optimization
-- **Nix-First**: Declarative package management via Home Manager + emacs-overlay
+- **Start Minimal**
+- **Build Incrementally**: Add features as needed, not speculatively.
+- **Performance**: Sub-second startup required
+- **Nix-First**: Declarative package management via Home Manager + emacs-overlay.
 
 ## Current Features
 
 ### Performance
-- **Early-init optimizations**: GC suppression, file handler optimization
-- **GCMH**: Intelligent garbage collection (GC during idle, not typing)
-- **Lazy loading**: All packages deferred by default via use-package
-- **Native compilation**: Automatic via emacs-overlay
-- **Expected startup**: < 1 second cold start
+- **Expected startup**: < 1 second cold start.
 
 ### Evil Mode (Vim Emulation)
-- Complete Vim modal editing (normal, insert, visual, operator-pending modes)
-- Evil Collection: Vim bindings for 50+ built-in modes
-- Evil Surround: Surround text objects (cs, ds, ys commands)
-- Visual line navigation (j/k move by screen line)
+- Complete Vim modal editing (normal, insert, visual, operator-pending modes).
+- **Evil Collection**: Vim bindings for 50+ built-in modes.
+- **Evil Surround**: Surround text objects (cs, ds, ys commands).
+- Visual line navigation (j/k move by screen line).
+- **Undo System**: Linear undo/redo with `undo-fu` and persistent history.
 
-### Discovery
-- **which-key**: Shows available key bindings after partial key sequence
+### Keybindings & Navigation
+- **Leader Key**: Spacemacs/Doom-style `SPC` leader system via `general.el`.
+- **Discovery**: `which-key` shows available key bindings after partial key sequence.
+- **Completion**: Modern "Vertico Stack" for fast, fuzzy vertical completion:
+    - `vertico` (UI), `orderless` (Fuzzy matching), `consult` (Enhanced commands), `marginalia` (Annotations), `embark` (Actions).
 
-### Theme
-- **doom-nord**: Nord color scheme matching Kitty terminal
-- Doom Emacs theme package with visual bell and org-mode support
-- Dark background (#2e3440) with Nord palette
-- Optimized for programming with syntax highlighting
+### Code Intelligence
+- **LSP**: Built-in `eglot` for "Go to definition", renaming, and error highlighting.
+- **Tree-sitter**: Fast, accurate syntax highlighting via `treesit-auto`.
+- **Version Control**: `magit` for Git integration.
 
-### UI
-- Minimal chrome (no toolbars, menubars, scrollbars)
-- Relative line numbers in programming/text modes
-- Current line highlighting
-- Smooth pixel-precision scrolling (Wayland-native)
+### Theme & UI
+- **doom-nord**: Nord color scheme matching system theme.
+- **Doom Modeline**: Minimal, informative modeline with icons (`nerd-icons`).
+- **Minimal chrome**: No toolbars, menubars, or scrollbars.
+- **Terminal**: Integrated `vterm` for full terminal emulation.
+- **Editor**: Relative line numbers, current line highlighting.
 
 ## Package Management
 
 **Hybrid Approach**:
-- **Nix**: Installs packages via emacs-overlay (declarative, reproducible)
-- **use-package**: Configures packages (lazy loading, key bindings)
+1.  **Nix (`emacs.nix`)**: Installs packages (declarative, reproducible).
+2.  **Elisp (`emacs.d/post-init.el`)**: Configures packages (lazy loading, key bindings).
 
-To add a new package:
+### How to Add a New Package
 
-1. Add to `emacs.nix` in `extraPackages`:
-   ```nix
-   extraPackages = epkgs: with epkgs; [
-     existing-package
-     new-package  # Add here
-   ];
-   ```
+1.  **Install via Nix**:
+    Add the package to `extraPackages` in `modules/editor/emacs.nix`:
+    ```nix
+    extraPackages = epkgs: with epkgs; [
+      # ... existing packages
+      new-package
+    ];
+    ```
 
-2. Configure in appropriate module file:
-   ```elisp
-   (use-package new-package
-     :defer t                    ; Lazy load
-     :hook (mode-name . setup)   ; Load on mode activation
-     :config
-     ;; Configuration here
-     )
-   ```
+2.  **Configure via Elisp**:
+    Add the configuration to `modules/editor/emacs.d/post-init.el`:
+    ```elisp
+    (use-package new-package
+      :defer t                    ; Lazy load
+      :hook (mode-name . setup)   ; Load on mode activation
+      :config
+      ;; Configuration here
+      )
+    ```
 
-3. Rebuild: `home-manager switch --flake ~/nix-config`
+3.  **Apply Changes**:
+    Rebuild your NixOS/Home Manager configuration:
+    ```bash
+    home-manager switch --flake ~/nix-config
+    ```
 
 ## File Structure
 
@@ -75,69 +81,13 @@ To add a new package:
 ├── emacs.nix                # Nix config (programs.emacs + packages)
 ├── README.md                # This file
 └── emacs.d/                 # Emacs Lisp configuration
-    ├── early-init.el        # Performance foundation (runs before GUI)
-    ├── init.el              # Entry point + use-package setup
-    └── modules/
-        ├── core-perf.el     # Runtime performance (GCMH, scrolling)
-        ├── core-theme.el    # Nord theme (doom-nord)
-        ├── core-ui.el       # Minimal UI + which-key
-        └── core-evil.el     # Complete Evil mode setup
+    ├── early-init.el        # Core performance foundation (DO NOT EDIT)
+    ├── init.el              # Entry point & defaults (DO NOT EDIT)
+    ├── post-init.el         # User configuration (Evil, Theme, Packages)
+    └── pre-early-init.el    # Early customizations (e.g. paths)
 ```
 
-## Usage
-
-### Building
-```bash
-# Home Manager rebuild
-home-manager switch --flake ~/nix-config
-
-# First launch (native compilation runs in background)
-emacs
-```
-## Extending the Configuration
-
-### Adding Language Support
-
-Example: Adding Python support with LSP
-
-1. **Add packages** (`emacs.nix`):
-   ```nix
-   extraPackages = epkgs: with epkgs; [
-     # ... existing packages
-     python-mode
-     lsp-mode
-     lsp-ui
-   ];
-   ```
-
-2. **Create module** (`emacs.d/modules/lang-python.el`):
-   ```elisp
-   (use-package python-mode
-     :defer t
-     :mode "\\.py\\'"
-     :hook (python-mode . lsp-deferred))
-
-   (use-package lsp-mode
-     :defer t
-     :commands (lsp lsp-deferred)
-     :config
-     (setq lsp-idle-delay 0.5))
-   ```
-
-3. **Load in init.el**:
-   ```elisp
-   (load (concat user-emacs-directory "modules/lang-python.el"))
-   ```
-
-### Adding Completion Framework
-
-Example: Adding Vertico + Orderless + Consult
-
-1. Add packages to `emacs.nix`
-2. Create `modules/completion-vertico.el`
-3. Load in `init.el`
-
-See Doom Emacs modules for reference patterns.
+> **Note:** `init.el` and `early-init.el` are managed core files. All user customizations should go into `post-init.el`.
 
 ## Troubleshooting
 
@@ -146,52 +96,35 @@ See Doom Emacs modules for reference patterns.
 # Profile startup
 emacs --debug-init
 
-# Check init time
+# Check init time within Emacs
 M-x emacs-init-time
 ```
 
 ### Package Issues
 ```bash
-# Rebuild after package changes
-home-manager switch --flake ~/nix-config
-
-# Check package availability
+# Check package availability in Nix
 nix search nixpkgs#emacsPackages.<package-name>
 ```
 
 ### Native Compilation
 ```bash
-# Check compilation status
+# Check compilation status within Emacs
 M-x native-compile-async-query
 
-# Force recompilation
+# Force recompilation (if needed)
 rm -rf ~/.emacs.d/eln-cache
 ```
 
-## Performance Benchmarks
-
-Target metrics:
-- **Cold startup**: < 1 second
-- **Warm startup**: < 0.5 seconds
-- **GC pauses**: < 50ms during editing
-- **LSP latency**: < 100ms (with read-process-output-max optimization)
-
-Measure with: `M-x emacs-init-time`
-
-## Agent Instructions
-
-When modifying this configuration:
-
-1. **Add features incrementally** - Don't bulk-add packages speculatively
-2. **Use lazy loading** - Always defer via `:defer`, `:hook`, `:commands`, `:mode`
-3. **Document additions** - Update this README with new features
-4. **Test startup time** - Verify `emacs-init-time` stays < 1s
-5. **Follow patterns** - Match existing module structure
-6. **Nix-first** - Add packages to `emacs.nix` first, then configure in elisp
-
 ## References
 
-- [Doom Emacs](https://github.com/doomemacs/doomemacs) - Performance inspiration
-- [emacs-overlay](https://github.com/nix-community/emacs-overlay) - Package source
-- [Evil Documentation](https://evil.readthedocs.io/) - Vim emulation
-- [use-package](https://github.com/jwiegley/use-package) - Package configuration
+- [minimal-emacs.d](https://github.com/jamescherti/minimal-emacs.d) - The upstream configuration base.
+- [emacs-overlay](https://github.com/nix-community/emacs-overlay) - Nix package source.
+- [Evil Documentation](https://evil.readthedocs.io/) - Vim emulation.
+- [use-package](https://github.com/jwiegley/use-package) - Package configuration macro.
+- [Doom Emacs Modules](https://github.com/doomemacs/doomemacs/tree/master/modules) - Reference implementation.
+- [General.el](https://github.com/noctuid/general.el) - Keybinding framework.
+- [Vertico](https://github.com/minad/vertico) - Vertical completion.
+- [gptel](https://github.com/karthink/gptel) - LLM integration.
+- [LSP Mode](https://emacs-lsp.github.io/lsp-mode/) - Language Server Protocol.
+- [Magit](https://magit.vc/) - Git porcelain.
+- [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) - Incremental parsing.

@@ -15,7 +15,14 @@
     extraPackages = epkgs:
       with epkgs; [
         # Performance
-        gcmh # Garbage Collector Magic Hack
+        gcmh
+
+        # Version Control
+        magit
+
+        # Undo System
+        undo-fu
+        undo-fu-session
 
         # Evil mode (Vim emulation)
         evil
@@ -25,8 +32,28 @@
         # Discovery
         which-key
 
-        # Theme
+        # Keybindings
+        general
+
+        # Completion
+        vertico
+        orderless
+        consult
+        marginalia
+        embark
+        embark-consult
+
+        # Development
+        eglot
+        treesit-auto
+
+        # Terminal
+        vterm
+
+        # Theme & UI
         doom-themes # Doom Emacs themes including doom-nord
+        doom-modeline
+        nerd-icons
 
         # use-package is built-in on Emacs 29+, but we ensure it's available
         use-package
