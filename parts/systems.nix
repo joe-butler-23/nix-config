@@ -37,6 +37,7 @@
         ../modules/core
 
         # System Modules (Enable System-wide Features)
+        ../modules/desktop/brave-wrapper.nix
         inputs.stylix.nixosModules.stylix
         inputs.sops-nix.nixosModules.sops
 
