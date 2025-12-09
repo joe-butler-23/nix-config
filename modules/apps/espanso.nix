@@ -16,6 +16,8 @@
     configs = {
       default = {
         toggle_key = "OFF";
+        show_notifications = false;
+        auto_restart = false;
         backend = "Clipboard";
       };
     };

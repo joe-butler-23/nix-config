@@ -8,7 +8,7 @@ _: {
 
     # menu
     $menu = rofi -show drun -matching regex -no-tokenize -drun-match-fields 'name' -drun-display-format '{name}' -display-drun "" -theme-str 'textbox-prompt-colon { enabled: false; }' -run-command "app2unit -- {cmd}"
-    $browser = app2unit brave
+    $browser = brave
 
     # file manager
     $fileManager = app2unit $terminal --class yazi --directory ~ -e sh -lc 'TMPFILE=$(mktemp); yazi --chooser-file="$TMPFILE"; if [ -s "$TMPFILE" ]; then xdg-open "$(cat "$TMPFILE")"; fi; rm -f "$TMPFILE"'

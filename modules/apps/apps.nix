@@ -3,5 +3,6 @@
     gnumeric
     obsidian
     zotero
+    vivaldi
   ];
 }

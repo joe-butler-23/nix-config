@@ -3,13 +3,14 @@
     ./stylix.nix
   ];
 
-  #### Hyprland configuration (System)
+  #### Hyprland sys setup
   programs.hyprland.enable = true;
   hardware.graphics.enable = true;
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     MOZ_ENABLE_WAYLAND = "1";
     QT_QPA_PLATFORM = "wayland";
+    GDK_BACKEND = "wayland";
   };
 
   #### Display manager
@@ -22,7 +23,7 @@
   services.gvfs.enable = true;
   services.tumbler.enable = true;
 
-  #### XDG Portals for Wayland (Hyprland + GTK)
+  #### XDG Portals for Wayland
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
