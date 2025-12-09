@@ -204,7 +204,6 @@
     startupNotify = true;
     terminal = false;
     categories = ["Network" "WebBrowser"];
-    mimeTypes = [
       "text/html"
       "text/xml"
       "application/xhtml+xml"
