@@ -1,47 +1,34 @@
-# Project guidelines
+# Project Guidelines
 
-This repository manages the NixOS configuration for optimal system stability, performance, and reproducibility. All contributions and modifications must adhere to the following principles.
-
-## 1. Modularity and Organization
-- **Flake-based Structure**: Maintain a well-organized `flake.nix` and `flake.lock` for reproducible builds.
-- **Module Separation**: Group related configurations into distinct Nix modules (e.g., `modules/desktop`, `modules/apps`).
-- **Home Manager Integration**: Utilize Home Manager for user-specific configurations, ensuring separation from system-wide settings.
-
-## 2. Best Practices
-- **Nix Purity**: Prioritize pure functions and avoid imperative shell scripting within Nix expressions where declarative alternatives exist.
-- **Immutability**: Embrace the immutable nature of NixOS. Avoid direct system modifications; all changes must be reflected in the configuration.
-- **Declarative Approach**: Strive for a fully declarative system configuration.
-- **Documentation first**: Nix can be a difficult and niche language. Always rely on documentation (either through web searches, or using the context7 mcp tools) rather than making guesses.
-
-## 3. Security and Secrets Management
-- **SOPS Integration**: All sensitive information (passwords, API keys) must be managed using `sops-nix` and encrypted. Never commit unencrypted secrets.
-- **Least Privilege**: Configure services and applications with the minimum necessary permissions.
-
-## 4. Documentation and Comments
-- **Self-Documenting Code**: Write clear, concise Nix expressions.
-- **Module Readmes**: Each significant module should have a `README.md` explaining its purpose and configurable options.
-- **Inline Comments**: Use comments sparingly to explain complex logic or non-obvious choices, focusing on "why" rather than "what."
-
-## 5. Testing and Validation
-- **Local Builds**: Always ask the user to test configuration changes locally using `nixos-rebuild switch --flake .#yourhostname` before committing (user has to run because it requires sudo)
-- **Linting**: Ensure Nix expressions are formatted and linted using `nix fmt`.
-
-## 6. Version Control
-- **Atomic Commits**: Each commit should represent a single, logical change.
-- **Descriptive Messages**: Write clear and concise commit messages.
-- **Regular Updates**: Keep `flake.lock` up-to-date with upstream `nixpkgs` or other dependencies.
+[Project-specific context/guidelines should be added here]
 
 # Agent Operating System (AOS)
 
-This document defines the standard operating procedures for AI Agents working within this repo. It integrates **Memory (`beads`)** and **Procedures (skills)** into a unified, self-correcting workflow that enforces good practices and a robust workflow. The user has a Nix Os machine with a zsh-p10k-kitty shell setup. Be vigilant to the fact you are running on a Nix machine and all that entails, in particular mainitaining a clean and tracked git tree at all times (or Nix may not be aware a file exists, or the changes made to it), and the need to use nix develop or nix-shell instead of npm/pip/etc install since it is a read only system. When working in this repo, you MUST work within the following system:
+This document defines the standard operating procedures for AI Agents working within this repo. It integrates **Memory (`beads`)** and **Procedures (skills)** into a unified, self-correcting workflow that enforces good practices and a robust workflow.
+
+**⚠️ SYSTEM ENVIRONMENT WARNING ⚠️**
+The user has a NixOS machine with a zsh-p10k-kitty shell setup.
+1. **Read-Only System:** You MUST use `nix develop` or `nix-shell` instead of `npm/pip/etc install` globally.
+2. **Git Awareness:** You MUST maintain a clean and tracked git tree. Nix may not see files that are not added to git.
+3. **Paths:** Always use absolute paths.
 
 ## System Architecture
 
 You are an autonomous engineer operating within a **robust workflow system**:
 
-1.   **Memory Layer (`beads`)**: The source of truth for *what* to do. Never rely on chat history for task tracking.
+1.  **Memory Layer (`beads`)**: The source of truth for *what* to do. Never rely on chat history for task tracking.
 2.  **Procedural Layer (skills)**: The source of truth for *how* to do it. These skills are codified procedures that should be automatically loaded when needed.
 3.  **Self-learning**: You should use built-in reflection and learning cycles for process improvement.
+
+## Creating New Projects
+
+To ensure modularity and replicability, **NEVER** create a new project manually. You MUST use the automated initialization script which enforces the "Master Toolkit" pattern:
+
+```bash
+~/documents/projects/sys-arc/scripts/sys-arc-init <project-name>
+```
+
+This script handles directory creation, git/beads init, and injects this very Agent Operating System into the new project.
 
 ## Workflow
 
@@ -138,7 +125,9 @@ history/
 
 <skills_system priority="1">
 
-## Available Skills
+## Pillar 2: Available Skills
+
+You should make use of the domain-specific knowledge of available skills to improve your work:
 
 <!-- SKILLS_TABLE_START -->
 <usage>
@@ -159,19 +148,7 @@ Usage notes:
 
 <skill>
 <name>beads-workflow</name>
-<description>Comprehensive workflow for using beads (bd) task management system. Covers work capture, issue tracking, progress updates, and session handoff. Use when working with beads-enabled projects or when task management is needed.</description>
-<location>project</location>
-</skill>
-
-<skill>
-<name>claude-commands</name>
-<description>Guide for creating custom slash commands for Claude Code. Use this skill when you need to extend Claude Code's capabilities with custom workflows, plugin commands, or reusable prompts defined in Markdown.</description>
-<location>project</location>
-</skill>
-
-<skill>
-<name>claude-subagents</name>
-<description>Guide for creating and configuring custom sub-agents for Claude Code. Use this skill when you need to define specialized agents with dedicated system prompts, tool sets, and models to handle specific tasks.</description>
+<description>Comprehensive workflow for using beads (bd) task management system, which is used for all task-tracking. Covers work capture, issue tracking, progress updates, and session handoff. Use when working with beads-enabled projects or when task management is needed.</description>
 <location>project</location>
 </skill>
 
@@ -188,20 +165,8 @@ Usage notes:
 </skill>
 
 <skill>
-<name>opencode-agents</name>
-<description>Guide for creating and configuring custom OpenCode agents. Use this skill when you need to define specialized agents with specific system prompts, models, and tool permissions.</description>
-<location>project</location>
-</skill>
-
-<skill>
-<name>opencode-commands</name>
-<description>Guide for creating and configuring custom OpenCode commands. Use this skill when you need to extend OpenCode capabilities, add custom workflows, or understand how to define commands with templates, arguments, and context injection.</description>
-<location>project</location>
-</skill>
-
-<skill>
 <name>project-initializer</name>
-<description>Comprehensive workflow for establishing new projects with full AI AOS (Agent Operating System) toolkit. Use this skill when setting up new repositories or integrating AI tooling into existing ones. It employs an interactive "Project Architect" agent to handle cross-client configuration (Claude, Opencode, Gemini, Cline).</description>
+<description>Comprehensive guide for establishing new projects with full AI AOS (Agent Operating System) toolkit including MCP servers, skills, hooks, and beads (memory management layer). Use when setting up new repositories or when existing projects need AI tooling integration.</description>
 <location>project</location>
 </skill>
 

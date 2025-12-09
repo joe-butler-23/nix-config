@@ -1,44 +1,14 @@
 # Project guidelines
 
-This repository manages the NixOS configuration for optimal system stability, performance, and reproducibility. All contributions and modifications must adhere to the following principles:
-
-## 1. Modularity and Organization
-- **Flake-based Structure**: Maintain a well-organized `flake.nix` and `flake.lock` for reproducible builds.
-- **Module Separation**: Group related configurations into distinct Nix modules (e.g., `modules/desktop`, `modules/apps`).
-- **Home Manager Integration**: Utilize Home Manager for user-specific configurations, ensuring separation from system-wide settings.
-
-## 2. Best Practices
-- **Nix Purity**: Prioritize pure functions and avoid imperative shell scripting within Nix expressions where declarative alternatives exist.
-- **Immutability**: Embrace the immutable nature of NixOS. Avoid direct system modifications; all changes must be reflected in the configuration.
-- **Declarative Approach**: Strive for a fully declarative system configuration.
-
-## 3. Security and Secrets Management
-- **SOPS Integration**: All sensitive information (passwords, API keys) must be managed using `sops-nix` and encrypted. Never commit unencrypted secrets.
-- **Least Privilege**: Configure services and applications with the minimum necessary permissions.
-
-## 4. Documentation and Comments
-- **Self-Documenting Code**: Write clear, concise Nix expressions.
-- **Module Readmes**: Each significant module should have a `README.md` explaining its purpose and configurable options.
-- **Inline Comments**: Use comments sparingly to explain complex logic or non-obvious choices, focusing on "why" rather than "what."
-
-## 5. Testing and Validation
-- **Local Builds**: Always test configuration changes locally using `nixos-rebuild switch --flake .#yourhostname` or `home-manager switch --flake .#yourusername` before committing.
-- **Type Checking**: Before adding new Nix options, verify expected types using `nixos-option` or documentation to prevent build errors.
-- **System Capability Check**: Before adding custom configurations, check if NixOS already provides the required functionality out-of-the-box.
-- **Linting**: Ensure Nix expressions are formatted and linted (e.g., using `nixpkgs-fmt` or `alejandra`).
-
-## 6. Version Control
-- **Atomic Commits**: Each commit should represent a single, logical change.
-- **Descriptive Messages**: Write clear and concise commit messages.
-- **Regular Updates**: Keep `flake.lock` up-to-date with upstream `nixpkgs` or other dependencies.
+[Project guidelines here]
 
 # AI-Led Project Management
 
-**Core Principle: All work should be tracked through beads issues and guided by skills.**
+This document defines the standard operating procedures for AI Agents working within this repo. It integrates **Memory (`beads`)** and **Procedures (skills)** into a unified, self-correcting workflow that enforces good practices and a robust workflow. The user has a Nix Os machine with a zsh-p10k-kitty shell setup. Be vigilant to the fact you are running on a Nix machine and all that entails, in particular mainitaining a clean and tracked git tree at all times (or Nix may not be aware a file exists, or the changes made to it), and the need to use nix develop or nix-shell instead of npm/pip/etc install since it is a read only system. When working in this repo, you MUST work within the following system:
 
 ## Project Management Philosophy
 
-This document defines the standard operating procedures for AI Agents working within this repo. It integrates **Memory (`beads`)** and **Procedures (skills)** into a unified, self-correcting workflow that enforces good practices and a robust workflow. The user has a Nix Os machine with a zsh-p10k-kitty shell setup. Be vigilant to the fact you are running on a Nix machine and all that entails, in particular mainitaining a clean and tracked git tree at all times (or Nix may not be aware a file exists, or the changes made to it), and the need to use nix develop or nix-shell instead of npm/pip/etc install since it is a read only system. When working in this repo, you MUST work within the following system:
+This project uses an AI-first approach where Claude actively manages workflows rather than passively responding to requests. The system is built on three pillars:
 
 ### 1. Beads (bd) - Task Tracking
 - **All work flows through beads issues** - no exceptions

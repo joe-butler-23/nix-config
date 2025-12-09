@@ -171,7 +171,7 @@
         # Build project list
         projects=""
         if [ -d "$PROJECTS_DIR" ]; then
-            projects=$(find "$PROJECTS_DIR" -mindepth 1 -maxdepth 1 -type d -not -name ".*" -printf "%f\n" | sort)
+            projects=$(find -L "$PROJECTS_DIR" -mindepth 1 -maxdepth 1 -type d -not -name ".*" -printf "%f\n" | sort)
         fi
 
         options="''${projects}
@@ -204,6 +204,7 @@
     startupNotify = true;
     terminal = false;
     categories = ["Network" "WebBrowser"];
+    mimeTypes = [
       "text/html"
       "text/xml"
       "application/xhtml+xml"
