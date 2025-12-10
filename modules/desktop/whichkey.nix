@@ -31,6 +31,9 @@
           - key: "p"
             desc: prompt library
             cmd: foot -a filepicker -e copy-prompt
+          - key: "n"
+            desc: nix
+            cmd: kitty -d /home/joebutler/nix-config gemini
 
       # clipboard
       - key: "c"
