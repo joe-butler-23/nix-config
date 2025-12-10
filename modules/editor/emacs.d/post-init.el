@@ -226,6 +226,6 @@
 ;; Claude Code
 (use-package claude-code
   :ensure nil ;; Installed via Nix
-  :bind ("C-c c" . claude-code-command-map)
+  :bind-keymap ("C-c c" . claude-code-command-map)
   :config
   (claude-code-mode))

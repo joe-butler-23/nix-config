@@ -1,199 +1,206 @@
 {pkgs, ...}: let
   realBrave = pkgs.brave;
 
-  # FIX 1: Added "$@" to the systemd-run line below so links actually open.
   braveGatekeeper = pkgs.writeShellScriptBin "brave" ''
-      set -euo pipefail
+    set -euo pipefail
 
-      # Ensure dependencies are in PATH
-      export PATH="${pkgs.gum}/bin:${pkgs.coreutils}/bin:${pkgs.findutils}/bin:${pkgs.sudo}/bin:${pkgs.kitty}/bin:${pkgs.emacs}/bin:${pkgs.libnotify}/bin:${pkgs.gnugrep}/bin:${pkgs.gawk}/bin:${pkgs.util-linux}/bin:${pkgs.systemd}/bin:${pkgs.hyprland}/bin:$PATH"
+    # Ensure dependencies are in PATH
+    export PATH="${pkgs.gum}/bin:${pkgs.coreutils}/bin:${pkgs.findutils}/bin:${pkgs.sudo}/bin:${pkgs.kitty}/bin:${pkgs.emacs}/bin:${pkgs.libnotify}/bin:${pkgs.gnugrep}/bin:${pkgs.gawk}/bin:${pkgs.util-linux}/bin:${pkgs.systemd}/bin:${pkgs.hyprland}/bin:$PATH"
 
-      # === CONFIGURATION ===
-      readonly PROJECTS_DIR="$HOME/documents/projects"
-      readonly HOOKS_DIR="$PROJECTS_DIR/sys-arc/project-hooks"
-      readonly LOG_FILE="$HOME/documents/sys-arc/browsing-log.org"
-      readonly REQUIRED_PASS="wastingtime"
+    # === CONFIGURATION ===
+    readonly PROJECTS_DIR="$HOME/documents/projects"
+    readonly HOOKS_DIR="$PROJECTS_DIR/sys-arc/project-hooks"
+    readonly LOG_FILE="$HOME/documents/sys-arc/browsing-log.org"
+    readonly REQUIRED_PASS="wastingtime"
 
-      # Capture original arguments (URLs) immediately
-      BRAVE_ARGS=("$@")
+    # Capture original arguments (URLs) immediately
+    BRAVE_ARGS=("$@")
 
-      # Nord Colors
-      readonly NORD11="#BF616A"
-      readonly NORD13="#EBCB8B"
-      readonly NORD14="#A3BE8C"
-      readonly NORD15="#B48EAD"
-      readonly NORD6="#ECEFF4"
+    # Nord Colors
+    readonly NORD11="#BF616A"
+    readonly NORD13="#EBCB8B"
+    readonly NORD14="#A3BE8C"
+    readonly NORD15="#B48EAD"
+    readonly NORD6="#ECEFF4"
 
-      # === FUNCTIONS ===
+    # === FUNCTIONS ===
 
-      log_browsing_session() {
-          local mission="$1"
-          local duration_str="$2"
+    log_browsing_session() {
+        local mission="$1"
+        local duration_str="$2"
 
-          local today
-          today=$(date '+%Y-%m-%d %A')
-          local timestamp
-          timestamp=$(date '+[%Y-%m-%d %H:%M]')
+        local today
+        today=$(date '+%Y-%m-%d %A')
+        local timestamp
+        timestamp=$(date '+[%Y-%m-%d %H:%M]')
 
-          mkdir -p "$(dirname "$LOG_FILE")"
+        mkdir -p "$(dirname "$LOG_FILE")"
 
-          if [ ! -f "$LOG_FILE" ]; then
-              echo "#+TITLE: Browsing Log" > "$LOG_FILE"
-              echo "#+STARTUP: overview" >> "$LOG_FILE"
-              echo "" >> "$LOG_FILE"
-          fi
+        if [ ! -f "$LOG_FILE" ]; then
+            echo "#+TITLE: Browsing Log" > "$LOG_FILE"
+            echo "#+STARTUP: overview" >> "$LOG_FILE"
+            echo "" >> "$LOG_FILE"
+        fi
 
-          if ! grep -q "\* $today" "$LOG_FILE"; then
-              echo "" >> "$LOG_FILE"
-              echo "* $today" >> "$LOG_FILE"
-          fi
+        if ! grep -q "\* $today" "$LOG_FILE"; then
+            echo "" >> "$LOG_FILE"
+            echo "* $today" >> "$LOG_FILE"
+        fi
 
-          echo "** $mission" >> "$LOG_FILE"
-          echo "   Created: $timestamp" >> "$LOG_FILE"
-          echo "   Duration: $duration_str" >> "$LOG_FILE"
-      }
-
-    launch_browsing_session() {
-    		local mission="$1"
-    		local duration_str="$2"
-    		local duration_seconds="$3"
-
-    		# Log the session
-    		log_browsing_session "$mission" "$duration_str"
-
-    		gum style --foreground "$NORD15" "✓ launching..."
-
-    		# Start timer if duration is set
-    		if [ "$duration_seconds" -gt 0 ]; then
-    			  (sleep "$duration_seconds" && notify-send -u critical "time up, browsing session ended") &
-    		fi
-
-    		# Launch Brave in new window
-    		local unit_timestamp
-    		unit_timestamp=$(date +%s)
-
-    		systemd-run --user --unit="brave-session-$unit_timestamp" \
-    			  "${realBrave}/bin/brave" --new-window "''${BRAVE_ARGS[@]}" >/dev/null 2>&1
-
-    		# Launch Emacs with specific title for Hyprland rules
-    		sleep 2
-    		systemd-run --user --unit="emacs-log-$unit_timestamp" \
-    			  emacs --title "brave-side-panel" "$LOG_FILE" >/dev/null 2>&1
-
-    		# Force layout adjustment
-    		systemd-run --user --unit="brave-layout-adjuster-$unit_timestamp" bash -c "
-    			  set -euo pipefail
-    			  sleep 1
-
-    	  # focus the Emacs side panel by its title
-    		hyprctl dispatch focuswindow 'title:^brave-side-panel$' >/dev/null 2>&1 && \
-    		hyprctl dispatch resizeactive exact 15% 100% >/dev/null 2>&1
-    		"
+        echo "** $mission" >> "$LOG_FILE"
+        echo "   Created: $timestamp" >> "$LOG_FILE"
+        echo "   Duration: $duration_str" >> "$LOG_FILE"
     }
 
-      handle_browsing_mode() {
-          gum style --foreground "$NORD13" "authenticate"
+    launch_browsing_session() {
+        local mission="$1"
+        local duration_str="$2"
+        local duration_seconds="$3"
 
-          local password
-          password=$(gum input --password --placeholder "pass phrase..." --prompt.foreground "$NORD13" --cursor.foreground "$NORD13")
+        # Log the session
+        log_browsing_session "$mission" "$duration_str"
 
-          if [[ "$password" != "$REQUIRED_PASS" ]]; then
-              gum style --foreground "$NORD11" "✗ incorrect phrase"
-              exit 1
-          fi
+        gum style --foreground "$NORD15" --padding "1 2" "✓ launching..."
 
-          # Get browsing purpose
-          gum style --foreground "$NORD14" "purpose"
-          local mission
-          mission=$(gum input --placeholder "what's the specific goal?" --prompt.foreground "$NORD13")
+        # Start timer if duration is set (run in background)
+        if [ "$duration_seconds" -gt 0 ]; then
+            ( sleep "$duration_seconds" && notify-send -u critical "time up, browsing session ended" ) \
+                >/dev/null 2>&1 &
+        fi
 
-          if [[ -z "$mission" ]]; then
-              local mindless_choice
-              mindless_choice=$(gum choose "browse mindlessly" "set a goal" \
-                  --header "no goal set. proceed anyway?" --cursor.foreground "$NORD13")
-              if [[ "$mindless_choice" == "set a goal" ]]; then
-                  gum style --foreground "$NORD11" "✗ cancelled"
-                  sleep 1
-                  exit 1
-              else
-                  mission="mindless browsing"
-              fi
-          fi
+        # Unique ID for this session
+        local unit_timestamp
+        unit_timestamp=$(date +%s)
 
-          # Get duration
-          local duration_str
-          duration_str=$(gum choose "5m" "15m" "30m" "1h" "unlimited" \
-              --header "Duration?" --cursor.foreground "$NORD13")
+        # Launch Brave in new window (systemd-run returns immediately)
+        systemd-run --user --unit="brave-session-$unit_timestamp" \
+            "${realBrave}/bin/brave" --new-window "''${BRAVE_ARGS[@]}" \
+            >/dev/null 2>&1
 
-          local duration_seconds=0
-          case "$duration_str" in
-              "5m") duration_seconds=300 ;;
-              "15m") duration_seconds=900 ;;
-              "30m") duration_seconds=1800 ;;
-              "1h") duration_seconds=3600 ;;
-              # "unlimited" leaves duration_seconds = 0
-          esac
+        # Launch Emacs side panel with an internal delay so we don't block here
+        systemd-run --user --unit="emacs-log-$unit_timestamp" bash -c "
+            set -euo pipefail
+            sleep 2
+            emacs --title 'brave-side-panel' '$LOG_FILE' >/dev/null 2>&1
+        " >/dev/null 2>&1
 
-          launch_browsing_session "$mission" "$duration_str" "$duration_seconds"
-      }
+        # Adjust layout in its own unit (with internal delay)
+        systemd-run --user --unit="brave-layout-adjuster-$unit_timestamp" bash -c "
+            set -euo pipefail
+            sleep 3
+            hyprctl dispatch focuswindow 'title:^brave-side-panel$' >/dev/null 2>&1 || true
+            hyprctl dispatch resizeactive exact 15% 100% >/dev/null 2>&1 || true
+        " >/dev/null 2>&1
+    }
 
-      handle_project_mode() {
-          local choice="$1"
+    handle_browsing_mode() {
+        gum style --foreground "$NORD13" --padding "1 2" "authenticate"
 
-          gum style --foreground "$NORD14" "✓ focusing on $choice."
+        local password
+        password=$(gum input \
+            --password \
+    		--no-show-help \
+    		--padding "1 2" \
+            --placeholder "pass phrase..." \
+            --prompt.foreground "$NORD13" \
+            --cursor.foreground "$NORD13" \
+            --width 40)
 
-          local hook_script="$HOOKS_DIR/$choice.sh"
-          if [ -f "$hook_script" ] && [ -x "$hook_script" ]; then
-              "$hook_script"
-          else
-              gum style --foreground "$NORD6" "No hook script found."
-              sleep 1
-          fi
+        if [[ "$password" != "$REQUIRED_PASS" ]]; then
+            gum style --foreground "$NORD11" --padding "1 2" "✗ incorrect phrase"
+            exit 1
+        fi
 
-          sleep 1
-      }
+        # Get browsing purpose
+        gum style --foreground "$NORD14" --padding "1 2" "purpose"
+        local mission
+        mission=$(gum input --placeholder "what's the specific goal?" --prompt.foreground "$NORD13")
 
-      # === MAIN ===
+        if [[ -z "$mission" ]]; then
+            local mindless_choice
+            mindless_choice=$(gum choose "browse mindlessly" "set a goal" \
+                --header "no goal set. proceed anyway?" --cursor.foreground "$NORD13")
+            if [[ "$mindless_choice" == "set a goal" ]]; then
+                gum style --foreground "$NORD11" --padding "1 2" "✗ cancelled"
+                sleep 1
+                exit 1
+            else
+                mission="mindless browsing"
+            fi
+        fi
 
-      # Check if we are already spawned or if we need a terminal
-      if [[ "''${BRAVE_GATEKEEPER_SPAWNED:-}" != "1" ]]; then
-          if [[ -z "''${PS1:-}" ]]; then
-                          exec kitty \
-                            --class brave-gatekeeper \
-                            --single-instance \
-                            --override window_padding_width=12 \
-                            --override line_height=8 \
-                            -e env BRAVE_GATEKEEPER_SPAWNED=1 "$0" "$@"          fi
-      fi
+        # Get duration
+        local duration_str
+        duration_str=$(gum choose "5m" "15m" "30m" "1h" "unlimited" \
+            --header "Duration?" --cursor.foreground "$NORD13")
 
-      # Display menu
-      gum style --foreground "$NORD6" --padding "1 2" "Focusing on..."
+        local duration_seconds=0
+        case "$duration_str" in
+            "5m") duration_seconds=300 ;;
+            "15m") duration_seconds=900 ;;
+            "30m") duration_seconds=1800 ;;
+            "1h") duration_seconds=3600 ;;
+            # "unlimited" leaves duration_seconds = 0
+        esac
 
-      # Build project list
-      projects=""
-      if [ -d "$PROJECTS_DIR" ]; then
-          projects=$(find -L "$PROJECTS_DIR" -mindepth 1 -maxdepth 1 -type d -not -name ".*" -printf "%f\n" | sort)
-      fi
+        launch_browsing_session "$mission" "$duration_str" "$duration_seconds"
+    }
 
-      options="''${projects}"$'\nbrowse'
+    handle_project_mode() {
+        local choice="$1"
 
-      # Get user choice
-      choice=$(echo "$options" | gum filter \
-          --no-show-help \
-          --header "" \
-          --indicator.foreground "$NORD13" \
-          --match.foreground "$NORD13" \
-          --height 10 \
-          --padding "1 2")
+        gum style --foreground "$NORD14" --padding "1 2" "✓ focusing on $choice."
 
-      # Route to appropriate handler
-      if [[ "$choice" == "browse" ]]; then
-          handle_browsing_mode
-      else
-          handle_project_mode "$choice"
-      fi
+        local hook_script="$HOOKS_DIR/$choice.sh"
+        if [ -f "$hook_script" ] && [ -x "$hook_script" ]; then
+            "$hook_script"
+        else
+            gum style --foreground "$NORD6" --padding "1 2" "No hook script found."
+            sleep 1
+        fi
+    }
 
-      exit 0
+    # === MAIN ===
+
+    # Check if we are already spawned or if we need a terminal
+    if [[ "''${BRAVE_GATEKEEPER_SPAWNED:-}" != "1" ]]; then
+        if [[ -z "''${PS1:-}" ]]; then
+            exec kitty \
+                --class brave-wrapper \
+                --single-instance \
+                --override window_padding_width=12 \
+                --override "modify_font cell_height=120%" \
+                -e env BRAVE_GATEKEEPER_SPAWNED=1 "$0" "$@"
+        fi
+    fi
+
+    # Display menu
+    gum style --foreground "$NORD6" --padding "1 2" "Focusing on..."
+
+    # Build project list
+    projects=""
+    if [ -d "$PROJECTS_DIR" ]; then
+        projects=$(find -L "$PROJECTS_DIR" -mindepth 1 -maxdepth 1 -type d -not -name ".*" -printf "%f\n" | sort)
+    fi
+
+    options="''${projects}"$'\nbrowse'
+
+    # Get user choice
+    choice=$(echo "$options" | gum filter \
+        --no-show-help \
+        --header "" \
+        --indicator.foreground "$NORD13" \
+        --match.foreground "$NORD13" \
+        --padding "1 2")
+
+    # Route to appropriate handler
+    if [[ "$choice" == "browse" ]]; then
+        handle_browsing_mode
+    else
+        handle_project_mode "$choice"
+    fi
+
+    exit 0
   '';
 
   braveDesktop = pkgs.makeDesktopItem {
