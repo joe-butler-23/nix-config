@@ -229,3 +229,6 @@
   :bind-keymap ("C-c c" . claude-code-command-map)
   :config
   (claude-code-mode))
+
+;; Global Auto Revert
+(global-auto-revert-mode 1)
