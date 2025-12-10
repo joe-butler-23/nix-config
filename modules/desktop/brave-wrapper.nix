@@ -178,12 +178,12 @@
     browse"
 
         # Get user choice
-        choice=$(echo "$options" | gum choose \
-            --no-show-help \
+        choice=$(echo "$options" | gum filter \
             --header "" \
             --cursor.foreground "$NORD13" \
             --selected.foreground "$NORD13" \
-            --height 10)
+            --height 10 \
+            --padding "1 2")
 
         # Route to appropriate handler
         if [[ "$choice" == "browse" ]]; then
