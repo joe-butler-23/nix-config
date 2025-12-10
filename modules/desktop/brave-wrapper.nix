@@ -180,8 +180,8 @@
         # Get user choice
         choice=$(echo "$options" | gum filter \
             --header "" \
-            --cursor.foreground "$NORD13" \
-            --selected.foreground "$NORD13" \
+            --indicator.foreground "$NORD13" \
+            --match.foreground "$NORD13" \
             --height 10 \
             --padding "1 2")
 
