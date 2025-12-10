@@ -158,11 +158,12 @@
       # Check if we are already spawned or if we need a terminal
       if [[ "''${BRAVE_GATEKEEPER_SPAWNED:-}" != "1" ]]; then
           if [[ -z "''${PS1:-}" ]]; then
-              exec kitty \
-                --class brave-gatekeeper \
-                --override window_padding_width=12 \
-                -e env BRAVE_GATEKEEPER_SPAWNED=1 "$0" "$@"
-          fi
+                          exec kitty \
+                            --class brave-gatekeeper \
+                            --single-instance \
+                            --override window_padding_width=12 \
+                            --override line_height=8 \
+                            -e env BRAVE_GATEKEEPER_SPAWNED=1 "$0" "$@"          fi
       fi
 
       # Display menu
