@@ -216,3 +216,16 @@
                                 :background (face-attribute 'default :background)
                                 :box nil
                                 :inherit 'default)))
+
+;;; Claude Code Integration
+
+;; Eat (Emulate A Terminal) - Recommended backend for claude-code
+(use-package eat
+  :ensure t)
+
+;; Claude Code
+(use-package claude-code
+  :ensure nil ;; Installed via Nix
+  :bind ("C-c c" . claude-code-command-map)
+  :config
+  (claude-code-mode))

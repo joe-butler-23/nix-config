@@ -12,7 +12,19 @@
     package = pkgs.emacs-pgtk;
 
     # Minimal package set for initial configuration
-    extraPackages = epkgs:
+    extraPackages = epkgs: let
+      claude-code = epkgs.trivialBuild {
+        pname = "claude-code";
+        version = "main";
+        src = pkgs.fetchFromGitHub {
+          owner = "stevemolitor";
+          repo = "claude-code.el";
+          rev = "main";
+          sha256 = "0z77nxazkw08pmqam2z27a56s9nyp72a1vvc0ba3vgcwfkjx0v81";
+        };
+        packageRequires = with epkgs; [transient inheritenv];
+      };
+    in
       with epkgs; [
         # Performance
         gcmh
@@ -57,6 +69,11 @@
 
         # use-package is built-in on Emacs 29+, but we ensure it's available
         use-package
+
+        # Claude Code Integration
+        claude-code
+        inheritenv
+        eat
       ];
   };
 
