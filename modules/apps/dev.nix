@@ -34,5 +34,6 @@ in {
       opencode
       gemini
       claude-code
+      pkgs.nodejs_latest
     ]);
 }

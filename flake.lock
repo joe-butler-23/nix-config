@@ -7,17 +7,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1764833698,
-        "narHash": "sha256-onVaC/X79FGGatEhGtBAizw2Hs9+XVZN8ZmFgcBSaq4=",
+        "lastModified": 1765388375,
+        "narHash": "sha256-n0PTpsqLe6ba9U6FRrs8auFY0lXjhAaCRGksXKihpp4=",
         "ref": "refs/heads/main",
-        "rev": "a6b7a3154966aa5814ee8af741b00ec84470a2a8",
-        "revCount": 31,
+        "rev": "c20de88b045db80e41138b7ed42177e0c6b5ff7b",
+        "revCount": 34,
         "type": "git",
-        "url": "ssh://git@github.com/joe-butler-23/ai.git"
+        "url": "file:///home/joebutler/utilities/ai"
       },
       "original": {
         "type": "git",
-        "url": "ssh://git@github.com/joe-butler-23/ai.git"
+        "url": "file:///home/joebutler/utilities/ai"
       }
     },
     "anki-forge": {
@@ -113,11 +113,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1764184499,
-        "narHash": "sha256-TYsx2FWOotapRt/h4KOU9Hi/MtpQ2mEL0oX3sjAg9Ko=",
+        "lastModified": 1765103675,
+        "narHash": "sha256-PCsU2GwrPYFAE2KTCdk60E6ZTPRtgNdbPF+bzf8qi3Q=",
         "owner": "steveyegge",
         "repo": "beads",
-        "rev": "352b9f7e6b1f2110d1f078803598052e5260db12",
+        "rev": "08d8353619777dfdd4119477ca029689597cec60",
         "type": "github"
       },
       "original": {
@@ -415,11 +415,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1763966396,
-        "narHash": "sha256-6eeL1YPcY1MV3DDStIDIdy/zZCDKgHdkCmsrLJFiZf0=",
+        "lastModified": 1765186076,
+        "narHash": "sha256-hM20uyap1a0M9d344I692r+ik4gTMyj60cQWO+hAYP8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5ae3b07d8d6527c42f17c876e404993199144b6a",
+        "rev": "addf7cf5f383a3101ecfba091b98d0a1263dc9b8",
         "type": "github"
       },
       "original": {
