@@ -100,6 +100,9 @@
           rm -f -- "$tmp_cwd" "$tmp_pick"
         }
 
+        # Initialize zoxide
+        eval "$(zoxide init zsh)"
+
         # Ensure cache directory exists
         [[ -d "$HOME/.zsh/cache" ]] || mkdir -p "$HOME/.zsh/cache"
 

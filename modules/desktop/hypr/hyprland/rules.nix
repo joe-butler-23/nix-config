@@ -27,6 +27,15 @@ _: {
        windowrulev2 = bordercolor rgb(ffffff), class:^(gum-script)$
     windowrulev2 = rounding 15, class:^(gum-script)$
 
+       # refile - quick capture emacs
+       windowrulev2 = float, title:^(refile\.org.*)$
+       windowrulev2 = center, title:^(refile\.org.*)$
+       windowrulev2 = size 400 400, title:^(refile\.org.*)$
+       windowrulev2 = stayfocused, title:^(refile\.org.*)$
+       windowrulev2 = bordersize 1, title:^(refile\.org.*)$
+       windowrulev2 = bordercolor rgb(ffffff), title:^(refile\.org.*)$
+       windowrulev2 = rounding 15, title:^(refile\.org.*)$
+
        # brave-wrapper
        windowrulev2 = float, class:^(brave-wrapper)$
        windowrulev2 = center, class:^(brave-wrapper)$
