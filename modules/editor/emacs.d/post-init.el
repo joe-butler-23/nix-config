@@ -107,28 +107,8 @@
   :ensure t
   :after evil
   :config
-  (general-create-definer my-leader-def
-    :prefix "SPC")
-  (general-create-definer my-local-leader-def
-    :prefix ",")
-
-  (my-leader-def
-    :states '(normal visual motion)
-    :keymaps 'override
-    "f" '(:ignore t :which-key "files")
-    "ff" '(find-file :which-key "find file")
-    "fs" '(save-buffer :which-key "save file")
-    "b" '(:ignore t :which-key "buffers")
-    "bb" '(switch-to-buffer :which-key "switch buffer")
-    "bk" '(kill-current-buffer :which-key "kill buffer")
-    "w" '(:ignore t :which-key "window")
-    "wl" '(evil-window-right :which-key "window right")
-    "wh" '(evil-window-left :which-key "window left")
-    "wk" '(evil-window-up :which-key "window up")
-    "wj" '(evil-window-down :which-key "window down")
-    "wd" '(delete-window :which-key "delete window")
-    "w/" '(split-window-right :which-key "split right")
-    "w-" '(split-window-below :which-key "split bottom")))
+  ;; Load keybindings from bindings.el
+  (load (expand-file-name "bindings.el" minimal-emacs-user-directory)))
 
 ;; Completion configuration
 (use-package vertico
@@ -150,10 +130,6 @@
 
 (use-package embark
   :ensure t
-  :bind
-  (("C-." . embark-act)
-   ("C-;" . embark-dwim)
-   ("C-h B" . embark-bindings))
   :init
   (setq prefix-help-command #'embark-prefix-help-command)
   :config
@@ -169,11 +145,6 @@
 
 (use-package consult
   :ensure t
-  :bind (("C-x b" . consult-buffer)
-         ("M-y" . consult-yank-pop)
-         ("M-g g" . consult-goto-line)
-         ("M-s r" . consult-ripgrep)
-         ("M-s l" . consult-line))
   :hook (completion-list-mode . consult-preview-at-point-mode)
   :init
   (setq xref-show-xrefs-function #'consult-xref
@@ -226,7 +197,6 @@
 ;; Claude Code
 (use-package claude-code
   :ensure nil ;; Installed via Nix
-  :bind-keymap ("C-c c" . claude-code-command-map)
   :config
   (claude-code-mode))
 
