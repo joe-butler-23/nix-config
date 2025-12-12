@@ -1,77 +1,120 @@
 ;;; daily-scratch.el --- Daily scratchpad configuration -*- lexical-binding: t; -*-
 
-;; Daily scratch popup configuration (based on refile.org pattern)
-(add-to-list 'display-buffer-alist
-             '("daily-scratch"
-               (display-buffer-pop-up-frame)
-               (window-parameters (mode-line-format . none))))
+;; Fast daily scratch opener for Emacs daemon + emacsclient.
 
-(defun my/daily-scratch-cleanup-empty-timestamps ()
-  "Remove timestamp entries that have nothing after the dash."
+(defgroup my/daily-scratch nil
+  "Quick capture into today's org-roam daily scratch section."
+  :group 'convenience)
+
+(defcustom my/daily-scratch-frame-name "daily-scratch"
+  "Name of the dedicated daily scratch frame."
+  :type 'string)
+
+(defcustom my/daily-scratch-auto-save-delay 0.25
+  "Seconds to wait before auto-saving after inserting a timestamp."
+  :type 'number)
+
+(defun my/daily-scratch--daily-dir ()
+  (cond
+   ((and (boundp 'org-roam-directory)
+         (boundp 'org-roam-dailies-directory)
+         org-roam-directory
+         org-roam-dailies-directory)
+    (file-name-as-directory
+     (expand-file-name org-roam-dailies-directory (file-truename org-roam-directory))))
+   (t
+    (file-name-as-directory (file-truename "~/documents/projects/org-roam/daily/")))))
+
+(defun my/daily-scratch--today-file ()
+  (expand-file-name (format-time-string "%Y-%m-%d.org") (my/daily-scratch--daily-dir)))
+
+(defun my/daily-scratch--ensure-file (file)
+  (unless (file-exists-p file)
+    (make-directory (file-name-directory file) t)
+    (let ((date-title (format-time-string "%Y-%m-%d %A"))
+          (date-scheduled (format-time-string "%Y-%m-%d %a")))
+      (with-temp-file file
+        (insert "#+title: " date-title "\n")
+        (insert "#+filetags: :daily:\n\n")
+        (insert "* morning\n** priorities\n\n")
+        (insert "* session log\n\n")
+        (insert "* habits\n")
+        (insert "** TODO exercise :habit:\n")
+        (insert "   SCHEDULED: <" date-scheduled " +1d>\n")
+        (insert "** TODO review inbox :habit:\n")
+        (insert "   SCHEDULED: <" date-scheduled " +1d>\n\n")
+        (insert "* metrics\n:PROPERTIES:\n:STEPS:\n:PAGES:\n:EXERCISE_MIN:\n:END:\n\n")
+        (insert "* scratch\n\n")
+        (insert "* shutdown\n")
+        (insert "- [ ] session end protocol completed\n")
+        (insert "- [ ] inbox processed\n")))))
+
+(defun my/daily-scratch--find-frame ()
+  (let ((frames (frame-list))
+        (found nil))
+    (while (and frames (not found))
+      (let ((frame (car frames)))
+        (when (string= (frame-parameter frame 'name) my/daily-scratch-frame-name)
+          (setq found frame)))
+      (setq frames (cdr frames)))
+    found))
+
+(defun my/daily-scratch--get-or-create-frame ()
+  (or (my/daily-scratch--find-frame)
+      (make-frame `((name . ,my/daily-scratch-frame-name)
+                    (frame-title-format . ,my/daily-scratch-frame-name)))))
+
+(defun my/daily-scratch--goto-scratch-heading ()
+  (widen)
+  (goto-char (point-max))
+  (unless (re-search-backward "^\\* scratch$" nil t)
+    (goto-char (point-max))
+    (insert "\n* scratch\n")))
+
+(defun my/daily-scratch--cleanup-empty-timestamps ()
   (save-excursion
     (goto-char (point-min))
     (while (re-search-forward "^[0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\} - *$" nil t)
       (delete-region (line-beginning-position) (1+ (line-end-position))))))
 
-(defun my/daily-scratch-setup ()
-  "Setup for daily scratch: hide modeline, insert at top of scratch, and add timestamps."
-  (ignore-errors
-    (when (and (buffer-file-name)
-               (string-match-p "/daily/[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$"
-                               (buffer-file-name)))
-      ;; Hide modeline (from refile.org)
-      (setq-local mode-line-format nil)
-      ;; Suppress server message
-      (setq-local server-visit-hook nil)
-      ;; Clear echo area immediately
-      (message "")
+(defun my/daily-scratch--prepare-visible-buffer ()
+  (require 'org)
+  (my/daily-scratch--goto-scratch-heading)
+  (org-narrow-to-subtree)
+  (my/daily-scratch--cleanup-empty-timestamps)
+  (goto-char (point-min))
+  (forward-line 1)
+  (insert (format-time-string "%H:%M:%S - ") "\n")
+  (forward-line -1)
+  (end-of-line))
 
-      ;; Clean up empty timestamp entries first
-      (my/daily-scratch-cleanup-empty-timestamps)
+(defun my/daily-scratch--maybe-save (buffer)
+  (when (buffer-live-p buffer)
+    (with-current-buffer buffer
+      (when (and (buffer-file-name) (buffer-modified-p))
+        (let ((inhibit-message t))
+          (save-buffer))))))
 
-      ;; Jump to scratch section and insert at top
-      (widen)  ;; Ensure we're not already narrowed
-      (goto-char (point-min))
-      (when (re-search-forward "^\\* scratch$" nil t)
-        ;; Found scratch section - NARROW to it first
-        (org-narrow-to-subtree)
-
-        ;; Now insert timestamp at top of the narrowed buffer (skipping the heading)
-        (goto-char (point-min)) ; Go to start of narrowed buffer (the heading)
-        (forward-line 1) ; Move past the "* scratch" heading
-
-        (let* ((time-string (format-time-string "%H:%M:%S"))
-               (timestamp-entry (format "%s - " time-string)))
-
-          (insert timestamp-entry "\n")
-          (forward-line -1) ; Move back to the beginning of the newly inserted line
-          (end-of-line)
-
-          ;; Auto-save after insertion (silently)
-          (when (buffer-modified-p)
-            (let ((inhibit-message t))
-              (save-buffer))
-            ;; Clear the echo area again after save ensures we leave it blank
-            (message "")))))))
+;;;###autoload
+(defun my/daily-scratch-open ()
+  "Open today's daily note at the scratch section, optimized for instant feel."
+  (interactive)
+  (let* ((file (my/daily-scratch--today-file)))
+    (my/daily-scratch--ensure-file file)
+    (let* ((buffer (find-file-noselect file))
+           (frame (my/daily-scratch--get-or-create-frame)))
+      (when (frame-live-p frame)
+        (set-frame-parameter frame 'frame-title-format my/daily-scratch-frame-name)
+        (raise-frame frame)
+        (select-frame-set-input-focus frame))
+      (with-selected-frame frame
+        (switch-to-buffer buffer)
+        (setq-local mode-line-format nil)
+        (ignore-errors (my/daily-scratch--prepare-visible-buffer))
+        (run-with-idle-timer my/daily-scratch-auto-save-delay
+                             nil
+                             #'my/daily-scratch--maybe-save
+                             buffer)))))
 
 ;; Disable server tutorial message globally (from refile.org)
 (setq server-client-instructions nil)
-
-;; Hook for emacsclient visits (fires when client opens a file)
-(add-hook 'server-visit-hook 'my/daily-scratch-setup)
-
-;; Also hook into frame creation to handle buffer reuse (from refile.org)
-(defun my/daily-scratch-frame-setup (frame)
-  "Run daily-scratch setup when a new frame is created showing a daily note."
-  ;; Small delay to ensure buffer is fully loaded in frame (from refile.org)
-  (run-with-timer 0.1 nil
-                  (lambda ()
-                    (ignore-errors
-                      (when (frame-live-p frame)
-                        (with-selected-frame frame
-                          (when (and (buffer-file-name)
-                                     (string-match-p "/daily/[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$"
-                                                     (buffer-file-name)))
-                            (my/daily-scratch-setup))))))))
-
-(add-hook 'after-make-frame-functions 'my/daily-scratch-frame-setup)
