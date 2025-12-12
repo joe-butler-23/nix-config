@@ -235,3 +235,55 @@
            :target (file+head+olp "%<%Y-%m-%d>.org"
                                   "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n* morning\n** priorities\n\n* session log\n\n* habits\n** TODO exercise :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n** TODO review inbox :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n\n* metrics\n:PROPERTIES:\n:STEPS: \n:PAGES: \n:EXERCISE_MIN: \n:END:\n\n* scratch\n\n* shutdown\n- [ ] session end protocol completed\n- [ ] inbox processed\n"
                                   ("scratch"))))))
+
+(defun my/daily-scratch-quick-capture ()
+  "Open today's daily note narrowed to scratch section with timestamp and clean UI."
+  (interactive)
+
+  ;; Get today's daily note path
+  (let* ((daily-name (format-time-string "%Y-%m-%d.org"))
+         (daily-path (expand-file-name daily-name
+                                       (expand-file-name org-roam-dailies-directory
+                                                         org-roam-directory))))
+
+    ;; Create the file if it doesn't exist using capture
+    (unless (file-exists-p daily-path)
+      (org-roam-dailies-capture-today t "d"))
+
+    ;; Open the file directly
+    (find-file daily-path)
+
+    ;; Clean UI setup (from refile.org)
+    (setq-local mode-line-format nil)
+    (setq-local server-visit-hook nil)
+    (message "")  ;; Clear echo area
+
+    ;; Jump to scratch section and narrow to it
+    (widen)  ;; Ensure we're not already narrowed
+    (goto-char (point-min))
+    (if (re-search-forward "^\\* scratch$" nil t)
+        (progn
+          ;; Found scratch section, narrow to it
+          (org-narrow-to-subtree)
+          ;; Go to end of subtree to insert timestamp
+          (goto-char (point-max))
+          ;; Insert newline if needed
+          (unless (bolp) (insert "\n"))
+          ;; Insert timestamp
+          (let ((time-string (format-time-string "%H:%M:%S")))
+            (insert time-string " - "))
+          ;; Auto-save silently
+          (let ((inhibit-message t))
+            (save-buffer))
+          (message ""))  ;; Clear echo area after save
+      ;; Scratch section not found - shouldn't happen with template
+      (message "Warning: scratch section not found"))))
+
+;; Disable server tutorial message globally
+(setq server-client-instructions nil)
+
+;; Add display-buffer rule for daily-scratch frame
+(add-to-list 'display-buffer-alist
+             '("daily-scratch"
+               (display-buffer-pop-up-frame)
+               (window-parameters (mode-line-format . none))))
