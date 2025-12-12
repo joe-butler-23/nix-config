@@ -66,6 +66,22 @@ The `gemini-cli` package in `nixpkgs` is often behind the rapid release cycle of
 
 The `gemini-cli` package is now available through `pkgsUnstable`.
 
+## Codex Overlay (`codex`)
+
+### Description
+
+Provides the `codex` CLI tool from the `openai/codex` repository. It fetches the pre-built Linux binary from GitHub Releases.
+
+### Implementation
+
+*   Fetches `codex-x86_64-unknown-linux-gnu.tar.gz` from GitHub Releases.
+*   Installs the binary to `$out/bin/codex`.
+*   Uses `autoPatchelfHook` for dynamic linking on NixOS.
+
+### How to Use
+
+The `codex` package is now available through `pkgs`.
+
 ### How to Update Overlays
 
 To update these packages, follow this procedure:
@@ -74,18 +90,16 @@ To update these packages, follow this procedure:
     ```bash
     curl -s https://api.github.com/repos/google-gemini/gemini-cli/releases/latest | jq -r '.tag_name' | sed 's/^v//'
     curl -s https://api.github.com/repos/sst/opencode/releases/latest | jq -r '.tag_name' | sed 's/^v//'
+    curl -s https://api.github.com/repos/openai/codex/releases/latest | jq -r '.tag_name' | sed 's/^rust-v//'
     ```
 2.  **Get New Hash**:
     Run `nix-prefetch-url` with the new version number found above:
     ```bash
     nix-prefetch-url "https://github.com/google-gemini/gemini-cli/releases/download/v<VERSION>/gemini.js"
     nix-prefetch-url "https://github.com/sst/opencode/releases/download/v<VERSION>/opencode-linux-x64.tar.gz"
+    nix-prefetch-url "https://github.com/openai/codex/releases/download/rust-v<VERSION>/codex-x86_64-unknown-linux-gnu.tar.gz"
     ```
 3.  **Update Files**:
     Edit `modules/apps/overlays/default.nix`:
     *   Update `version = "..."` with the new version.
-    *   Update `sha256 = "..."` in the `gemini` section with the new hash.
-
-    Edit `modules/apps/overlays/default.nix`:
-    *   Update `version = "..."` with the new version.
-    *   Update `sha256 = "..."` in the `opencode` section with the new hash.
+    *   Update `sha256 = "..."` in the respective section with the new hash.

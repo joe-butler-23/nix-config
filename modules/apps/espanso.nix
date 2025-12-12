@@ -19,6 +19,9 @@
         show_notifications = false;
         auto_restart = false;
         backend = "Clipboard";
+        keyboard_layout = {
+          layout = "gb";
+        };
       };
     };
 

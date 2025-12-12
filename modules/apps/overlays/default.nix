@@ -8,6 +8,7 @@
 # TOOLS PROVIDED:
 # 1. opencode: The OpenCode CLI agent (https://github.com/sst/opencode)
 # 2. gemini: The Google Gemini CLI (https://github.com/google-gemini/gemini-cli)
+# 3. codex: The OpenAI Codex CLI (https://github.com/openai/codex)
 #
 # USAGE:
 # These packages become available in `pkgs` automatically (e.g., pkgs.opencode).
@@ -119,6 +120,59 @@ _: _final: prev: {
       homepage = "https://github.com/google-gemini/gemini-cli";
       license = licenses.asl20;
       platforms = platforms.all;
+    };
+  };
+
+  codex = prev.stdenv.mkDerivation rec {
+    pname = "codex";
+    version = "0.71.0";
+
+    src = prev.fetchurl {
+      url = "https://github.com/openai/codex/releases/download/rust-v${version}/codex-x86_64-unknown-linux-gnu.tar.gz";
+      sha256 = "1y35ywhchrj5g18k8n41f4wy7y4nkj5q6hdgzpxqh8cr8hhy8dqf";
+    };
+
+    nativeBuildInputs = [prev.autoPatchelfHook];
+
+    buildInputs = [
+      prev.stdenv.cc.cc.lib
+      prev.zlib
+    ];
+
+    sourceRoot = ".";
+
+    installPhase = ''
+      runHook preInstall
+      install -Dm755 codex-x86_64-unknown-linux-gnu $out/bin/codex
+      runHook postInstall
+    '';
+
+    passthru.updateScript = prev.writeShellScript "update-codex" ''
+      set -euo pipefail
+
+      # Get latest version
+      LATEST=$(curl -s https://api.github.com/repos/openai/codex/releases/latest | jq -r '.tag_name' | sed 's/^rust-v//')
+
+      echo "Latest version: $LATEST"
+
+      # Update version in file
+      sed -i "s/version = \".*\";/version = \"$LATEST\";/" modules/apps/overlays/default.nix
+
+      # Calculate new hash
+      URL="https://github.com/openai/codex/releases/download/rust-v$LATEST/codex-x86_64-unknown-linux-gnu.tar.gz"
+      HASH=$(nix-prefetch-url "$URL")
+
+      # Update hash in file
+      sed -i "s|sha256 = \".*\";|sha256 = \"$HASH\";|" modules/apps/overlays/default.nix
+
+      echo "Updated codex to $LATEST with hash $HASH"
+    '';
+
+    meta = with prev.lib; {
+      description = "Codex CLI";
+      homepage = "https://github.com/openai/codex";
+      license = licenses.asl20;
+      platforms = platforms.linux;
     };
   };
 }
