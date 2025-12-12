@@ -250,38 +250,41 @@
       (delete-region (line-beginning-position) (1+ (line-end-position))))))
 
 (defun my/daily-scratch-setup ()
-  "Setup for daily scratch: hide modeline, narrow to scratch, and add timestamps."
-  (when (and (buffer-file-name)
-             (string-match-p "/daily/[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$" (buffer-file-name)))
-    ;; Hide modeline (from refile.org)
-    (setq-local mode-line-format nil)
-    ;; Suppress server message
-    (setq-local server-visit-hook nil)
-    ;; Clear echo area
-    (message "")
+  "Setup for daily scratch: hide modeline, insert at top of scratch, and add timestamps."
+  (ignore-errors
+    (when (and (buffer-file-name)
+               (string-match-p "/daily/[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$" (buffer-file-name)))
+      ;; Hide modeline (from refile.org)
+      (setq-local mode-line-format nil)
+      ;; Suppress server message
+      (setq-local server-visit-hook nil)
+      ;; Clear echo area immediately
+      (message "")
 
-    ;; Clean up empty timestamp entries first
-    (my/daily-scratch-cleanup-empty-timestamps)
+      ;; Clean up empty timestamp entries first
+      (my/daily-scratch-cleanup-empty-timestamps)
 
-    ;; Jump to scratch section and narrow to it
-    (widen)  ;; Ensure we're not already narrowed
-    (goto-char (point-min))
-    (when (re-search-forward "^\\* scratch$" nil t)
-      ;; Found scratch section, narrow to it
-      (org-narrow-to-subtree)
-      ;; Go to end of subtree to insert timestamp
-      (goto-char (point-max))
-      ;; Insert newline if needed
-      (unless (bolp) (insert "\n"))
-      ;; Insert timestamp
-      (let ((time-string (format-time-string "%H:%M:%S")))
-        (insert time-string " - "))
-      ;; Auto-save after insertion (silently, from refile.org)
-      (when (buffer-modified-p)
-        (let ((inhibit-message t))
-          (save-buffer))
-        ;; Clear the echo area again after save
-        (message "")))))
+      ;; Jump to scratch section and insert at top
+      (widen)  ;; Ensure we're not already narrowed
+      (goto-char (point-min))
+      (when (re-search-forward "^\\* scratch$" nil t)
+        ;; Found scratch section
+        (let* ((time-string (format-time-string "%H:%M:%S"))
+               (timestamp-entry (format "%s - " time-string))
+               (scratch-header-pos (line-beginning-position)))
+
+          (goto-char scratch-header-pos)
+          (forward-line 1) ; Move past the "* scratch" heading
+          (insert timestamp-entry "\n")
+          (forward-line -1) ; Move back to the beginning of the newly inserted line
+          (end-of-line)
+
+          ;; Auto-save after insertion (silently)
+          (when (buffer-modified-p)
+            (let ((inhibit-message t))
+              (save-buffer))
+            ;; Clear the echo area again after save ensures we leave it blank
+            (message "")))))))
 
 (defun my/daily-scratch-quick-capture ()
   "Open today's daily note for scratch capture (hook will handle setup)."
@@ -309,9 +312,11 @@
   ;; Small delay to ensure buffer is fully loaded in frame (from refile.org)
   (run-with-timer 0.1 nil
                   (lambda ()
-                    (with-selected-frame frame
-                      (when (and (buffer-file-name)
-                                 (string-match-p "/daily/[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$" (buffer-file-name)))
-                        (my/daily-scratch-setup))))))
+                    (ignore-errors
+                      (when (frame-live-p frame)
+                        (with-selected-frame frame
+                          (when (and (buffer-file-name)
+                                     (string-match-p "/daily/[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$" (buffer-file-name)))
+                            (my/daily-scratch-setup))))))))
 
 (add-hook 'after-make-frame-functions 'my/daily-scratch-frame-setup)
