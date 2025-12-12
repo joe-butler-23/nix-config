@@ -10,14 +10,15 @@
   "Remove timestamp entries that have nothing after the dash."
   (save-excursion
     (goto-char (point-min))
-    (while (re-search-forward "^[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\} - *$" nil t)
+    (while (re-search-forward "^[0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\} - *$" nil t)
       (delete-region (line-beginning-position) (1+ (line-end-position))))))
 
 (defun my/daily-scratch-setup ()
   "Setup for daily scratch: hide modeline, insert at top of scratch, and add timestamps."
   (ignore-errors
     (when (and (buffer-file-name)
-               (string-match-p "/daily/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}\.org$" (buffer-file-name)))
+               (string-match-p "/daily/[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$"
+                               (buffer-file-name)))
       ;; Hide modeline (from refile.org)
       (setq-local mode-line-format nil)
       ;; Suppress server message
@@ -31,7 +32,7 @@
       ;; Jump to scratch section and insert at top
       (widen)  ;; Ensure we're not already narrowed
       (goto-char (point-min))
-      (when (re-search-forward "^\* scratch$" nil t)
+      (when (re-search-forward "^\\* scratch$" nil t)
         ;; Found scratch section - NARROW to it first
         (org-narrow-to-subtree)
 
@@ -69,7 +70,8 @@
                       (when (frame-live-p frame)
                         (with-selected-frame frame
                           (when (and (buffer-file-name)
-                                     (string-match-p "/daily/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}\.org$" (buffer-file-name)))
-                            (my/daily-scratch-setup)))))))
+                                     (string-match-p "/daily/[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$"
+                                                     (buffer-file-name)))
+                            (my/daily-scratch-setup))))))))
 
 (add-hook 'after-make-frame-functions 'my/daily-scratch-frame-setup)
