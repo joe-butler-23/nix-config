@@ -290,3 +290,19 @@
 
 ;; Global Auto Revert
 (global-auto-revert-mode 1)
+
+;; Org-roam configuration
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "~/documents/projects/org-roam"))
+  (org-roam-dailies-directory "daily/")
+  :config
+  (org-roam-db-autosync-mode)
+
+  ;; Daily templates
+  (setq org-roam-dailies-capture-templates
+        '(("d" "default" entry
+           "* %?"
+           :target (file+head "%<%Y-%m-%d>.org"
+                              "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n* morning\n** priorities\n\n* session log\n\n* habits\n** TODO exercise :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n** TODO review inbox :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n\n* metrics\n:PROPERTIES:\n:STEPS: \n:PAGES: \n:EXERCISE_MIN: \n:END:\n\n* scratch\n\n* shutdown\n- [ ] session end protocol completed\n- [ ] inbox processed\n")))))

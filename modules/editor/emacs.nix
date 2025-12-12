@@ -62,6 +62,9 @@
         # Terminal
         vterm
 
+        # Org Mode
+        org-roam
+
         # Theme & UI
         doom-themes # Doom Emacs themes including doom-nord
         doom-modeline
