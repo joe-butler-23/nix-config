@@ -236,54 +236,82 @@
                                   "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n* morning\n** priorities\n\n* session log\n\n* habits\n** TODO exercise :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n** TODO review inbox :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n\n* metrics\n:PROPERTIES:\n:STEPS: \n:PAGES: \n:EXERCISE_MIN: \n:END:\n\n* scratch\n\n* shutdown\n- [ ] session end protocol completed\n- [ ] inbox processed\n"
                                   ("scratch"))))))
 
-(defun my/daily-scratch-quick-capture ()
-  "Open today's daily note narrowed to scratch section with timestamp and clean UI."
-  (interactive)
+;; daily-scratch popup configuration (based on refile.org pattern)
+(add-to-list 'display-buffer-alist
+             '("daily-scratch"
+               (display-buffer-pop-up-frame)
+               (window-parameters (mode-line-format . none))))
 
+(defun my/daily-scratch-cleanup-empty-timestamps ()
+  "Remove timestamp entries that have nothing after the dash."
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward "^[0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\} - *$" nil t)
+      (delete-region (line-beginning-position) (1+ (line-end-position))))))
+
+(defun my/daily-scratch-setup ()
+  "Setup for daily scratch: hide modeline, narrow to scratch, and add timestamps."
+  (when (and (buffer-file-name)
+             (string-match-p "/daily/[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$" (buffer-file-name)))
+    ;; Hide modeline (from refile.org)
+    (setq-local mode-line-format nil)
+    ;; Suppress server message
+    (setq-local server-visit-hook nil)
+    ;; Clear echo area
+    (message "")
+
+    ;; Clean up empty timestamp entries first
+    (my/daily-scratch-cleanup-empty-timestamps)
+
+    ;; Jump to scratch section and narrow to it
+    (widen)  ;; Ensure we're not already narrowed
+    (goto-char (point-min))
+    (when (re-search-forward "^\\* scratch$" nil t)
+      ;; Found scratch section, narrow to it
+      (org-narrow-to-subtree)
+      ;; Go to end of subtree to insert timestamp
+      (goto-char (point-max))
+      ;; Insert newline if needed
+      (unless (bolp) (insert "\n"))
+      ;; Insert timestamp
+      (let ((time-string (format-time-string "%H:%M:%S")))
+        (insert time-string " - "))
+      ;; Auto-save after insertion (silently, from refile.org)
+      (when (buffer-modified-p)
+        (let ((inhibit-message t))
+          (save-buffer))
+        ;; Clear the echo area again after save
+        (message "")))))
+
+(defun my/daily-scratch-quick-capture ()
+  "Open today's daily note for scratch capture (hook will handle setup)."
+  (interactive)
   ;; Get today's daily note path
   (let* ((daily-name (format-time-string "%Y-%m-%d.org"))
          (daily-path (expand-file-name daily-name
                                        (expand-file-name org-roam-dailies-directory
                                                          org-roam-directory))))
-
     ;; Create the file if it doesn't exist using capture
     (unless (file-exists-p daily-path)
       (org-roam-dailies-capture-today t "d"))
+    ;; Open the file directly (hooks will handle the rest)
+    (find-file daily-path)))
 
-    ;; Open the file directly
-    (find-file daily-path)
-
-    ;; Clean UI setup (from refile.org)
-    (setq-local mode-line-format nil)
-    (setq-local server-visit-hook nil)
-    (message "")  ;; Clear echo area
-
-    ;; Jump to scratch section and narrow to it
-    (widen)  ;; Ensure we're not already narrowed
-    (goto-char (point-min))
-    (if (re-search-forward "^\\* scratch$" nil t)
-        (progn
-          ;; Found scratch section, narrow to it
-          (org-narrow-to-subtree)
-          ;; Go to end of subtree to insert timestamp
-          (goto-char (point-max))
-          ;; Insert newline if needed
-          (unless (bolp) (insert "\n"))
-          ;; Insert timestamp
-          (let ((time-string (format-time-string "%H:%M:%S")))
-            (insert time-string " - "))
-          ;; Auto-save silently
-          (let ((inhibit-message t))
-            (save-buffer))
-          (message ""))  ;; Clear echo area after save
-      ;; Scratch section not found - shouldn't happen with template
-      (message "Warning: scratch section not found"))))
-
-;; Disable server tutorial message globally
+;; Disable server tutorial message globally (from refile.org)
 (setq server-client-instructions nil)
 
-;; Add display-buffer rule for daily-scratch frame
-(add-to-list 'display-buffer-alist
-             '("daily-scratch"
-               (display-buffer-pop-up-frame)
-               (window-parameters (mode-line-format . none))))
+;; Hook for emacsclient visits (fires when client opens a file)
+(add-hook 'server-visit-hook 'my/daily-scratch-setup)
+
+;; Also hook into frame creation to handle buffer reuse (from refile.org)
+(defun my/daily-scratch-frame-setup (frame)
+  "Run daily-scratch setup when a new frame is created showing a daily note."
+  ;; Small delay to ensure buffer is fully loaded in frame (from refile.org)
+  (run-with-timer 0.1 nil
+                  (lambda ()
+                    (with-selected-frame frame
+                      (when (and (buffer-file-name)
+                                 (string-match-p "/daily/[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$" (buffer-file-name)))
+                        (my/daily-scratch-setup))))))
+
+(add-hook 'after-make-frame-functions 'my/daily-scratch-frame-setup)
