@@ -227,4 +227,4 @@
            "* %? :scratch:"
            :target (file+head+olp "%<%Y-%m-%d>.org"
                                   "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n* morning\n** priorities\n\n* session log\n\n* habits\n** TODO exercise :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n** TODO review inbox :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n\n* metrics\n:PROPERTIES:\n:STEPS: \n:PAGES: \n:EXERCISE_MIN: \n:END:\n\n* scratch\n\n* shutdown\n- [ ] session end protocol completed\n- [ ] inbox processed\n"
-                                  ("scratch")))))
+                                  ("scratch"))))))
