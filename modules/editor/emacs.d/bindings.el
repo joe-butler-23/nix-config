@@ -72,8 +72,12 @@
   ;; Org Mode
   "o"   '(:ignore t :which-key "org mode")
   "of"  '(org-roam-node-find :which-key "find node")
-  "ot"  '(org-roam-dailies-goto-today :which-key "today")
+  "od"  '(org-roam-dailies-goto-today :which-key "today")
   "oc"  '(org-roam-dailies-capture-today :which-key "capture today")
+  "ot"  '(org-todo :which-key "cycle todo")
+  "ox"  '(org-toggle-checkbox :which-key "toggle checkbox")
+  "oi"  '(org-narrow-to-subtree :which-key "zoom in (narrow)")
+  "oo"  '(widen :which-key "zoom out (widen)")
 
   ;; Toggles
   "t"   '(:ignore t :which-key "toggles")
