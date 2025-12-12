@@ -81,7 +81,7 @@ When learning opportunity detected:
 - Create quick reference materials
 
 **Planned Implementation** (medium/low priority):
-- File as beads issues for structured tracking
+- File as Org tasks for structured tracking
 - Plan implementation in future sessions
 - Gather additional examples before acting
 

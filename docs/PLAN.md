@@ -12,7 +12,7 @@
 - Just initialized
 
 ## Implementation Roadmap
-[We will need to define the associated tasks and then use them to populate beads]
+[We will need to define the associated tasks and then use them to populate Org tasks]
 
 ---
 *This is a living document. Update as project evolves.*

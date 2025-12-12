@@ -28,8 +28,6 @@ hardware-*.nix
 .ssh/
 .gnupg/
   .gemini/
-.beads/
-
 # SOPS secrets (encrypted secrets.yaml should NOT be ignored)
 secrets/*.tmp
 secrets/*.bak

@@ -19,4 +19,4 @@ All notable changes to this project will be documented in this file.
 - `emacs.nix`: Removed and re-added `gcmh` in the process; added new packages.
 
 ### Removed
-- `TODO.md`: Replaced by `beads` for task tracking.
+- `TODO.md`: Replaced by Org-mode for task tracking.

@@ -34,7 +34,6 @@ Skills use three-level loading for context efficiency:
 ## Active Skills
 
 ### Core Workflow Skills
-- **beads-workflow** - Task management through beads (bd) system
 - **session-handoff** - Quality gates and session completion checklists
 - **self-learning** - Skill improvement and evolution patterns
 
