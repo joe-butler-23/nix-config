@@ -44,6 +44,13 @@
   ;; Whether Y yanks to the end of the line
   (evil-want-Y-yank-to-eol t))
 
+;; Enable evil mode in certain buffers
+(with-eval-after-load 'evil
+  (dolist (mode '(debugger-mode
+                  backtrace-mode
+                  help-mode))
+    (evil-set-initial-state mode 'normal)))
+
 (use-package evil-collection
   :after evil
   :ensure t
