@@ -268,13 +268,16 @@
       (widen)  ;; Ensure we're not already narrowed
       (goto-char (point-min))
       (when (re-search-forward "^\\* scratch$" nil t)
-        ;; Found scratch section
-        (let* ((time-string (format-time-string "%H:%M:%S"))
-               (timestamp-entry (format "%s - " time-string))
-               (scratch-header-pos (line-beginning-position)))
+        ;; Found scratch section - NARROW to it first
+        (org-narrow-to-subtree)
 
-          (goto-char scratch-header-pos)
-          (forward-line 1) ; Move past the "* scratch" heading
+        ;; Now insert timestamp at top of the narrowed buffer (skipping the heading)
+        (goto-char (point-min)) ; Go to start of narrowed buffer (the heading)
+        (forward-line 1) ; Move past the "* scratch" heading
+
+        (let* ((time-string (format-time-string "%H:%M:%S"))
+               (timestamp-entry (format "%s - " time-string)))
+
           (insert timestamp-entry "\n")
           (forward-line -1) ; Move back to the beginning of the newly inserted line
           (end-of-line)
