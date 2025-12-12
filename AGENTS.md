@@ -37,7 +37,6 @@ This repo uses Org-mode workflows for task tracking.
 Guidelines:
 
 - Capture meaningful work as an Org task
-- Keep at most one task truly in-progress
 - Record brief progress notes and decisions in the task
 
 ### AI Planning Documents
