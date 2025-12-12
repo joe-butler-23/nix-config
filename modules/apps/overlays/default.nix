@@ -137,6 +137,7 @@ _: _final: prev: {
     buildInputs = [
       prev.stdenv.cc.cc.lib
       prev.zlib
+      prev.openssl
     ];
 
     sourceRoot = ".";
