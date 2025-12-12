@@ -8,6 +8,7 @@
     (import ./recent-files-launcher.nix {inherit pkgs;})
     (import ./copy-prompt.nix {inherit pkgs user;})
     (import ./directory-finder.nix {inherit pkgs;})
+    (import ./daily-scratch.nix {inherit pkgs;})
     (import ./study-focus.nix {inherit pkgs;})
     (import ./maintenance/weekly-review.nix {inherit pkgs;})
   ];
