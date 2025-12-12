@@ -138,90 +138,7 @@
                  nil
                  (window-parameters (mode-line-format . none)))))
 
-;; refile.org popup configuration
-(add-to-list 'display-buffer-alist
-             '("refile\\.org"
-               (display-buffer-pop-up-frame)
-               (window-parameters (mode-line-format . none))))
 
-(defun my/refile-org-setup ()
-  "Setup for refile.org: hide modeline, manage date headers, and add timestamps."
-  (when (string-match-p "refile\\.org" (buffer-name))
-    ;; Hide modeline
-    (setq-local mode-line-format nil)
-    ;; Suppress server message by advising the message function temporarily
-    (setq-local server-visit-hook nil)
-    ;; Clear echo area
-    (message "")
-
-    (let* ((date-string (format-time-string "%Y-%m-%d"))
-           (day-name (format-time-string "%A"))
-           (date-header (format "* %s %s" date-string day-name))
-           (time-string (format-time-string "%H:%M:%S"))
-           (timestamp-entry (format "%s - " time-string))
-           (header-regex (concat "^\\* " (regexp-quote date-string)))
-           header-pos)
-
-      ;; Clean up empty timestamp entries first
-      (my/refile-org-cleanup-empty-timestamps)
-
-      ;; Search for today's date header
-      (save-excursion
-        (goto-char (point-min))
-        (when (re-search-forward header-regex nil t)
-          (setq header-pos (line-beginning-position))))
-
-      (if header-pos
-          ;; Date header exists - add timestamp at top
-          (progn
-            (goto-char header-pos)
-            (forward-line 1)
-            (insert timestamp-entry "\n")
-            (forward-line -1)
-            (end-of-line))
-
-        ;; Date header doesn't exist - create it
-        (progn
-          (goto-char (point-max))
-          (unless (bolp) (insert "\n"))
-          (unless (= (point) (point-min))
-            (insert "\n"))
-          (insert date-header "\n")
-          (insert timestamp-entry)
-          (end-of-line)))
-
-      ;; Auto-save after insertion (silently)
-      (when (buffer-modified-p)
-        (let ((inhibit-message t))
-          (save-buffer))
-        ;; Clear the echo area again after save
-        (message "")))))
-
-(defun my/refile-org-cleanup-empty-timestamps ()
-  "Remove timestamp entries that have nothing after the dash."
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward "^[0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\} - *$" nil t)
-      (delete-region (line-beginning-position) (1+ (line-end-position))))))
-
-;; Disable server tutorial message globally
-(setq server-client-instructions nil)
-
-;; Hook for emacsclient visits (fires when client opens a file)
-(add-hook 'server-visit-hook 'my/refile-org-setup)
-
-;; Also hook into frame creation to handle buffer reuse
-(defun my/refile-org-frame-setup (frame)
-  "Run refile setup when a new frame is created showing refile.org."
-  ;; Small delay to ensure buffer is fully loaded in frame
-  (run-with-timer 0.1 nil
-                  (lambda ()
-                    (with-selected-frame frame
-                      (when (and (buffer-file-name)
-                                 (string-match-p "refile\\.org" (buffer-file-name)))
-                        (my/refile-org-setup))))))
-
-(add-hook 'after-make-frame-functions 'my/refile-org-frame-setup)
 
 (use-package embark-consult
   :ensure t
@@ -305,4 +222,9 @@
         '(("d" "default" entry
            "* %?"
            :target (file+head "%<%Y-%m-%d>.org"
-                              "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n* morning\n** priorities\n\n* session log\n\n* habits\n** TODO exercise :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n** TODO review inbox :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n\n* metrics\n:PROPERTIES:\n:STEPS: \n:PAGES: \n:EXERCISE_MIN: \n:END:\n\n* scratch\n\n* shutdown\n- [ ] session end protocol completed\n- [ ] inbox processed\n")))))
+                              "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n* morning\n** priorities\n\n* session log\n\n* habits\n** TODO exercise :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n** TODO review inbox :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n\n* metrics\n:PROPERTIES:\n:STEPS: \n:PAGES: \n:EXERCISE_MIN: \n:END:\n\n* scratch\n\n* shutdown\n- [ ] session end protocol completed\n- [ ] inbox processed\n"))
+          ("s" "scratch" entry
+           "* %? :scratch:"
+           :target (file+head+olp "%<%Y-%m-%d>.org"
+                                  "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n* morning\n** priorities\n\n* session log\n\n* habits\n** TODO exercise :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n** TODO review inbox :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n\n* metrics\n:PROPERTIES:\n:STEPS: \n:PAGES: \n:EXERCISE_MIN: \n:END:\n\n* scratch\n\n* shutdown\n- [ ] session end protocol completed\n- [ ] inbox processed\n"
+                                  ("scratch")))))
