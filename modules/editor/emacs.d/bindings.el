@@ -72,7 +72,7 @@
   ;; Org Mode
   "o"   '(:ignore t :which-key "org mode")
   "of"  '(org-roam-node-find :which-key "find node")
-  "od"  '((lambda () (interactive) (org-roam-dailies-goto-today nil "d")) :which-key "today")
+  "od"  '((lambda () (interactive) (org-roam-dailies-capture-today t "d")) :which-key "today")
   "oc"  '(org-roam-dailies-capture-today :which-key "capture today")
   "ot"  '(org-todo :which-key "cycle todo")
   "ox"  '(org-toggle-checkbox :which-key "toggle checkbox")
