@@ -25,7 +25,7 @@ _: {
     bind = $mainMod, Y, exec, app2unit hyprshot -m region --clipboard-only
     bind = $mainMod, SPACE, exec, wlr-which-key
     bind = $mainMod, a, exec, anki-forge-launcher
-    bind = $mainMod, R, exec, emacsclient -n -a "" -e "(my/daily-scratch-open)"
+    bind = $mainMod, R, exec, emacsclient -n -r -F '((name . "daily-scratch"))' -e '(my/daily-scratch-open)'
 
     # fzf launcher
     bind = $mainMod, F, exec, app2unit $terminal --class filepicker -e fzf-file-launcher
