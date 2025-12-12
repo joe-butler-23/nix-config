@@ -64,6 +64,30 @@
       (make-frame `((name . ,my/daily-scratch-frame-name)
                     (frame-title-format . ,my/daily-scratch-frame-name)))))
 
+(defun my/daily-scratch--indirect-buffer-name (file)
+  (format " *daily-scratch:%s*"
+          (file-name-nondirectory (file-name-sans-extension file))))
+
+(defun my/daily-scratch--get-or-create-indirect-buffer (base-buffer file)
+  "Return an indirect buffer for BASE-BUFFER's FILE.
+
+Using an indirect buffer keeps narrowing/point local to the scratch view, so
+opening the scratch does not \"zoom\" other windows that display the same file."
+  (let* ((name (my/daily-scratch--indirect-buffer-name file))
+         (existing (get-buffer name)))
+    (cond
+     ((and existing
+           (buffer-live-p existing)
+           (eq (buffer-base-buffer existing) base-buffer))
+      existing)
+     (existing
+      (kill-buffer existing)
+      (with-current-buffer base-buffer
+        (clone-indirect-buffer name nil)))
+     (t
+      (with-current-buffer base-buffer
+        (clone-indirect-buffer name nil))))))
+
 (defun my/daily-scratch--goto-scratch-heading ()
   (widen)
   (goto-char (point-max))
@@ -101,20 +125,21 @@
   (interactive)
   (let* ((file (my/daily-scratch--today-file)))
     (my/daily-scratch--ensure-file file)
-    (let* ((buffer (find-file-noselect file))
+    (let* ((base-buffer (find-file-noselect file))
+           (scratch-buffer (my/daily-scratch--get-or-create-indirect-buffer base-buffer file))
            (frame (my/daily-scratch--get-or-create-frame)))
       (when (frame-live-p frame)
         (set-frame-parameter frame 'frame-title-format my/daily-scratch-frame-name)
         (raise-frame frame)
         (select-frame-set-input-focus frame))
       (with-selected-frame frame
-        (switch-to-buffer buffer)
+        (switch-to-buffer scratch-buffer)
         (setq-local mode-line-format nil)
         (ignore-errors (my/daily-scratch--prepare-visible-buffer))
         (run-with-idle-timer my/daily-scratch-auto-save-delay
                              nil
                              #'my/daily-scratch--maybe-save
-                             buffer)))))
+                             base-buffer)))))
 
 ;; Disable server tutorial message globally (from refile.org)
 (setq server-client-instructions nil)
