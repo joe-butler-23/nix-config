@@ -1,79 +1,87 @@
-{pkgs}:
-pkgs.writeShellScriptBin "rofi-daily-capture" ''
-  set -euo pipefail
+{pkgs}: let
+  rofiTheme = ''
+    listview { enabled: false; }
+    textbox-prompt-colon { enabled: false; }
 
-  ROFI="${pkgs.rofi}/bin/rofi"
-  DATE="${pkgs.coreutils}/bin/date"
-  MKDIR="${pkgs.coreutils}/bin/mkdir"
-  PRINTF="${pkgs.coreutils}/bin/printf"
-  AWK="${pkgs.gawk}/bin/awk"
+    window {
+      border: 2px;
+      border-color: #000000;
+      border-radius: 12px;
+      width: 25%;
+      padding: 6px;
+    }
 
-  DAILY_DIR="$HOME/documents/projects/org-roam/daily"
-  TEMPLATE_FILE="$HOME/.emacs.d/templates/daily.org.tmpl"
-  ROFI_THEME_STR='listview { enabled: false; } textbox-prompt-colon { enabled: false; } window { border: 2px; border-color: #ffffff; border-radius: 12px; width: 25%; } mainbox { padding: 12px; } entry { padding: 6px; }'
+    mainbox { padding: 6px; }
+    inputbar { padding: 6px; }
+    prompt { padding: 0px; }
+    entry  { padding: 0px; }
+  '';
+in
+  pkgs.writeShellApplication {
+    name = "rofi-daily-capture";
+    runtimeInputs = with pkgs; [coreutils rofi gnused];
 
-  ensure_daily_file() {
-    local file="$1"
+    text = ''
+      DAILY_DIR="$HOME/documents/projects/org-roam/daily"
+      TEMPLATE_FILE="$HOME/documents/projects/org-roam/templates/daily.org.tmpl"
 
-    "$MKDIR" -p "$DAILY_DIR"
+      # Interpolate the theme string. Quote it for the shell.
+      ROFI_THEME_STR="${rofiTheme}"
 
-    if [ -f "$file" ]; then
-      return 0
-    fi
+      ensure_daily_file() {
+        local file="$1"
 
-    local date_title
-    local date_scheduled
-    date_title="$("$DATE" "+%Y-%m-%d %A")"
-    date_scheduled="$("$DATE" "+%Y-%m-%d %a")"
+        mkdir -p "$DAILY_DIR"
 
-    if [ -f "$TEMPLATE_FILE" ]; then
-      "$AWK" -v title="$date_title" -v scheduled="$date_scheduled" '
-        {
-          gsub(/\\{\\{DATE_TITLE\\}\\}/, title)
-          gsub(/\\{\\{DATE_SCHEDULED\\}\\}/, scheduled)
-          print
-        }
-      ' "$TEMPLATE_FILE" >"$file"
-    else
-      "$PRINTF" "%s\n" \
-        "#+title: $date_title" \
-        "#+filetags: :daily:" \
-        "" \
-        "* scratch" \
-        "" \
-        >"$file"
-    fi
+        if [ -f "$file" ]; then
+          return 0
+        fi
+
+        local date_title
+        local date_scheduled
+        date_title="$(date "+%Y-%m-%d %A")"
+        date_scheduled="$(date "+%Y-%m-%d %a")"
+
+        if [ -f "$TEMPLATE_FILE" ]; then
+          sed -e "s/{{DATE_TITLE}}/$date_title/" \
+              -e "s/{{DATE_SCHEDULED}}/$date_scheduled/" \
+              "$TEMPLATE_FILE" > "$file"
+        else
+          printf "%s\n" \
+            "#+title: $date_title" \
+            "#+filetags: :daily:" \
+            "" \
+            "* scratch" \
+            "" \
+            >"$file"
+        fi
+      }
+
+      main() {
+        local today
+        local file
+        today="$(date "+%Y-%m-%d")"
+        file="$DAILY_DIR/$today.org"
+
+        # Capture note
+        local note
+        # echo "" | ... prevents rofi from waiting on stdin
+        note=$(echo "" | rofi -dmenu -p "scratch: " -theme-str "$ROFI_THEME_STR" || true)
+
+        # Trim whitespace using sed
+        note=$(echo "$note" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+
+        if [ -z "$note" ]; then
+          exit 0
+        fi
+
+        ensure_daily_file "$file"
+
+        local ts
+        ts="$(date "+%H:%M:%S")"
+        echo "$ts - $note" >> "$file"
+      }
+
+      main
+    '';
   }
-
-  trim() {
-    local s="$1"
-    s="''${s#"''${s%%[![:space:]]*}"}"
-    s="''${s%"''${s##*[![:space:]]}"}"
-    "$PRINTF" "%s" "$s"
-  }
-
-  prompt_note() {
-    "$PRINTF" "%s\n" "" | "$ROFI" -dmenu -p "scratch: " -theme-str "$ROFI_THEME_STR" || true
-  }
-
-  main() {
-    local today
-    local file
-    today="$("$DATE" "+%Y-%m-%d")"
-    file="$DAILY_DIR/$today.org"
-
-    local note
-    note="$(trim "$(prompt_note)")"
-    if [ -z "''${note}" ]; then
-      exit 0
-    fi
-
-    ensure_daily_file "$file"
-
-    local ts
-    ts="$("$DATE" "+%H:%M:%S")"
-    "$PRINTF" "%s\n" "$ts - $note" >>"$file"
-  }
-
-  main
-''

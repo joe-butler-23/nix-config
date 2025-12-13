@@ -260,3 +260,20 @@
            :target (file+head+olp "%<%Y-%m-%d>.org"
                                   (my/org-roam-dailies--file-head)
                                   ("scratch"))))))
+
+;; Org-ql configuration
+(use-package org-ql
+  :ensure t
+  :custom
+  (org-ql-ask-to-save-buffers nil)
+  :config
+  ;; Load dynamic block support
+  (require 'org-ql-search)
+
+  ;; Define custom views
+  (add-to-list 'org-ql-views
+               '("All tasks (tasks.org)"
+                 :buffers-files ("/home/joebutler/documents/projects/tasks.org")
+                 :query t
+                 :sort (todo priority date)
+                 :title "All tasks (tasks.org)")))
