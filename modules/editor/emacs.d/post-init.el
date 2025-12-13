@@ -224,17 +224,39 @@
   :config
   (org-roam-db-autosync-mode)
 
+  (defun my/org-roam-dailies--template-file ()
+    (expand-file-name "templates/daily.org.tmpl" minimal-emacs-user-directory))
+
+  (defun my/org-roam-dailies--file-head ()
+    (let* ((template-file (my/org-roam-dailies--template-file))
+           (template
+            (with-temp-buffer
+              (insert-file-contents template-file)
+              (buffer-string))))
+      (setq template
+            (replace-regexp-in-string
+             "{{DATE_TITLE}}"
+             (format-time-string "%Y-%m-%d %A")
+             template
+             t
+             t))
+      (setq template
+            (replace-regexp-in-string
+             "{{DATE_SCHEDULED}}"
+             (format-time-string "%Y-%m-%d %a")
+             template
+             t
+             t))
+      template))
+
   ;; Daily templates
   (setq org-roam-dailies-capture-templates
         '(("d" "default" entry
            "* %?"
            :target (file+head "%<%Y-%m-%d>.org"
-                              "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n* morning\n** priorities\n\n* session log\n\n* habits\n** TODO exercise :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n** TODO review inbox :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n\n* metrics\n:PROPERTIES:\n:STEPS: \n:PAGES: \n:EXERCISE_MIN: \n:END:\n\n* scratch\n\n* shutdown\n- [ ] session end protocol completed\n- [ ] inbox processed\n"))
+                              (my/org-roam-dailies--file-head)))
           ("s" "scratch" entry
            "* %? :scratch:"
            :target (file+head+olp "%<%Y-%m-%d>.org"
-                                  "#+title: %<%Y-%m-%d %A>\n#+filetags: :daily:\n\n* morning\n** priorities\n\n* session log\n\n* habits\n** TODO exercise :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n** TODO review inbox :habit:\n   SCHEDULED: <%<%Y-%m-%d %a> +1d>\n\n* metrics\n:PROPERTIES:\n:STEPS: \n:PAGES: \n:EXERCISE_MIN: \n:END:\n\n* scratch\n\n* shutdown\n- [ ] session end protocol completed\n- [ ] inbox processed\n"
+                                  (my/org-roam-dailies--file-head)
                                   ("scratch"))))))
-
-;; Load daily-scratch configuration
-(load (expand-file-name "daily-scratch.el" minimal-emacs-user-directory))

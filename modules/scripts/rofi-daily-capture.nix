@@ -5,13 +5,12 @@ pkgs.writeShellScriptBin "rofi-daily-capture" ''
   ROFI="${pkgs.rofi}/bin/rofi"
   DATE="${pkgs.coreutils}/bin/date"
   MKDIR="${pkgs.coreutils}/bin/mkdir"
-  MKTEMP="${pkgs.coreutils}/bin/mktemp"
-  MV="${pkgs.coreutils}/bin/mv"
   PRINTF="${pkgs.coreutils}/bin/printf"
   AWK="${pkgs.gawk}/bin/awk"
 
   DAILY_DIR="$HOME/documents/projects/org-roam/daily"
-  ROFI_THEME_STR='listview { enabled: false; } textbox-prompt-colon { enabled: false; } window { border: 2px; }'
+  TEMPLATE_FILE="$HOME/.emacs.d/templates/daily.org.tmpl"
+  ROFI_THEME_STR='listview { enabled: false; } textbox-prompt-colon { enabled: false; } window { border: 2px; border-color: #ffffff; border-radius: 12px; width: 25%; } mainbox { padding: 12px; } entry { padding: 6px; }'
 
   ensure_daily_file() {
     local file="$1"
@@ -27,61 +26,23 @@ pkgs.writeShellScriptBin "rofi-daily-capture" ''
     date_title="$("$DATE" "+%Y-%m-%d %A")"
     date_scheduled="$("$DATE" "+%Y-%m-%d %a")"
 
-    "$PRINTF" "%s\n" \
-      "#+title: $date_title" \
-      "#+filetags: :daily:" \
-      "" \
-      "* morning" \
-      "** priorities" \
-      "" \
-      "* session log" \
-      "" \
-      "* habits" \
-      "** TODO exercise :habit:" \
-      "   SCHEDULED: <$date_scheduled +1d>" \
-      "** TODO review inbox :habit:" \
-      "   SCHEDULED: <$date_scheduled +1d>" \
-      "" \
-      "* metrics" \
-      ":PROPERTIES:" \
-      ":STEPS:" \
-      ":PAGES:" \
-      ":EXERCISE_MIN:" \
-      ":END:" \
-      "" \
-      "* scratch" \
-      "" \
-      "* shutdown" \
-      "- [ ] session end protocol completed" \
-      "- [ ] inbox processed" \
-      >"$file"
-  }
-
-  insert_under_scratch() {
-    local file="$1"
-    local entry="$2"
-    local tmp
-    tmp="$("$MKTEMP")"
-
-    "$AWK" -v entry="$entry" '
-      BEGIN { inserted = 0 }
-      {
-        print
-        if (!inserted && $0 ~ /^\\* scratch([[:space:]]|$)/) {
-          print entry
-          inserted = 1
+    if [ -f "$TEMPLATE_FILE" ]; then
+      "$AWK" -v title="$date_title" -v scheduled="$date_scheduled" '
+        {
+          gsub(/\\{\\{DATE_TITLE\\}\\}/, title)
+          gsub(/\\{\\{DATE_SCHEDULED\\}\\}/, scheduled)
+          print
         }
-      }
-      END {
-        if (!inserted) {
-          print ""
-          print "* scratch"
-          print entry
-        }
-      }
-    ' "$file" >"$tmp"
-
-    "$MV" "$tmp" "$file"
+      ' "$TEMPLATE_FILE" >"$file"
+    else
+      "$PRINTF" "%s\n" \
+        "#+title: $date_title" \
+        "#+filetags: :daily:" \
+        "" \
+        "* scratch" \
+        "" \
+        >"$file"
+    fi
   }
 
   trim() {
@@ -111,7 +72,7 @@ pkgs.writeShellScriptBin "rofi-daily-capture" ''
 
     local ts
     ts="$("$DATE" "+%H:%M:%S")"
-    insert_under_scratch "$file" "$ts - $note"
+    "$PRINTF" "%s\n" "$ts - $note" >>"$file"
   }
 
   main

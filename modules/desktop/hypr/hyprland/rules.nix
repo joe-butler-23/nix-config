@@ -36,15 +36,6 @@ _: {
        windowrulev2 = bordercolor rgb(ffffff), title:^(refile\.org.*)$
        windowrulev2 = rounding 15, title:^(refile\.org.*)$
 
-       # daily scratch - quick capture to org-roam daily
-       windowrulev2 = float, title:^(daily-scratch.*)$
-       windowrulev2 = center, title:^(daily-scratch.*)$
-       windowrulev2 = size 400 400, title:^(daily-scratch.*)$
-       windowrulev2 = stayfocused, title:^(daily-scratch.*)$
-       windowrulev2 = bordersize 1, title:^(daily-scratch.*)$
-       windowrulev2 = bordercolor rgb(ffffff), title:^(daily-scratch.*)$
-       windowrulev2 = rounding 15, title:^(daily-scratch.*)$
-
        # brave-wrapper
        windowrulev2 = float, class:^(brave-wrapper)$
        windowrulev2 = center, class:^(brave-wrapper)$
