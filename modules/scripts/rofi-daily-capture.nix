@@ -11,6 +11,7 @@ pkgs.writeShellScriptBin "rofi-daily-capture" ''
   AWK="${pkgs.gawk}/bin/awk"
 
   DAILY_DIR="$HOME/documents/projects/org-roam/daily"
+  ROFI_THEME_STR='listview { enabled: false; } textbox-prompt-colon { enabled: false; } window { border: 2px; }'
 
   ensure_daily_file() {
     local file="$1"
@@ -66,7 +67,7 @@ pkgs.writeShellScriptBin "rofi-daily-capture" ''
       BEGIN { inserted = 0 }
       {
         print
-        if (!inserted && $0 ~ /^\\* scratch\\b/) {
+        if (!inserted && $0 ~ /^\\* scratch([[:space:]]|$)/) {
           print entry
           inserted = 1
         }
@@ -83,8 +84,15 @@ pkgs.writeShellScriptBin "rofi-daily-capture" ''
     "$MV" "$tmp" "$file"
   }
 
+  trim() {
+    local s="$1"
+    s="''${s#"''${s%%[![:space:]]*}"}"
+    s="''${s%"''${s##*[![:space:]]}"}"
+    "$PRINTF" "%s" "$s"
+  }
+
   prompt_note() {
-    "$PRINTF" "%s\n" "" | "$ROFI" -dmenu -p "scratch" -theme-str 'listview { enabled: false; } textbox-prompt-colon { enabled: false; }' || true
+    "$PRINTF" "%s\n" "" | "$ROFI" -dmenu -p "scratch: " -theme-str "$ROFI_THEME_STR" || true
   }
 
   main() {
@@ -94,8 +102,8 @@ pkgs.writeShellScriptBin "rofi-daily-capture" ''
     file="$DAILY_DIR/$today.org"
 
     local note
-    note="$(prompt_note)"
-    if [ -z "''${note:-}" ]; then
+    note="$(trim "$(prompt_note)")"
+    if [ -z "''${note}" ]; then
       exit 0
     fi
 
