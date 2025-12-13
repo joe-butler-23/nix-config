@@ -277,3 +277,6 @@
                  :query t
                  :sort (todo priority date)
                  :title "All tasks (tasks.org)")))
+
+;; Add tasks.org to agenda files
+(add-to-list 'org-agenda-files "/home/joebutler/documents/projects/tasks.org")
