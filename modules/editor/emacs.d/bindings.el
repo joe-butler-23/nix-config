@@ -71,6 +71,7 @@
 
   ;; Org Mode
   "o"   '(:ignore t :which-key "org mode")
+  "oa"  '(org-agenda :which-key "agenda")
   "of"  '(org-roam-node-find :which-key "find node")
   "od"  '((lambda () (interactive) (org-roam-dailies-capture-today t "d")) :which-key "today")
   "oc"  '(org-roam-dailies-capture-today :which-key "capture today")

@@ -218,65 +218,13 @@
 ;; Org-roam configuration
 (use-package org-roam
   :ensure t
-  :custom
-  (org-roam-directory (file-truename "~/documents/projects/org-roam"))
-  (org-roam-dailies-directory "daily/")
+  :commands (org-roam-node-find org-roam-node-insert org-roam-capture org-roam-dailies-capture-today)
+  :init
+  (setq org-roam-directory (expand-file-name "~/documents/projects/org-roam")
+        org-roam-dailies-directory "daily/")
   :config
-  (org-roam-db-autosync-mode)
-
-  (defun my/org-roam-dailies--template-file ()
-    (expand-file-name "templates/daily.org.tmpl" minimal-emacs-user-directory))
-
-  (defun my/org-roam-dailies--file-head ()
-    (let* ((template-file (my/org-roam-dailies--template-file))
-           (template
-            (with-temp-buffer
-              (insert-file-contents template-file)
-              (buffer-string))))
-      (setq template
-            (replace-regexp-in-string
-             "{{DATE_TITLE}}"
-             (format-time-string "%Y-%m-%d %A")
-             template
-             t
-             t))
-      (setq template
-            (replace-regexp-in-string
-             "{{DATE_SCHEDULED}}"
-             (format-time-string "%Y-%m-%d %a")
-             template
-             t
-             t))
-      template))
-
-  ;; Daily templates
-  (setq org-roam-dailies-capture-templates
-        '(("d" "default" entry
-           "* %?"
-           :target (file+head "%<%Y-%m-%d>.org"
-                              (my/org-roam-dailies--file-head)))
-          ("s" "scratch" entry
-           "* %? :scratch:"
-           :target (file+head+olp "%<%Y-%m-%d>.org"
-                                  (my/org-roam-dailies--file-head)
-                                  ("scratch"))))))
-
-;; Org-ql configuration
-(use-package org-ql
-  :ensure t
-  :custom
-  (org-ql-ask-to-save-buffers nil)
-  :config
-  ;; Load dynamic block support
-  (require 'org-ql-search)
-
-  ;; Define custom views
-  (add-to-list 'org-ql-views
-               '("All tasks (tasks.org)"
-                 :buffers-files ("/home/joebutler/documents/projects/tasks.org")
-                 :query t
-                 :sort (todo priority date)
-                 :title "All tasks (tasks.org)")))
+  (when (file-directory-p org-roam-directory)
+    (org-roam-db-autosync-mode)))
 
 ;; Add tasks.org to agenda files
 (add-to-list 'org-agenda-files "/home/joebutler/documents/projects/tasks.org")
