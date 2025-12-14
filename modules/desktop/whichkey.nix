@@ -30,7 +30,7 @@
         submenu:
           - key: "p"
             desc: prompt library
-            cmd: foot -a filepicker -e copy-prompt
+            cmd: kitty --single-instance --class filepicker copy-prompt
           - key: "n"
             desc: nix
             cmd: kitty -d /home/joebutler/nix-config gemini
@@ -38,7 +38,7 @@
       # clipboard
       - key: "c"
         desc: clipboard
-        cmd: foot -a clipse -D ~ sh -lc clipse
+        cmd: kitty --single-instance --class clipse -d ~ sh -lc clipse
 
       # files
       - key: "f"
@@ -46,13 +46,13 @@
         submenu:
           - key: "f"
             desc: find files
-            cmd: foot -a filepicker -e fzf-file-launcher
+            cmd: kitty --single-instance --class filepicker fzf-file-launcher
           - key: "p"
             desc: path
-            cmd: foot -a dirfinder -e directory-finder
+            cmd: kitty --single-instance --class dirfinder directory-finder
           - key: "r"
             desc: recent files
-            cmd: foot -a filepicker -e recent-files-launcher
+            cmd: kitty --single-instance --class filepicker recent-files-launcher
 
       # workflows
       - key: "p"

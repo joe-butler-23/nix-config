@@ -35,6 +35,12 @@ _: {
     bind = $mainMod, k, movefocus, u
     bind = $mainMod, j, movefocus, d
 
+    # Resize windows
+    binde = $mainMod CTRL, h, resizeactive, -20 0
+    binde = $mainMod CTRL, l, resizeactive, 20 0
+    binde = $mainMod CTRL, k, resizeactive, 0 -20
+    binde = $mainMod CTRL, j, resizeactive, 0 20
+
     bind = $mainMod, 1, workspace, 1
     bind = $mainMod, 2, workspace, 2
     bind = $mainMod, 3, workspace, 3
