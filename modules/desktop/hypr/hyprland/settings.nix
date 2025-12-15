@@ -1,9 +1,8 @@
 {config, ...}: {
   wayland.windowManager.hyprland.settings = {
     monitor = [
-      ",preferred,auto,auto"
-      "eDP-1, preferred, 0x0, 1"
-      "desc:Dell Inc. DELL S2721HSX, 1920x1080@75, 1920x0, 1"
+      "eDP-1,1920x1080@60,0x0,1"
+      "desc:Dell Inc. DELL S2721HSX,1920x1080@75,0x0,1"
     ];
 
     env = [

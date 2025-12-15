@@ -33,14 +33,17 @@
   home-manager.users.${user} = {
     services.kanshi.enable = true;
 
+    # Kanshi dynamically manages monitor enable/disable based on connected displays
+    # The 'exec hyprctl reload' is REQUIRED to apply Hyprland's monitor configuration after kanshi enables/disables outputs
+    # DO NOT REMOVE the exec commands - they ensure resolution and scaling settings from hyprland/settings.nix are applied
     xdg.configFile."kanshi/config".text = ''
       profile undocked {
-        output eDP-1 enable position 0,0 mode 1920x1080
+        output eDP-1 enable
         exec hyprctl reload
       }
 
       profile docked {
-        output "Dell Inc. DELL S2721HSX 1991Q83" enable position 0,0 mode 1920x1080
+        output "Dell Inc. DELL S2721HSX 1991Q83" enable
         output eDP-1 disable
         exec hyprctl reload
       }
