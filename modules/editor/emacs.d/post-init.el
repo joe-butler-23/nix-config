@@ -48,8 +48,42 @@
 (with-eval-after-load 'evil
   (dolist (mode '(debugger-mode
                   backtrace-mode
-                  help-mode))
-    (evil-set-initial-state mode 'normal)))
+                  help-mode
+                  org-agenda-mode
+                  messages-buffer-mode
+                  info-mode
+                  man-mode
+                  calendar-mode
+                  compilation-mode
+                  occur-mode))
+    (evil-set-initial-state mode 'normal))
+
+  ;; Explicitly bind keys for Org Agenda in Normal state
+  (evil-define-key 'normal org-agenda-mode-map
+    "j" 'org-agenda-next-line
+    "k" 'org-agenda-previous-line
+    "t" 'org-agenda-todo
+    "q" 'org-agenda-quit
+    "r" 'org-agenda-redo
+    "g" 'org-agenda-redo
+    "s" 'org-agenda-schedule
+    "e" 'org-agenda-entry-text-mode
+    "f" 'org-agenda-follow-mode
+    "RET" 'org-agenda-goto
+    "TAB" 'org-agenda-goto)
+
+  ;; Explicitly bind keys for Debugger Mode in Normal state
+  (evil-define-key 'normal debugger-mode-map
+    "j" 'debugger-step-through
+    "k" 'previous-line
+    "q" 'top-level
+    "y" 'evil-yank
+    "C-a" 'mark-whole-buffer
+    "RET" 'debugger-step-through)
+
+  ;; Auto-refresh agenda when a task state changes
+  (add-hook 'org-trigger-hook 'save-buffer)
+  (advice-add 'org-agenda-todo :after 'org-agenda-redo))
 
 (use-package evil-collection
   :after evil
@@ -226,5 +260,28 @@
   (when (file-directory-p org-roam-directory)
     (org-roam-db-autosync-mode)))
 
-;; Add tasks.org to agenda files
-(add-to-list 'org-agenda-files "/home/joebutler/documents/projects/tasks.org")
+;; Org Mode Configuration
+(use-package org
+  :ensure nil
+  :config
+  ;; Add tasks.org to agenda files
+  (add-to-list 'org-agenda-files "/home/joebutler/documents/projects/tasks.org")
+
+  ;; Enable automatic ID generation and tracking
+  (require 'org-id)
+  (setq org-id-track-globally t)
+
+  ;; Custom Agenda Views
+  (setq org-agenda-custom-commands
+        '(("o" "Organised Agenda"
+           ((tags-todo "SCHEDULED<\"<today>\""
+                       ((org-agenda-overriding-header "Overdue Tasks")))
+            (agenda ""
+                    ((org-agenda-span 100)              ; Custom span for 100 days
+                     (org-agenda-show-all-dates nil)    ; Don't show empty days
+                     (org-agenda-skip-deadline-if-done t)
+                     (org-agenda-skip-scheduled-if-done t)))
+            (alltodo ""
+                     ((org-agenda-overriding-header "Unscheduled Tasks")
+                      (org-agenda-skip-function
+                       '(org-agenda-skip-entry-if 'scheduled 'deadline 'timestamp)))))))))

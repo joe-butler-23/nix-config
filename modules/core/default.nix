@@ -15,6 +15,7 @@
   boot.loader.timeout = 2;
   boot.tmp.useTmpfs = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelModules = ["uinput"];
   boot.consoleLogLevel = 0;
   boot.kernelParams = ["quiet"];
   boot.plymouth.enable = true;
