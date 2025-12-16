@@ -8,9 +8,9 @@
     export PATH="${pkgs.gum}/bin:${pkgs.coreutils}/bin:${pkgs.findutils}/bin:${pkgs.sudo}/bin:${pkgs.kitty}/bin:${pkgs.emacs}/bin:${pkgs.libnotify}/bin:${pkgs.gnugrep}/bin:${pkgs.gawk}/bin:${pkgs.util-linux}/bin:${pkgs.systemd}/bin:${pkgs.hyprland}/bin:$PATH"
 
     # === CONFIGURATION ===
-    readonly PROJECTS_DIR="$HOME/documents/projects"
+    readonly PROJECTS_DIR="$HOME/projects"
     readonly HOOKS_DIR="$PROJECTS_DIR/sys-arc/project-hooks"
-    readonly LOG_FILE="$HOME/documents/sys-arc/browsing-log.org"
+    readonly LOG_FILE="$HOME/projects/sys-arc/browsing-log.org"
     readonly REQUIRED_PASS="wastingtime"
 
     # Capture original arguments (URLs) immediately

@@ -60,19 +60,19 @@
         submenu:
           - key: "h"
             desc: health
-            cmd: ~/documents/projects/sys-arc/project-hooks/health.sh
+            cmd: ~/projects/sys-arc/project-hooks/health.sh
           - key: "e"
             desc: emacs
-            cmd: ~/documents/projects/sys-arc/project-hooks/learn-emacs.sh
+            cmd: ~/projects/sys-arc/project-hooks/learn-emacs.sh
           - key: "n"
             desc: nix
-            cmd: ~/documents/projects/sys-arc/project-hooks/learn-nix.sh
+            cmd: ~/projects/sys-arc/project-hooks/learn-nix.sh
           - key: "m"
             desc: misc
-            cmd: ~/documents/projects/sys-arc/project-hooks/misc.sh
+            cmd: ~/projects/sys-arc/project-hooks/misc.sh
           - key: "a"
             desc: sys arc
-            cmd: ~/documents/projects/sys-arc/project-hooks/sys-arc.sh
+            cmd: ~/projects/sys-arc/project-hooks/sys-arc.sh
 
       # workflows
       - key: "w"

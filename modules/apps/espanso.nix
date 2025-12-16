@@ -8,7 +8,7 @@
     # Triage Instructions
 
     ## Input Analysis
-    Read the contents of `~/documents/projects/refile.org`.
+    Read the contents of `~/projects/refile.org`.
     If the file is empty, stop and report **"Inbox Zero"**.
 
     ## Classification Logic (The Sorter)
@@ -105,8 +105,203 @@ in {
         }
 
         {
+          trigger = ":date";
+          replace = "{{mydate}}";
+          vars = [
+            {
+              name = "mydate";
+              type = "date";
+              params = {
+                format = "%Y-%m-%d";
+              };
+            }
+          ];
+        }
+
+        {
+          trigger = ":datetime";
+          replace = "{{mydatetime}}";
+          vars = [
+            {
+              name = "mydatetime";
+              type = "date";
+              params = {
+                format = "%Y-%m-%d %H:%M";
+              };
+            }
+          ];
+        }
+
+        {
           trigger = ":triage";
           replace = triageInstructionsMd;
+        }
+      ];
+    };
+
+    # match/ai-prompts.yml
+    matches.ai-prompts = {
+      matches = [
+        {
+          trigger = ":ai_test_prompt";
+          replace = "This is a test prompt to verify Espanso AI integration is working correctly.";
+        }
+
+        {
+          trigger = ":ai_code_review";
+          replace = ''
+            Please review the following code for:
+            - Correctness and logic errors
+            - Performance issues
+            - Security vulnerabilities
+            - Code style and best practices
+            - Missing error handling
+
+            Provide specific suggestions for improvement.
+          '';
+        }
+
+        {
+          trigger = ":ai_debug";
+          replace = ''
+            I'm encountering an issue with the following code. Please help me:
+            1. Identify the root cause of the problem
+            2. Explain why it's happening
+            3. Suggest a fix with explanation
+            4. Recommend how to prevent similar issues
+
+            Code and error:
+          '';
+        }
+
+        {
+          trigger = ":ai_explain";
+          replace = ''
+            Please explain the following code:
+            - What does it do?
+            - How does it work?
+            - What are the key concepts?
+            - Are there any edge cases or gotchas?
+
+            Code:
+          '';
+        }
+
+        {
+          trigger = ":ai_docs";
+          replace = ''
+            Please generate clear, concise documentation for the following code:
+            - Brief description of purpose
+            - Parameters and return values
+            - Usage examples
+            - Any important notes or warnings
+
+            Code:
+          '';
+        }
+
+        {
+          trigger = ":ai_refactor";
+          replace = ''
+            Please suggest refactoring improvements for the following code:
+            - Improve readability
+            - Reduce complexity
+            - Follow best practices
+            - Maintain existing functionality
+
+            Code:
+          '';
+        }
+
+        {
+          trigger = ":ai_test";
+          replace = ''
+            Please generate comprehensive tests for the following code:
+            - Unit tests for core functionality
+            - Edge cases and error conditions
+            - Mock external dependencies
+            - Aim for high coverage
+
+            Code:
+          '';
+        }
+      ];
+    };
+
+    # match/shortcuts.yml
+    matches.shortcuts = {
+      matches = [
+        # Symbols and Unicode
+        {
+          trigger = ":shrug";
+          replace = "¯\\_(ツ)_/¯";
+        }
+
+        {
+          trigger = ":check";
+          replace = "✓";
+        }
+
+        {
+          trigger = ":cross";
+          replace = "✗";
+        }
+
+        {
+          trigger = ":arrow";
+          replace = "→";
+        }
+
+        {
+          trigger = ":larrow";
+          replace = "←";
+        }
+
+        # Common phrases
+        {
+          trigger = ":lgtm";
+          replace = "Looks good to me!";
+        }
+
+        {
+          trigger = ":wip";
+          replace = "Work in progress";
+        }
+
+        {
+          trigger = ":todo";
+          replace = "TODO: ";
+        }
+
+        {
+          trigger = ":fixme";
+          replace = "FIXME: ";
+        }
+
+        # Git shortcuts
+        {
+          trigger = ":gitfix";
+          replace = "fix: ";
+        }
+
+        {
+          trigger = ":gitfeat";
+          replace = "feat: ";
+        }
+
+        {
+          trigger = ":gitdocs";
+          replace = "docs: ";
+        }
+
+        {
+          trigger = ":gitrefactor";
+          replace = "refactor: ";
+        }
+
+        {
+          trigger = ":gitchore";
+          replace = "chore: ";
         }
       ];
     };

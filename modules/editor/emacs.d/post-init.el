@@ -254,7 +254,7 @@
   :ensure t
   :commands (org-roam-node-find org-roam-node-insert org-roam-capture org-roam-dailies-capture-today)
   :init
-  (setq org-roam-directory (expand-file-name "~/documents/projects/org-roam")
+  (setq org-roam-directory (expand-file-name "~/projects/org-roam")
         org-roam-dailies-directory "daily/")
   :config
   (when (file-directory-p org-roam-directory)
@@ -265,7 +265,7 @@
   :ensure nil
   :config
   ;; Add tasks.org to agenda files
-  (add-to-list 'org-agenda-files "/home/joebutler/documents/projects/tasks.org")
+  (add-to-list 'org-agenda-files "/home/joebutler/projects/tasks.org")
 
   ;; Enable automatic ID generation and tracking
   (require 'org-id)

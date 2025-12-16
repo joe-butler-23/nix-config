@@ -30,6 +30,7 @@
       noto-fonts-color-emoji
 
       qmk
+      sops
       imagemagick
       brightnessctl
 

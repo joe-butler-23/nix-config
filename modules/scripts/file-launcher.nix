@@ -5,12 +5,11 @@ pkgs.writeShellScriptBin "fzf-file-launcher" ''
 
   # Configuration
   ALLOWED_DIRS=(
-    "$HOME/bin"
-    "$HOME/Downloads"
-    "$HOME/Documents"
+    "$HOME/downloads"
+    "$HOME/documents"
+    "$HOME/projects"
     "$HOME/development"
     "$HOME/nix-config"
-    "$HOME/org"
   )
 
   EDITOR_CMD="${pkgs.xfce.mousepad}/bin/mousepad"

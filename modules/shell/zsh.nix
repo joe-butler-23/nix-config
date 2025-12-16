@@ -65,6 +65,14 @@
 
       # --- PART B: MAIN CONFIGURATION ---
       (lib.mkOrder 1200 ''
+        # Load Home Manager session variables (needed for non-login shells, e.g. kitty tabs)
+        if [[ -r "/etc/profiles/per-user/${user}/etc/profile.d/hm-session-vars.sh" ]]; then
+          source "/etc/profiles/per-user/${user}/etc/profile.d/hm-session-vars.sh"
+        elif [[ -r "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]]; then
+          source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+        fi
+        export SOPS_AGE_KEY_FILE="''${SOPS_AGE_KEY_FILE:-/home/${user}/nix-config/secrets/sops.agekey}"
+
         # Load p10k config
         source ~/.p10k.zsh
 

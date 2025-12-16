@@ -25,7 +25,7 @@ The user has a NixOS machine with a zsh-p10k-kitty shell setup.
 Never create a new project manually. Use the automated initialization script:
 
 ```bash
-~/documents/projects/sys-arc/scripts/sys-arc-init <project-name>
+~/projects/sys-arc/scripts/sys-arc-init <project-name>
 ```
 
 ## Workflow

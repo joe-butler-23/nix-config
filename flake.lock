@@ -6,17 +6,17 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1765556877,
-        "narHash": "sha256-OeAO0YTKE0S91KnYAV0zcHlCsMY05xzMAA59WhZmziY=",
+        "lastModified": 1765890967,
+        "narHash": "sha256-eeJYcfH/lZZP2KQwSKs5eYrCJqUSDqGB90/DO+zZmOI=",
         "ref": "refs/heads/main",
-        "rev": "af80407fd7884f972605705a1816151f422f5be0",
-        "revCount": 35,
+        "rev": "d0c8ecd0bde23ef1a3844a6d92b589c656e41e5a",
+        "revCount": 36,
         "type": "git",
-        "url": "file:///home/joebutler/utilities/ai"
+        "url": "file:///home/joebutler/projects/sys-arc/ai"
       },
       "original": {
         "type": "git",
-        "url": "file:///home/joebutler/utilities/ai"
+        "url": "file:///home/joebutler/projects/sys-arc/ai"
       }
     },
     "anki-forge": {

@@ -24,7 +24,7 @@ in
     text = ''
       set -euo pipefail
 
-      REFILE_FILE="$HOME/documents/projects/refile.org"
+      REFILE_FILE="$HOME/projects/refile.org"
 
       # Interpolate the theme string. Quote it for the shell.
       ROFI_THEME_STR="${rofiTheme}"
