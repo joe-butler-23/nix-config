@@ -1,90 +1,105 @@
-# Project Guidelines
+# Project: nix-config
 
-[Project-specific context/guidelines should be added here]
+## External File Loading
+CRITICAL: When you encounter a file reference (e.g., @modules/file.md), use your Read tool to load it when relevant to the task.
 
-# Agent Operating System (AOS)
+Instructions:
+- Load references based on actual need
+- Treat loaded content as mandatory instructions
+- Follow references recursively when needed
 
-This document defines standard operating procedures for AI Agents working within this repo.
+## Critical Imports
+@~/projects/sys-arc/ai/tooling/file-imports/agents-header.md
 
-SYSTEM ENVIRONMENT WARNING
+## Project Overview
 
-The user has a NixOS machine with a zsh-p10k-kitty shell setup.
+NixOS system configuration managed declaratively with Home Manager. This repository contains system-level configuration, dotfiles, custom scripts, and editor setup.
 
-1. Read-only system: use `nix develop` or `nix-shell` instead of global installs
-2. Git awareness: keep changes tracked so Nix sees them
-3. Paths: always use absolute paths
+**Environment:**
+- NixOS with Hyprland window manager
+- ZSH with Powerlevel10k prompt
+- Kitty terminal
+- Read-only system (use `nix develop` or `nix-shell` instead of global installs)
+- Git-tracked changes required for Nix awareness
 
-## System Architecture
+**Key Directories:**
+- `modules/editor/`
+- `modules/scripts/` - Custom Nix-based scripts (see [DEVELOPMENT.md](modules/scripts/DEVELOPMENT.md) for script creation guide)
 
-1. Memory layer (Org tasks/notes): source of truth for what to do
-2. Procedural layer (skills): source of truth for how to do it
-3. Self-learning: improve procedures over time
+**Task Tracking:** This project uses **org-mode** for task management.
 
-## Creating New Projects
-
-Never create a new project manually. Use the automated initialization script:
-
-```bash
-~/projects/sys-arc/scripts/sys-arc-init <project-name>
-```
-
-## Workflow
-
-### Task Tracking
-
-This repo uses Org-mode workflows for task tracking.
-
-Guidelines:
-
-- Capture meaningful work as an Org task
-- Record brief progress notes and decisions in the task
-
-### AI Planning Documents
-
-Store ephemeral AI planning/design docs in `history/` (and optionally add `history/` to `.gitignore`).
+## Available Skills (Progressive Disclosure)
 
 <skills_system priority="1">
 
 ## Available Skills
 
+<!-- SKILLS_TABLE_START -->
+<usage>
+When users ask you to perform tasks, check if any of the available skills below can help complete the task more effectively. Skills provide specialized capabilities and domain knowledge.
+
+How to use skills:
+- Invoke: Bash("openskills read <skill-name>")
+- The skill content will load with detailed instructions on how to complete the task
+- Base directory provided in output for resolving bundled resources (references/, scripts/, assets/)
+
+Usage notes:
+- Only use skills listed in <available_skills> below
+- Do not invoke a skill that is already loaded in your context
+- Each skill invocation is stateless
+</usage>
+
 <available_skills>
 
 <skill>
+<name>create-AGENTSmd</name>
+<description>Guide for creating the AGENTS.md context file. You MUST use this skill when setting up a new project or migrating an existing one to the standard AI context architecture and a new AGENTS.md is required,</description>
+<location>global</location>
+</skill>
+
+<skill>
+<name>create-commands</name>
+<description>Guide for creating global, cross-platform commands (Gemini, Claude, OpenCode). You MUST use this skill when asked to create a new command, reusable prompt, or workflow for AI agents.</description>
+<location>global</location>
+</skill>
+
+<skill>
+<name>create-skill</name>
+<description>Guide for creating effective skills. This skill MUST be used when users want to create a new skill (or update an existing skill) that extends AI's capabilities with specialized knowledge, workflows, or tool integrations.</description>
+<location>global</location>
+</skill>
+
+<skill>
 <name>documentation</name>
-<description>Technical documentation creation and improvement with emphasis on clarity and conciseness.</description>
-<location>project</location>
+<description>Technical documentation creation and improvement with emphasis on clarity, conciseness, and maximum communication efficiency. You MUST use for any technical documentation such as README files, API docs, project documentation, code comments, and any written content.</description>
+<location>global</location>
+</skill>
+
+<skill>
+<name>executing-plans</name>
+<description>Guide to effective task execution. You MUST activate this skill when a user asks you to complete a pre-determined task, i.e. from tasks.org</description>
+<location>global</location>
+</skill>
+
+<skill>
+<name>gum-shell-scripts</name>
+<description>Create interactive shell scripts using Charm's gum library. You MUST use when building command-line interfaces, user prompts, selection menus, or any interactive terminal UI.</description>
+<location>global</location>
 </skill>
 
 <skill>
 <name>local-development</name>
-<description>Troubleshooting for NixOS + ZSH + Hyprland development environment.</description>
-<location>project</location>
+<description>NixOS development environment guide. MUST use when engaged in coding work.</description>
+<location>global</location>
 </skill>
 
 <skill>
-<name>project-initializer</name>
-<description>Guide for establishing new projects with AI tooling (hooks, skills, MCP, Nix) and optional Org-based task tracking.</description>
-<location>project</location>
-</skill>
-
-<skill>
-<name>self-learning</name>
-<description>Continuous improvement system: detect patterns and evolve skills.</description>
-<location>project</location>
-</skill>
-
-<skill>
-<name>session-handoff</name>
-<description>Mandatory workflow for ending coding sessions: capture remaining work, run checks, and sync changes.</description>
-<location>project</location>
-</skill>
-
-<skill>
-<name>skill-creator</name>
-<description>Guide for creating effective skills.</description>
-<location>project</location>
+<name>task-refinement</name>
+<description>Mandatory workflow for refining vaguely defined tasks.</description>
+<location>global</location>
 </skill>
 
 </available_skills>
+<!-- SKILLS_TABLE_END -->
 
 </skills_system>
