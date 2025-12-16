@@ -32,39 +32,29 @@ The `opencode` overlay (`modules/overlays/default.nix`) now defines a custom der
 
 The `opencode` package is now available through `pkgsUnstable` (as defined in `flake.nix` and `modules/home/packages.nix`). Simply reference `pkgsUnstable.opencode` where needed in your Home Manager or NixOS configurations.
 
-### How to Update `opencode` (Agent Instructions)
-
-To update `opencode`, you must follow this procedure:
-
-1.  **Get Latest Version**:
-    ```bash
-    curl -s https://api.github.com/repos/sst/opencode/releases/latest | jq -r '.tag_name' | sed 's/^v//'
-    ```
-2.  **Get New Hash**:
-    Run `nix-prefetch-url` with the new version number found above:
-    ```bash
-    nix-prefetch-url "https://github.com/sst/opencode/releases/download/v<VERSION>/opencode-linux-x64.tar.gz"
-    ```
-3.  **Update File**:
-    Edit `modules/apps/overlays/default.nix`:
-    *   Update `version = "..."` with the new version.
-    *   Update `sha256 = "..."` in the `opencode` section with the new hash.
-
 ## Gemini CLI Overlay (`gemini-cli`)
 
 ### Problem Statement
 
-The `gemini-cli` package in `nixpkgs` is often behind the rapid release cycle of the official GitHub repository. The goal was to provide the latest version directly from the official binary/script releases.
+The `gemini-cli` package in `nixpkgs` is often behind the rapid release cycle of the official GitHub repository. The goal was to provide the latest version directly from the official binary/script releases, including preview versions.
 
 ### Approach and Solution
 
-*   **Source**: Fetches the pre-bundled `gemini.js` executable from the official `google-gemini/gemini-cli` GitHub Releases.
+*   **Source**: Fetches the pre-bundled `gemini.js` executable from the official `google-gemini/gemini-cli` GitHub Releases (uses tags to find latest previews).
 *   **Wrapper**: Wraps the JavaScript file with the system's `nodejs` runtime using `makeWrapper` to create an executable `gemini` command.
 *   **Automation**: Includes an `updateScript` to automate version bumping.
 
-### How to Use
+## Claude Code Overlay (`claude-code`)
 
-The `gemini-cli` package is now available through `pkgsUnstable`.
+### Description
+
+Provides the `claude` CLI tool (Claude Code) from Anthropic. It fetches the package from the NPM registry.
+
+### Implementation
+
+*   Fetches the tarball from the NPM registry (`registry.npmjs.org`).
+*   Extracts the package.
+*   Wraps the internal `cli.js` with `nodejs` to create the `claude` executable.
 
 ## Codex Overlay (`codex`)
 
@@ -78,19 +68,23 @@ Provides the `codex` CLI tool from the `openai/codex` repository. It fetches the
 *   Installs the binary to `$out/bin/codex`.
 *   Uses `autoPatchelfHook` for dynamic linking on NixOS.
 
-### How to Use
-
-The `codex` package is now available through `pkgs`.
-
 ### How to Update Overlays
 
-To update these packages, follow this procedure:
+To update these packages, you can use the embedded scripts or follow this procedure:
 
 1.  **Get Latest Versions**:
     ```bash
-    curl -s https://api.github.com/repos/google-gemini/gemini-cli/releases/latest | jq -r '.tag_name' | sed 's/^v//'
+    # Gemini (checking tags for previews)
+    curl -s "https://api.github.com/repos/google-gemini/gemini-cli/tags" | jq -r '.[0].name' | sed 's/^v//'
+
+    # OpenCode
     curl -s https://api.github.com/repos/sst/opencode/releases/latest | jq -r '.tag_name' | sed 's/^v//'
+
+    # Codex
     curl -s https://api.github.com/repos/openai/codex/releases/latest | jq -r '.tag_name' | sed 's/^rust-v//'
+
+    # Claude Code
+    curl -s https://registry.npmjs.org/@anthropic-ai/claude-code/latest | jq -r .version
     ```
 2.  **Get New Hash**:
     Run `nix-prefetch-url` with the new version number found above:
@@ -98,6 +92,7 @@ To update these packages, follow this procedure:
     nix-prefetch-url "https://github.com/google-gemini/gemini-cli/releases/download/v<VERSION>/gemini.js"
     nix-prefetch-url "https://github.com/sst/opencode/releases/download/v<VERSION>/opencode-linux-x64.tar.gz"
     nix-prefetch-url "https://github.com/openai/codex/releases/download/rust-v<VERSION>/codex-x86_64-unknown-linux-gnu.tar.gz"
+    nix-prefetch-url "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-<VERSION>.tgz"
     ```
 3.  **Update Files**:
     Edit `modules/apps/overlays/default.nix`:

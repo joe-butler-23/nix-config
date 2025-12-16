@@ -8,7 +8,8 @@
 # TOOLS PROVIDED:
 # 1. opencode: The OpenCode CLI agent (https://github.com/sst/opencode)
 # 2. gemini: The Google Gemini CLI (https://github.com/google-gemini/gemini-cli)
-# 3. codex: The OpenAI Codex CLI (https://github.com/openai/codex)
+# 3. claude: The Anthropic Claude Code CLI (https://github.com/anthropics/claude-code)
+# 4. codex: The OpenAI Codex CLI (https://github.com/openai/codex)
 #
 # USAGE:
 # These packages become available in `pkgs` automatically (e.g., pkgs.opencode).
@@ -20,11 +21,11 @@
 _: _final: prev: {
   opencode = prev.stdenv.mkDerivation rec {
     pname = "opencode";
-    version = "1.0.141";
+    version = "1.0.163";
 
     src = prev.fetchurl {
       url = "https://github.com/sst/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      sha256 = "16sqzbiv2wyralrg979qdsn94hidwmgnhnxq0qna2vbbr28j4i42";
+      sha256 = "0388cgpnp9l0qndxgwcy7xyhyfjdncnyh98hgra95pz178bnvqlr";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
@@ -54,14 +55,14 @@ _: _final: prev: {
       echo "Latest version: $LATEST"
 
       # Update version in file
-      sed -i "s/version = \".*\";/version = \"$LATEST\";/" modules/apps/overlays/default.nix
+      sed -i "s/version = ".*";/version = \"$LATEST\";/" modules/apps/overlays/default.nix
 
       # Calculate new hash
       URL="https://github.com/sst/opencode/releases/download/v$LATEST/opencode-linux-x64.tar.gz"
       HASH=$(nix-prefetch-url "$URL")
 
       # Update hash in file
-      sed -i "s|sha256 = \".*\";|sha256 = \"$HASH\";|" modules/apps/overlays/default.nix
+      sed -i "s|sha256 = ".*";|sha256 = \"$HASH\";|" modules/apps/overlays/default.nix
 
       echo "Updated opencode to $LATEST with hash $HASH"
     '';
@@ -76,11 +77,11 @@ _: _final: prev: {
 
   gemini = prev.stdenv.mkDerivation rec {
     pname = "gemini-cli";
-    version = "0.21.0-preview.0";
+    version = "0.21.0-preview.5";
 
     src = prev.fetchurl {
       url = "https://github.com/google-gemini/gemini-cli/releases/download/v${version}/gemini.js";
-      sha256 = "0ywb0xjqa7kyiqqyffg3vfn252v76wkvnppch4inj44nfm6v0bna";
+      sha256 = "143sybwg0djwafrkapkbpwcrih4v651i25i932npjj2g3hyzr3ca";
     };
 
     dontUnpack = true;
@@ -98,19 +99,19 @@ _: _final: prev: {
       set -euo pipefail
 
       # Get latest version
-      LATEST=$(curl -s https://api.github.com/repos/google-gemini/gemini-cli/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+      LATEST=$(curl -s "https://api.github.com/repos/google-gemini/gemini-cli/tags" | jq -r '.[0].name' | sed 's/^v//')
 
       echo "Latest version: $LATEST"
 
       # Update version in file
-      sed -i "s/version = \".*\";/version = \"$LATEST\";/" modules/apps/overlays/default.nix
+      sed -i "s/version = ".*";/version = \"$LATEST\";/" modules/apps/overlays/default.nix
 
       # Calculate new hash
       URL="https://github.com/google-gemini/gemini-cli/releases/download/v$LATEST/gemini.js"
       HASH=$(nix-prefetch-url "$URL")
 
       # Update hash in file
-      sed -i "s|sha256 = \".*\";|sha256 = \"$HASH\";|" modules/apps/overlays/default.nix
+      sed -i "s|sha256 = ".*";|sha256 = \"$HASH\";|" modules/apps/overlays/default.nix
 
       echo "Updated gemini-cli to $LATEST with hash $HASH"
     '';
@@ -123,13 +124,60 @@ _: _final: prev: {
     };
   };
 
+  claude = prev.stdenv.mkDerivation rec {
+    pname = "claude-code";
+    version = "2.0.70";
+
+    src = prev.fetchurl {
+      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
+      sha256 = "0lgir5afswfrvxz7qb151f3fx2facnwiydsha248xsjv56v75pbh";
+    };
+
+    nativeBuildInputs = [prev.makeWrapper];
+
+    installPhase = ''
+      mkdir -p $out/libexec $out/bin
+      cp -r * $out/libexec/
+      makeWrapper ${prev.nodejs}/bin/node $out/bin/claude \
+        --add-flags "$out/libexec/cli.js"
+    '';
+
+    passthru.updateScript = prev.writeShellScript "update-claude-code" ''
+      set -euo pipefail
+
+      # Get latest version
+      LATEST=$(curl -s https://registry.npmjs.org/@anthropic-ai/claude-code/latest | jq -r .version)
+
+      echo "Latest version: $LATEST"
+
+      # Update version in file
+      sed -i "s/version = ".*";/version = \"$LATEST\";/" modules/apps/overlays/default.nix
+
+      # Calculate new hash
+      URL="https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-$LATEST.tgz"
+      HASH=$(nix-prefetch-url "$URL")
+
+      # Update hash in file
+      sed -i "s|sha256 = ".*";|sha256 = \"$HASH\";|" modules/apps/overlays/default.nix
+
+      echo "Updated claude-code to $LATEST with hash $HASH"
+    '';
+
+    meta = with prev.lib; {
+      description = "Claude Code CLI";
+      homepage = "https://github.com/anthropics/claude-code";
+      license = licenses.isc; # Based on npm output if available, or generic
+      platforms = platforms.all;
+    };
+  };
+
   codex = prev.stdenv.mkDerivation rec {
     pname = "codex";
-    version = "0.71.0";
+    version = "0.73.0";
 
     src = prev.fetchurl {
       url = "https://github.com/openai/codex/releases/download/rust-v${version}/codex-x86_64-unknown-linux-gnu.tar.gz";
-      sha256 = "1y35ywhchrj5g18k8n41f4wy7y4nkj5q6hdgzpxqh8cr8hhy8dqf";
+      sha256 = "0q76xybf03r19a81i7pgpmpgv97v0i6sb1lcm9485ky5p05g7m28";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
@@ -157,14 +205,14 @@ _: _final: prev: {
       echo "Latest version: $LATEST"
 
       # Update version in file
-      sed -i "s/version = \".*\";/version = \"$LATEST\";/" modules/apps/overlays/default.nix
+      sed -i "s/version = ".*";/version = \"$LATEST\";/" modules/apps/overlays/default.nix
 
       # Calculate new hash
       URL="https://github.com/openai/codex/releases/download/rust-v$LATEST/codex-x86_64-unknown-linux-gnu.tar.gz"
       HASH=$(nix-prefetch-url "$URL")
 
       # Update hash in file
-      sed -i "s|sha256 = \".*\";|sha256 = \"$HASH\";|" modules/apps/overlays/default.nix
+      sed -i "s|sha256 = ".*";|sha256 = \"$HASH\";|" modules/apps/overlays/default.nix
 
       echo "Updated codex to $LATEST with hash $HASH"
     '';
