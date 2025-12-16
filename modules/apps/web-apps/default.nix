@@ -64,5 +64,14 @@ in {
       noDisplay = true;
       terminal = false;
     };
+
+    outlook = {
+      name = "Outlook";
+      comment = "Outlook Web App";
+      icon = "microsoft-outlook"; # Assuming a standard icon name might exist or be handled by the system
+      exec = "${pkgs.vivaldi}/bin/vivaldi --app=https://outlook.office.com/mail/";
+      categories = ["Office" "Email"];
+      terminal = false;
+    };
   };
 }

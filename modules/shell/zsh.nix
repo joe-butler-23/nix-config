@@ -6,11 +6,12 @@
   ...
 }: {
   # 1. Symlink P10k Config
-  # Take file from repo and place at ~/.p10k.zsh
-  home.file.".p10k.zsh".source = ./p10k.zsh;
+  # Take file from repo and place at ~/.config/zsh/.p10k.zsh
+  home.file.".config/zsh/.p10k.zsh".source = ./p10k.zsh;
 
   programs.zsh = {
     enable = true;
+    dotDir = ".config/zsh";
 
     # 2. Completion
     enableCompletion = true;
@@ -74,21 +75,10 @@
         export SOPS_AGE_KEY_FILE="''${SOPS_AGE_KEY_FILE:-/home/${user}/nix-config/secrets/sops.agekey}"
 
         # Load p10k config
-        source ~/.p10k.zsh
+        source ~/.config/zsh/.p10k.zsh
 
         # Core options
         setopt correct extendedglob nocaseglob rcexpandparam nocheckjobs numericglobsort nobeep appendhistory histignorealldups autocd inc_append_history histignorespace interactivecomments
-
-        # 1Password injection helper
-        auth() {
-          if command -v op >/dev/null 2>&1 && [ -S "/run/user/$UID/1password/agent.sock" ]; then
-            echo "Injecting 1Password secrets..."
-            eval "$(op inject --in-file "$HOME/.dotfiles/secrets.zsh")"
-            echo "Secrets injected."
-          else
-            echo "Error: 1Password CLI (op) not found or agent socket missing."
-          fi
-        }
 
         # Yazi chooser
         y() {
