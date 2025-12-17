@@ -349,16 +349,17 @@
   (setq org-agenda-time-grid '((daily) () "" ""))
   (setq org-agenda-block-separator ?─)
 
+  ;; Define a spacer with reduced height (half-width effect).
+  (defconst my/org-agenda-spacer (propertize "\n" 'face '(:height 0.4)))
+
   (defun my/org-agenda-move-time-to-end (item)
     "Move time (e.g. 16:00 or 16:00-17:00) from start to end of ITEM."
     (if (string-match
-         "^\\s-*\\([0-9]+:[0-9]+\\(?:-[0-9]+:[0-9]+\\)?\\)\\s-+"
+         "^\\s-*\\([0-9]+:[0-9]+\\(?:-[0-9]+:[0-9]+\\)?\\)\\s-+\\(.*\\)"
          item)
         (let ((time (match-string 1 item))
-              (rest-start (match-end 0)))
-          (concat (substring item rest-start)
-                  " "
-                  (propertize time 'face '(:weight bold :slant italic))))
+              (rest (match-string 2 item)))
+          (concat rest " " (propertize time 'face '(:weight bold :slant italic))))
       item))
 
   ;; Clean agenda prefix formatting (controls what appears before each entry).
@@ -376,7 +377,7 @@
             ;; BLOCK 1: Overdue
             ;; ------------------------------
             (tags "SCHEDULED<\"<today>\"|DEADLINE<\"<today>\""
-                  ((org-agenda-overriding-header "⚠️ Overdue \n")
+                  ((org-agenda-overriding-header "⚠️ Overdue")
                    (org-super-agenda-groups
                     '((:name none :todo "TODO")))))
 
@@ -385,7 +386,7 @@
             ;; ------------------------------
             (agenda ""
                     ((org-agenda-span 1)
-                     (org-agenda-overriding-header "\n📅 Today")
+                     (org-agenda-overriding-header (concat my/org-agenda-spacer "📅 Today"))
                      (org-agenda-format-date "")
                      (org-super-agenda-groups
                       '((:name none :todo "EVENT")
@@ -400,7 +401,7 @@
                     ((org-agenda-span 90)
                      (org-agenda-start-day "+1d")
                      (org-agenda-show-all-dates nil)
-                     (org-agenda-overriding-header "\n🔮 Upcoming \n")
+                     (org-agenda-overriding-header (concat my/org-agenda-spacer "🔮 Upcoming"))
                      (org-super-agenda-groups
                       '((:name none :todo "EVENT"
                                :transformer my/org-agenda-move-time-to-end)
@@ -411,7 +412,7 @@
             ;; BLOCK 4: Unscheduled TODOs
             ;; ------------------------------
             (alltodo ""
-                     ((org-agenda-overriding-header "\n📥 Unscheduled \n")
+                     ((org-agenda-overriding-header (concat my/org-agenda-spacer "📥 Unscheduled"))
                       (org-super-agenda-groups
                        '((:name "Research" :tag "research")
                          (:name none :anything t)))
