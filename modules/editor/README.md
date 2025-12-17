@@ -1,13 +1,13 @@
 # Editor Module - Emacs Configuration
 
-Minimal, performance-optimized Emacs configuration based on [minimal-emacs.d](https://github.com/jamescherti/minimal-emacs.d) principles, integrated with Nix.
+Minimal, performance-optimized Emacs configuration based on [minimal-emacs.d](https://github.com/jamescherti/minimal-emacs.d) principles.
 
 ## Philosophy
 
 - **Start Minimal**
 - **Build Incrementally**: Add features as needed, not speculatively.
 - **Performance**: Sub-second startup required
-- **Nix-First**: Declarative package management via Home Manager + emacs-overlay.
+- **Fast Iteration**: Package management via straight.el for instant updates without system rebuilds.
 
 ## Current Features
 
@@ -41,23 +41,16 @@ Minimal, performance-optimized Emacs configuration based on [minimal-emacs.d](ht
 
 ## Package Management
 
-**Hybrid Approach**:
-1.  **Nix (`emacs.nix`)**: Installs packages (declarative, reproducible).
-2.  **Elisp (`emacs.d/post-init.el`)**: Configures packages (lazy loading, key bindings).
+Packages are managed by [straight.el](https://github.com/radian-software/straight.el), which provides:
+- **Reproducible builds**: Packages pinned to specific commits
+- **Git-based**: Clones packages directly from source repositories
+- **Fast iteration**: Add/update packages without system rebuilds
+- **Lockfile**: `~/.emacs.d/straight/versions/` tracks exact versions
 
 ### How to Add a New Package
 
-1.  **Install via Nix**:
-    Add the package to `extraPackages` in `modules/editor/emacs.nix`:
-    ```nix
-    extraPackages = epkgs: with epkgs; [
-      # ... existing packages
-      new-package
-    ];
-    ```
-
-2.  **Configure via Elisp**:
-    Add the configuration to `modules/editor/emacs.d/post-init.el`:
+1.  **Add to `post-init.el`**:
+    Simply add a `use-package` declaration to `modules/editor/emacs.d/post-init.el`:
     ```elisp
     (use-package new-package
       :defer t                    ; Lazy load
@@ -67,27 +60,48 @@ Minimal, performance-optimized Emacs configuration based on [minimal-emacs.d](ht
       )
     ```
 
-3.  **Apply Changes**:
-    Rebuild your NixOS/Home Manager configuration:
-    ```bash
-    home-manager switch --flake ~/nix-config
+2.  **Restart Emacs**:
+    straight.el will automatically clone and build the package on next launch.
+
+3.  **For GitHub packages**:
+    Specify the repository explicitly:
+    ```elisp
+    (use-package new-package
+      :straight (:host github :repo "user/repo")
+      :config
+      ;; Configuration here
+      )
     ```
+
+### Package Updates
+
+```elisp
+;; Update a specific package
+M-x straight-pull-package RET package-name RET
+
+;; Update all packages
+M-x straight-pull-all
+
+;; Rebuild a package after updates
+M-x straight-rebuild-package RET package-name RET
+```
 
 ## File Structure
 
 ```
 /modules/editor/
 ├── default.nix              # Module aggregator
-├── emacs.nix                # Nix config (programs.emacs + packages)
+├── emacs.nix                # Nix config (installs Emacs binary only)
 ├── README.md                # This file
 └── emacs.d/                 # Emacs Lisp configuration
     ├── early-init.el        # Core performance foundation (DO NOT EDIT)
     ├── init.el              # Entry point & defaults (DO NOT EDIT)
-    ├── post-init.el         # User configuration (Evil, Theme, Packages)
+    ├── post-init.el         # User config (straight.el bootstrap, packages, theme)
+    ├── bindings.el          # Keybindings (SPC leader + general.el)
     └── pre-early-init.el    # Early customizations (e.g. paths)
 ```
 
-> **Note:** `init.el` and `early-init.el` are managed core files. All user customizations should go into `post-init.el`.
+> **Note:** `init.el` and `early-init.el` are managed core files. All user customizations should go into `post-init.el` and `bindings.el`.
 
 ## Troubleshooting
 
@@ -101,9 +115,18 @@ M-x emacs-init-time
 ```
 
 ### Package Issues
-```bash
-# Check package availability in Nix
-nix search nixpkgs#emacsPackages.<package-name>
+```elisp
+;; Check if straight.el loaded a package
+M-x straight-get-recipe RET package-name RET
+
+;; Force rebuild a package
+M-x straight-rebuild-package RET package-name RET
+
+;; Check straight.el build directory
+M-x straight-check-all
+
+;; Reset straight.el completely (nuclear option)
+;; Delete ~/.emacs.d/straight/ and restart Emacs
 ```
 
 ### Native Compilation
@@ -115,16 +138,23 @@ M-x native-compile-async-query
 rm -rf ~/.emacs.d/eln-cache
 ```
 
+### First Launch
+On first launch, straight.el will clone and build all packages (~1-2 minutes). Subsequent launches are instant. You'll see messages like:
+```
+Bootstrapping straight.el...
+Building evil...
+Building magit...
+```
+This is normal and only happens once.
+
 ## References
 
 - [minimal-emacs.d](https://github.com/jamescherti/minimal-emacs.d) - The upstream configuration base.
-- [emacs-overlay](https://github.com/nix-community/emacs-overlay) - Nix package source.
+- [straight.el](https://github.com/radian-software/straight.el) - Package manager.
 - [Evil Documentation](https://evil.readthedocs.io/) - Vim emulation.
 - [use-package](https://github.com/jwiegley/use-package) - Package configuration macro.
 - [Doom Emacs Modules](https://github.com/doomemacs/doomemacs/tree/master/modules) - Reference implementation.
 - [General.el](https://github.com/noctuid/general.el) - Keybinding framework.
 - [Vertico](https://github.com/minad/vertico) - Vertical completion.
-- [gptel](https://github.com/karthink/gptel) - LLM integration.
-- [LSP Mode](https://emacs-lsp.github.io/lsp-mode/) - Language Server Protocol.
 - [Magit](https://magit.vc/) - Git porcelain.
 - [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) - Incremental parsing.
