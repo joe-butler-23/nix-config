@@ -14,6 +14,9 @@
     statix
     nixd
     lm_sensors
+
+    # Temporary: mako notification daemon (should be in home.packages)
+    mako
   ];
 
   # thunar dotfiles in modules/apps/thunar.nix
