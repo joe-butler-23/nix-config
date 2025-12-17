@@ -301,8 +301,9 @@
    (defun my/org-agenda-move-time-to-end (item)
      "Move time (e.g. 16:00 or 16:00-17:00) from start to end of ITEM."
      (if (string-match "^\\s-*\\([0-9]+:[0-9]+\\(?:-[0-9]+:[0-9]+\\)?\\)\\s-+\\(.*\\)" item)
-         (format "%s %s" (match-string 2 item)
-                 (propertize (match-string 1 item) 'face '(:weight bold :slant italic)))
+         (let ((time (match-string 1 item))
+               (rest (match-string 2 item)))
+           (concat rest " " (propertize time 'face '(:weight bold :slant italic))))
        item))
 
    ;; Clean agenda format: remove category prefix, show time at end
@@ -321,7 +322,8 @@
                      '((:name none :todo "TODO")))))
              (agenda ""
                      ((org-agenda-span 1)          ; Focus on TODAY
-                      (org-agenda-overriding-header "📅 Today")
+                      (org-agenda-overriding-header "\n📅 Today")
+                      (org-agenda-format-date "")
                       (org-super-agenda-groups
                        '((:name none :todo "EVENT")
                          (:name none :habit t)
@@ -333,13 +335,13 @@
                      ((org-agenda-span 90)         ; Look ahead 3 months
                       (org-agenda-start-day "+1d") ; Start from tomorrow
                       (org-agenda-show-all-dates nil)  ; Only show dates with items
-                      (org-agenda-overriding-header "🔮 Upcoming")
+                      (org-agenda-overriding-header "\n🔮 Upcoming")
                       (org-super-agenda-groups
                        '((:name none :todo "EVENT" :transformer my/org-agenda-move-time-to-end)
                          (:name none :todo "TODO")
                          (:discard (:anything t))))))
              (alltodo ""
-                      ((org-agenda-overriding-header "📥 Backlog (Unscheduled)")
+                      ((org-agenda-overriding-header "\n📥 Unscheduled")
                        (org-super-agenda-groups
                         '((:name "Research" :tag "research")
                           (:name "General" :anything t)))
