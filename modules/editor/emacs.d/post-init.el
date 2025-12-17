@@ -388,6 +388,9 @@
   ;; Add tasks.org to agenda files.
   (add-to-list 'org-agenda-files "/home/joebutler/projects/tasks.org")
 
+  ;; Set org-agenda to open in the current window
+  (setq org-agenda-window-setup 'current-window)
+
   ;; Org-capture configuration
   ;; Quick task capture to "Unsorted" heading in tasks.org
   (setq org-capture-templates
