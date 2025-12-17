@@ -260,6 +260,23 @@
   (when (file-directory-p org-roam-directory)
     (org-roam-db-autosync-mode)))
 
+;; Org-modern configuration
+(use-package org-modern
+  :ensure t
+  :hook ((org-mode . org-modern-mode)
+         (org-agenda-finalize . org-modern-agenda))
+  :custom
+  (org-modern-todo-faces
+   '(("TODO" :background "#bf616a" :foreground "white" :weight bold)
+     ("EVENT" :background "#b48ead" :foreground "white" :weight bold)
+     ("DONE" :background "#a3be8c" :foreground "white" :weight bold))))
+
+;; Org-super-agenda configuration
+(use-package org-super-agenda
+  :ensure t
+  :config
+  (org-super-agenda-mode))
+
 ;; Org Mode Configuration
 (use-package org
   :ensure nil
@@ -269,19 +286,57 @@
 
   ;; Enable automatic ID generation and tracking
   (require 'org-id)
+  (require 'org-habit)
+  (add-to-list 'org-modules 'org-habit)
   (setq org-id-track-globally t)
 
-  ;; Custom Agenda Views
-  (setq org-agenda-custom-commands
-        '(("o" "Organised Agenda"
-           ((tags-todo "SCHEDULED<\"<today>\""
-                       ((org-agenda-overriding-header "Overdue Tasks")))
-            (agenda ""
-                    ((org-agenda-span 100)              ; Custom span for 100 days
-                     (org-agenda-show-all-dates nil)    ; Don't show empty days
-                     (org-agenda-skip-deadline-if-done t)
-                     (org-agenda-skip-scheduled-if-done t)))
-            (alltodo ""
-                     ((org-agenda-overriding-header "Unscheduled Tasks")
-                      (org-agenda-skip-function
-                       '(org-agenda-skip-entry-if 'scheduled 'deadline 'timestamp)))))))))
+  ;; Define TODO keywords including EVENT
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "EVENT(e)" "|" "DONE(d!)")))
+
+   (defun my/org-agenda-move-time-to-end (item)
+     "Move time (e.g. 16:00 or 16:00-17:00) from start to end of ITEM."
+     (if (string-match "^\\s-*\\([0-9]+:[0-9]+\\(?:-[0-9]+:[0-9]+\\)?\\)\\s-+\\(.*\\)" item)
+         (format "%s %s" (match-string 2 item) (match-string 1 item))
+       item))
+
+   ;; Clean agenda format: remove category prefix, show time at end
+   (setq org-agenda-prefix-format
+         '((agenda . "  %t ")
+           (todo . " %i ")
+           (tags . " %i ")
+           (search . " %i ")))
+
+   ;; Custom Agenda Views
+   (setq org-agenda-custom-commands
+         '(("o" "Organised Agenda"
+            ((tags "SCHEDULED<\"<today>\"|DEADLINE<\"<today>\""
+                   ((org-agenda-overriding-header "⚠️ Overdue")
+                    (org-super-agenda-groups
+                     '((:todo "TODO")))))
+             (agenda ""
+                     ((org-agenda-span 1)          ; Focus on TODAY
+                      (org-agenda-overriding-header "📅 Today")
+                      (org-super-agenda-groups
+                       '((:name none :todo "EVENT")
+                         (:name none :habit t)
+                         (:name none :priority "A")
+                         (:name none :todo "TODO")
+                         (:discard (:anything t))))
+                      (org-agenda-skip-function 'my/skip-past-scheduled)))
+             (agenda ""
+                     ((org-agenda-span 90)         ; Look ahead 3 months
+                      (org-agenda-start-day "+1d") ; Start from tomorrow
+                      (org-agenda-show-all-dates nil)  ; Only show dates with items
+                      (org-agenda-overriding-header "🔮 Upcoming")
+                      (org-super-agenda-groups
+                       '((:name none :todo "EVENT" :transformer my/org-agenda-move-time-to-end)
+                         (:name none :todo "TODO")
+                         (:discard (:anything t))))))
+             (alltodo ""
+                      ((org-agenda-overriding-header "📥 Backlog (Unscheduled)")
+                       (org-super-agenda-groups
+                        '((:name "Research" :tag "research")
+                          (:name "General" :anything t)))
+                       (org-agenda-skip-function
+                        '(org-agenda-skip-entry-if 'scheduled 'deadline 'timestamp)))))))))
