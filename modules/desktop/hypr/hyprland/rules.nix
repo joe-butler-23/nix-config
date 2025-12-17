@@ -44,8 +44,26 @@ _: {
        windowrulev2 = bordersize 1, class:^(brave-wrapper)$
        windowrulev2 = bordercolor rgb(ffffff), class:^(brave-wrapper)$
 
-       # terminal border
-       windowrulev2 = bordersize 1, class:^kitty$
-       windowrulev2 = bordercolor rgb(ffffff), class:^kitty$
+        # nix rebuild
+        windowrulev2 = float, class:^(nix_rebuild)$
+        windowrulev2 = center, class:^(nix_rebuild)$
+        windowrulev2 = size 300 300, class:^(nix_rebuild)$
+        windowrulev2 = stayfocused, class:^(nix_rebuild)$
+        windowrulev2 = bordersize 1, class:^(nix_rebuild)$
+        windowrulev2 = bordercolor rgb(ffffff), class:^(nix_rebuild)$
+        windowrulev2 = rounding 15, class:^(nix_rebuild)$
+
+        # weekly review
+        windowrulev2 = float, class:^(weekly_review)$
+        windowrulev2 = center, class:^(weekly_review)$
+        windowrulev2 = size 600 400, class:^(weekly_review)$
+        windowrulev2 = stayfocused, class:^(weekly_review)$
+        windowrulev2 = bordersize 1, class:^(weekly_review)$
+        windowrulev2 = bordercolor rgb(ffffff), class:^(weekly_review)$
+        windowrulev2 = rounding 15, class:^(weekly_review)$
+
+        # terminal border
+        windowrulev2 = bordersize 1, class:^kitty$
+        windowrulev2 = bordercolor rgb(ffffff), class:^kitty$
   '';
 }

@@ -81,5 +81,16 @@
           - key: "s"
             desc: study mode
             cmd: study-focus toggle
+          - key: "m"
+            desc: weekly maintenance
+            cmd: kitty --class weekly_review weekly-review
+
+      # nix
+      - key: "n"
+        desc: nix
+        submenu:
+          - key: "n"
+            desc: nixos-rebuild
+            cmd: kitty --class nix_rebuild sh -c "sudo nixos-rebuild switch --flake $HOME/nix-config; echo 'Press Enter to close'; read"
   '';
 }
