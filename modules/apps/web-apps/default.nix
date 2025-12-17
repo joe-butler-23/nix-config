@@ -5,7 +5,6 @@
   ...
 }: let
   # Helper to create a first-run preferences file to suppress extension popups
-
   unhook-extension = pkgs.stdenv.mkDerivation {
     name = "unhook-extension";
     src = pkgs.fetchurl {

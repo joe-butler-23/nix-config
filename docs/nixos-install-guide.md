@@ -31,7 +31,7 @@ To ssh in, establish the IP address with:
 # Establish device
 ip a
 
-# Identify ip address 
+# Identify ip address
 ip addr show wlp3s0 # Where wlp3s0 is the device na,e
 
 # Set password
@@ -119,7 +119,7 @@ sudo cryptsetup -v -y \
     --label=NIXOS_LUKS luksFormat --type luks2 /dev/nvme0n1p2
 ```
 
-It should warn about overwriting data, and then let you set a password. 
+It should warn about overwriting data, and then let you set a password.
 
 ### Verify and Open Encrypted Container
 
@@ -200,10 +200,10 @@ Or for simpler view run `sudo lsblk -o name,type,mountpoints /dev/nvme0n1` for a
 
 ```
 NAME               TYPE  MOUNTPOINTS
-nvme0n1            disk  
+nvme0n1            disk
 ├─nvme0n1p1        part  /mnt/boot
-└─nvme0n1p2        part  
-  └─cryptroot      crypt 
+└─nvme0n1p2        part
+  └─cryptroot      crypt
     └─lvmroot-root lvm   /mnt/var/log
                          /mnt/persist
                          /mnt/nix
@@ -234,7 +234,7 @@ ls -l /dev/disk/by-uuid/  | grep db52d953-3a83-4c18-b9ab-af6ced62bb6f || true
 
 ### Amend Hardware Configuration
 
-## this needs amending since the guidance refers to an approach for ext4 rather than btrfs. so will likely create issues. 
+## this needs amending since the guidance refers to an approach for ext4 rather than btrfs. so will likely create issues.
 
 First amend the hardware-configuration, with `sudo nano /mnt/etc/nixos/hardware-configuration.nix`. Follow the instructions here https://jadarma.github.io/blog/posts/2024/08/installing-nixos-with-flakes-and-lvm-on-luks/.
 
@@ -248,9 +248,9 @@ boot.kernelModules = [ "kvm-intel" ];
 boot.extraModulePackages = [ ];
 ```
 
-In nano its ctrl + w to exit, press y to save. 
+In nano its ctrl + w to exit, press y to save.
 
-There are then different options depending on wheterh the intention is to use an existing config or start fresh. To use the config in this repo first: 
+There are then different options depending on wheterh the intention is to use an existing config or start fresh. To use the config in this repo first:
 
 ## Install with existing nix config
 
@@ -407,7 +407,7 @@ sudo chmod 700 /boot
 sudo chmod 600 /boot/loader/random-seed
 ```
 
-### Git Repository Setup 
+### Git Repository Setup
 
 Establish NixOS as git repo:
 
