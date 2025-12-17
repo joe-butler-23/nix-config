@@ -3,6 +3,32 @@
 ;; Post-init configuration for packages and UX.
 ;;; Code:
 
+;; ============================================================
+;; Package Management: straight.el
+;; ============================================================
+;; Bootstrap straight.el for reproducible package management
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-sync
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+;; Install use-package via straight
+(straight-use-package 'use-package)
+
+;; Configure use-package to use straight.el by default
+(setq straight-use-package-by-default t)
+
 ;; If you are using undo-fu for Evil undo integration.
 ;; Note: undo-fu should be installed/available for this to work as intended.
 (setq evil-undo-system 'undo-fu)
@@ -299,13 +325,12 @@
 ;; ============================================================
 ;; Claude Code Integration
 ;; ============================================================
-;; Eat (Emulate A Terminal) - backend dependency for claude-code (if you use it that way).
-(use-package eat
-  :ensure t)
+;; Eat (Emulate A Terminal) - backend dependency for claude-code.
+(use-package eat)
 
-;; Claude Code package (installed via Nix, so :ensure nil).
+;; Claude Code package fetched from GitHub via straight.el
 (use-package claude-code
-  :ensure nil
+  :straight (:host github :repo "stevemolitor/claude-code.el")
   :config
   (claude-code-mode))
 
