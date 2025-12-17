@@ -3,16 +3,17 @@
 repos:
   - repo: local
     hooks:
-      - id: nix-fmt
-        name: nix-fmt
-        entry: nix fmt
-        language: system
-        files: \.nix$
-      - id: emacs-lint
-        name: emacs-lint
-        entry: bash -c 'emacs --batch --eval "(load-file \"$0\")" 2>&1 | grep -i error | grep -v "use-package" | grep -q . && exit 1 || exit 0'
-        language: system
-        files: modules/editor/emacs\.d/.*\.el$
+       - id: nix-fmt
+         name: nix-fmt
+         entry: nix fmt
+         language: system
+         files: \.nix$
+       - id: emacs-lint
+         name: emacs-lint
+         entry: bash -c 'emacs --batch --eval "(load-file \"$0\")" 2>&1 | grep -i error | grep -v "use-package" | grep -q . && exit 1 || exit 0'
+         language: system
+         files: modules/editor/emacs\.d/.*\.el$
+         exclude: modules/editor/emacs\.d/(init|early-init|pre-early-init|post-early-init|bindings)\.el$
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
