@@ -10,6 +10,9 @@
     NIXOS_OZONE_WL = "1";
     MOZ_ENABLE_WAYLAND = "1";
     QT_QPA_PLATFORM = "wayland";
+    EDITOR = "emacsclient -t";
+    VISUAL = "emacsclient -c";
+    SOPS_EDITOR = "emacsclient -t";
   };
 
   #### Display manager

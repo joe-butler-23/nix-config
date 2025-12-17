@@ -64,6 +64,8 @@
 
         # Org Mode
         org-roam
+        org-modern
+        org-super-agenda
 
         # Theme & UI
         doom-themes # Doom Emacs themes including doom-nord

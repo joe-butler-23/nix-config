@@ -15,7 +15,6 @@ _: {
       update_check_interval = 0;
       enable_audio_bell = false;
       window_alert_on_bell = false;
-      wayland_enable_ime = "no";
       window_padding_width = "10 0";
 
       # --- Nord Theme ---

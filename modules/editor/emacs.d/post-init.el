@@ -313,7 +313,7 @@
   (org-modern-todo-faces
    '(("TODO"  :background "#bf616a" :foreground "white" :weight bold)
      ("EVENT" :background "#b48ead" :foreground "white" :weight bold)
-     ("DONE"  :background "#a3be8c" :foreground "white" :weight bold))))
+     ("DONE "  :background "#a3be8c" :foreground "white" :weight bold))))
 
 ;; ============================================================
 ;; Org-super-agenda
@@ -349,6 +349,35 @@
   (setq org-agenda-time-grid '((daily) () "" ""))
   (setq org-agenda-block-separator ?─)
 
+  (defun my/skip-past-scheduled ()
+    "Skip entries that are scheduled for a past date."
+    (let ((scheduled (org-entry-get nil "SCHEDULED")))
+      (if (and scheduled
+               (< (org-time-string-to-absolute scheduled) (org-today)))
+          (or (outline-next-heading) (point-max))
+        nil)))
+
+  (defun my/remove-empty-agenda-blocks ()
+    "Remove headers of empty blocks."
+    (let ((inhibit-read-only t))
+      (save-excursion
+        (goto-char (point-min))
+        (while (re-search-forward "\\(⚠️ Overdue\\|📅 Today\\|🔮 Upcoming\\|📥 Unscheduled\\)" nil t)
+          (let ((header-start (line-beginning-position)))
+            (if (save-excursion
+                  (forward-line 1)
+                  (while (and (not (eobp)) (looking-at-p "^\\s-*$"))
+                    (forward-line 1))
+                  (or (eobp)
+                      (looking-at-p "^\\s-*─")))
+                (let ((delete-end (save-excursion
+                                    (forward-line 1)
+                                    (while (and (not (eobp)) (looking-at-p "^\\s-*$"))
+                                      (forward-line 1))
+                                    (point))))
+                  (delete-region (max (point-min) (1- header-start)) delete-end))))))))
+  (add-hook 'org-agenda-finalize-hook #'my/remove-empty-agenda-blocks)
+
   ;; Clean agenda prefix formatting (controls what appears before each entry).
   (setq org-agenda-prefix-format
         '((agenda . "  ")
@@ -374,12 +403,14 @@
             (agenda ""
                     ((org-agenda-span 1)
                      (org-agenda-overriding-header "\n📅 Today")
+                     (org-agenda-show-all-dates nil)
                      (org-agenda-format-date "")
+                     (org-agenda-skip-function 'my/skip-past-scheduled)
                      (org-super-agenda-groups
-                      '((:name none :todo "EVENT")
-                        (:name none :priority "A")
-                        (:name none :todo "TODO")
-                        (:discard (:anything t))))))
+											'((:name none :todo "EVENT")
+												(:name none :priority "A")
+												(:name none :todo "TODO")
+												(:discard (:anything t))))))
 
             ;; ------------------------------
             ;; BLOCK 3: Upcoming (90 days from tomorrow)

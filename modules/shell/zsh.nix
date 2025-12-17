@@ -7,11 +7,11 @@
 }: {
   # 1. Symlink P10k Config
   # Take file from repo and place at ~/.config/zsh/.p10k.zsh
-  home.file.".config/zsh/.p10k.zsh".source = ./p10k.zsh;
+  home.file."${config.xdg.configHome}/zsh/.p10k.zsh".source = ./p10k.zsh;
 
   programs.zsh = {
     enable = true;
-    dotDir = ".config/zsh";
+    dotDir = "${config.xdg.configHome}/zsh";
 
     # 2. Completion
     enableCompletion = true;
@@ -75,7 +75,7 @@
         export SOPS_AGE_KEY_FILE="''${SOPS_AGE_KEY_FILE:-/home/${user}/nix-config/secrets/sops.agekey}"
 
         # Load p10k config
-        source ~/.config/zsh/.p10k.zsh
+        source "${config.xdg.configHome}/zsh/.p10k.zsh"
 
         # Core options
         setopt correct extendedglob nocaseglob rcexpandparam nocheckjobs numericglobsort nobeep appendhistory histignorealldups autocd inc_append_history histignorespace interactivecomments
