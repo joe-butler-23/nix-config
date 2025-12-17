@@ -15,7 +15,7 @@
         (or (bound-and-true-p straight-base-dir)
             user-emacs-directory)))
       (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
+  (unless (or (file-exists-p bootstrap-file) noninteractive)
     (defvar url-http-attempt-keepalives nil)
     (let ((url (url-generic-parse-url "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el")))
       (with-current-buffer
@@ -24,7 +24,8 @@
            'silent 'inhibit-cookies)
         (goto-char (point-max))
         (eval-print-last-sexp))))
-  (load bootstrap-file nil 'nomessage))
+  (when (file-exists-p bootstrap-file)
+    (load bootstrap-file nil 'nomessage)))
 
 ;; Install use-package via straight
 (straight-use-package 'use-package)
