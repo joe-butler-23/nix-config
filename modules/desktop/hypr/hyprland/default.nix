@@ -9,7 +9,7 @@
     ./settings.nix
   ];
 
-  home.packages = [pkgs.swaybg pkgs.rofi];
+  home.packages = [pkgs.swaybg pkgs.rofi pkgs.mako];
 
   wayland.windowManager.hyprland = {
     enable = true;
