@@ -317,12 +317,12 @@
    (setq org-agenda-custom-commands
          '(("o" "Organised Agenda"
             ((tags "SCHEDULED<\"<today>\"|DEADLINE<\"<today>\""
-                   ((org-agenda-overriding-header "⚠️ Overdue")
+                   ((org-agenda-overriding-header "⚠️ Overdue\n")
                     (org-super-agenda-groups
                      '((:name none :todo "TODO")))))
              (agenda ""
                      ((org-agenda-span 1)          ; Focus on TODAY
-                      (org-agenda-overriding-header "\n📅 Today")
+                      (org-agenda-overriding-header "\n📅 Today\n")
                       (org-agenda-format-date "")
                       (org-super-agenda-groups
                        '((:name none :todo "EVENT")
@@ -335,15 +335,15 @@
                      ((org-agenda-span 90)         ; Look ahead 3 months
                       (org-agenda-start-day "+1d") ; Start from tomorrow
                       (org-agenda-show-all-dates nil)  ; Only show dates with items
-                      (org-agenda-overriding-header "\n🔮 Upcoming")
+                      (org-agenda-overriding-header "\n🔮 Upcoming\n")
                       (org-super-agenda-groups
                        '((:name none :todo "EVENT" :transformer my/org-agenda-move-time-to-end)
                          (:name none :todo "TODO")
                          (:discard (:anything t))))))
              (alltodo ""
-                      ((org-agenda-overriding-header "\n📥 Unscheduled")
+                      ((org-agenda-overriding-header "\n📥 Unscheduled\n")
                        (org-super-agenda-groups
                         '((:name "Research" :tag "research")
-                          (:name "General" :anything t)))
+                          (:name none :anything t)))
                        (org-agenda-skip-function
                         '(org-agenda-skip-entry-if 'scheduled 'deadline 'timestamp)))))))))
