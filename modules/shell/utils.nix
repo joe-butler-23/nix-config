@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
     bat
+    chezmoi
     clipse
     fd
     fzf
