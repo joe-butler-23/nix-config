@@ -294,10 +294,15 @@
   (setq org-todo-keywords
         '((sequence "TODO(t)" "EVENT(e)" "|" "DONE(d!)")))
 
+   ;; Remove time grid lines
+   (setq org-agenda-current-time-string "")
+   (setq org-agenda-time-grid '((daily) () "" ""))
+
    (defun my/org-agenda-move-time-to-end (item)
      "Move time (e.g. 16:00 or 16:00-17:00) from start to end of ITEM."
      (if (string-match "^\\s-*\\([0-9]+:[0-9]+\\(?:-[0-9]+:[0-9]+\\)?\\)\\s-+\\(.*\\)" item)
-         (format "%s %s" (match-string 2 item) (match-string 1 item))
+         (format "%s %s" (match-string 2 item)
+                 (propertize (match-string 1 item) 'face '(:weight bold :slant italic)))
        item))
 
    ;; Clean agenda format: remove category prefix, show time at end
@@ -313,7 +318,7 @@
             ((tags "SCHEDULED<\"<today>\"|DEADLINE<\"<today>\""
                    ((org-agenda-overriding-header "⚠️ Overdue")
                     (org-super-agenda-groups
-                     '((:todo "TODO")))))
+                     '((:name none :todo "TODO")))))
              (agenda ""
                      ((org-agenda-span 1)          ; Focus on TODAY
                       (org-agenda-overriding-header "📅 Today")
