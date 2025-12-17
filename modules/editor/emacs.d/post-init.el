@@ -74,18 +74,44 @@
 
   ;; Define Org Agenda bindings once org-agenda keymap exists.
   (with-eval-after-load 'org-agenda
-    (evil-define-key 'normal org-agenda-mode-map
+    (evil-define-key '(normal insert) org-agenda-mode-map
+      ;; Navigation
       "j" #'org-agenda-next-line
       "k" #'org-agenda-previous-line
+
+      ;; Quick capture
+      "a" #'org-capture
+
+      ;; TODO & Scheduling
       "t" #'org-agenda-todo
-      "q" #'org-agenda-quit
-      "r" #'org-agenda-redo
-      "g" #'org-agenda-redo
       "s" #'org-agenda-schedule
-      "e" #'org-agenda-entry-text-mode
-      "f" #'org-agenda-follow-mode
-      "RET" #'org-agenda-goto
-      "TAB" #'org-agenda-goto)
+      "d" #'org-agenda-deadline
+
+      ;; Priority
+      "+" #'org-agenda-priority-up
+      "-" #'org-agenda-priority-down
+
+      ;; Tags & Properties
+      ":" #'org-agenda-set-tags
+      "e" #'org-agenda-set-effort
+
+      ;; Clocking
+      "I" #'org-agenda-clock-in
+      "O" #'org-agenda-clock-out
+
+      ;; Refile
+      "r" #'org-agenda-refile
+
+      ;; View & Navigation
+      "RET" #'org-agenda-switch-to
+      "TAB" #'org-agenda-tree-to-indirect-buffer
+
+      ;; Refresh & Quit
+      "g" #'org-agenda-redo
+      "q" #'org-agenda-quit
+
+      ;; Additional useful bindings
+      "f" #'org-agenda-follow-mode)
 
     ;; Auto-refresh agenda when a task state changes:
     ;; - Save buffer when org triggers run
@@ -334,6 +360,14 @@
   ;; Add tasks.org to agenda files.
   (add-to-list 'org-agenda-files "/home/joebutler/projects/tasks.org")
 
+  ;; Org-capture configuration
+  ;; Quick task capture to "Unsorted" heading in tasks.org
+  (setq org-capture-templates
+        '(("t" "Task" entry
+           (file+headline "/home/joebutler/projects/tasks.org" "Unsorted")
+           "* TODO %?\n  %U"
+           :empty-lines 1)))
+
   ;; Enable automatic ID generation and tracking.
   (require 'org-id)
   (require 'org-habit)
@@ -358,7 +392,7 @@
         nil)))
 
   (defun my/remove-empty-agenda-blocks ()
-    "Remove headers of empty blocks."
+    "Remove headers and separators of empty blocks."
     (let ((inhibit-read-only t))
       (save-excursion
         (goto-char (point-min))
@@ -372,7 +406,11 @@
                       (looking-at-p "^\\s-*─")))
                 (let ((delete-end (save-excursion
                                     (forward-line 1)
+                                    ;; Skip blank lines
                                     (while (and (not (eobp)) (looking-at-p "^\\s-*$"))
+                                      (forward-line 1))
+                                    ;; Also skip the separator line if present
+                                    (when (looking-at-p "^\\s-*─")
                                       (forward-line 1))
                                     (point))))
                   (delete-region (max (point-min) (1- header-start)) delete-end))))))))

@@ -34,3 +34,4 @@ secrets/*.bak
 
 secrets/sops.agekey
 secrets.yml
+.serena/

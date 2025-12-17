@@ -25,6 +25,7 @@
   "f"   '(:ignore t :which-key "files")
   "ff"  '(find-file :which-key "find file")
   "fs"  '(save-buffer :which-key "save buffer")
+  "fq"  '((lambda () (interactive) (save-buffer) (delete-window)) :which-key "save & close")
   "fr"  '(consult-recent-file :which-key "recent files")
   "fR"  '(rename-file :which-key "rename file")
   "fD"  '(delete-file :which-key "delete file")
@@ -96,7 +97,7 @@
 
   ;; AI (Custom)
   "a"   '(:ignore t :which-key "ai")
-  "ac"  '(claude-code-command-map :which-key "claude code"))
+  "ac"  claude-code-command-map)
 
 (provide 'bindings)
 ;;; bindings.el ends here
