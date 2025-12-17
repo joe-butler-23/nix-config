@@ -7,6 +7,7 @@
 ;; Package Management: straight.el
 ;; ============================================================
 ;; Bootstrap straight.el for reproducible package management
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -15,12 +16,14 @@
             user-emacs-directory)))
       (bootstrap-version 7))
   (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-sync
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
+    (defvar url-http-attempt-keepalives nil)
+    (let ((url (url-generic-parse-url "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el")))
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp))))
   (load bootstrap-file nil 'nomessage))
 
 ;; Install use-package via straight

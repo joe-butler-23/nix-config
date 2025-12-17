@@ -78,6 +78,14 @@
             }
           ];
         }
+        {
+          trigger = ":skill";
+          replace = "Your first step is now to confirm which of the available skills you think are required for this task and repeat them back to me. Then stop and wait for my confirmation.";
+        }
+        {
+          trigger = ":skon";
+          replace = "Great. Please now use openskills to load those skills as your next priority. And after that is done, proceed with the following:";
+        }
       ];
     };
   };
