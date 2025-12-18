@@ -35,6 +35,8 @@
       runHook preUnpack
       mkdir -p $out
       bsdtar -xf $src -C $out --strip-components=1
+      # Prevent uBlock Origin from opening the dashboard/first-run page by logging instead of opening
+      find $out -name "*.js" -exec sed -i "s|µb.openNewTab({url:'dashboard.html'|console.log({url:'dashboard.html'|g" {} +
       runHook postUnpack
     '';
     installPhase = "true";
@@ -68,6 +70,8 @@
       mkdir -p $out
       # Create a parent directory to match expected Chromium extension structure
       bsdtar -xf $src -C $out --strip-components=0
+      # Prevent Consent-O-Matic from opening options page on install by logging instead of creating tab
+      find $out -name "*.js" -exec sed -i 's|chrome.tabs.create({url:chrome.runtime.getURL("options.html")|console.log({url:chrome.runtime.getURL("options.html")|g' {} +
       runHook postUnpack
     '';
     installPhase = "true";
@@ -85,6 +89,8 @@
       mkdir -p $out
       # The zip already contains a top-level directory, so don't strip components
       bsdtar -xf $src -C $out --strip-components=0
+      # Prevent FastForward from opening the first-run page by logging instead
+      find $out -name "*.js" -exec sed -i 's|brws.tabs.create({url:"https://fastforward.team|console.log({url:"https://fastforward.team|g' {} +
       runHook postUnpack
     '';
     installPhase = "true";
@@ -99,7 +105,7 @@
   ];
 
   # Common flags for standalone app mode to suppress extension popups
-  standalone-app-flags = "--no-first-run --no-default-browser-check --disable-background-mode --disable-extensions-file-access-check --disable-background-timer-throttling --disable-renderer-backgrounding";
+  standalone-app-flags = "--no-first-run --no-default-browser-check --disable-background-mode --disable-extensions-file-access-check --disable-background-timer-throttling --disable-renderer-backgrounding --disable-component-update --disable-sync --disable-breakpad --disable-crash-reporter --disable-speech-api --disable-domain-reliability --no-pings";
 
   # Create wrapper scripts for each web app
   makeWebAppWrapper = name: url: dataDir: extraFlags: let
@@ -168,6 +174,22 @@ in {
           --disable-default-apps
       ''}";
       categories = ["AudioVideo" "Video"];
+      terminal = false;
+    };
+
+    configure-youtube = {
+      name = "Configure YouTube Extensions";
+      comment = "Open YouTube profile to configure Unhook and other extensions";
+      icon = "preferences-system";
+      exec = "${pkgs.writeShellScript "configure-youtube-wrapper" ''
+        # Launch Brave with YouTube profile but with full UI to access extension settings
+        exec ${pkgs.brave}/bin/brave \
+          https://www.youtube.com \
+          --load-extension=${unhook-extension} \
+          --user-data-dir=${config.xdg.dataHome}/brave-youtube \
+          --no-first-run
+      ''}";
+      categories = ["Settings"];
       terminal = false;
     };
 
