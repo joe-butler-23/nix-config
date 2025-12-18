@@ -37,6 +37,11 @@
     keymap = {
       mgr.prepend_keymap = [
         {
+          on = ["c" "y"];
+          run = ''shell 'wl-copy < "$1" && notify-send "Yazi" "Copied contents of $1"' --confirm'';
+          desc = "Copy file contents";
+        }
+        {
           on = "z";
           run = ''shell 'dest=$(fd . ~/downloads ~/documents ~/projects ~/development ~/orgflow ~/utilities ~/nix-config --type d --max-depth 2 | fzf) && [ -n "$dest" ] && ya emit cd "$dest"' --block'';
           desc = "Jump to directory (restricted)";
