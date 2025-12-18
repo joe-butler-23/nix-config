@@ -253,15 +253,15 @@ _: _final: prev: {
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out/bin $out/libexec $out/share
-      cp -r zed.app/* $out/
+      mkdir -p $out
+      cp -r * $out/
 
       # Symlink the binary
+      mkdir -p $out/bin
       ln -s $out/libexec/zed-editor $out/bin/zed
 
       runHook postInstall
     '';
-
     passthru.updateScript = prev.writeShellScript "update-zed" ''
       set -euo pipefail
       LATEST=$(curl -s https://api.github.com/repos/zed-industries/zed/releases/latest | jq -r '.tag_name' | sed 's/^v//')
