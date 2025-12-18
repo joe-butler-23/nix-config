@@ -87,6 +87,7 @@
       "swaybg -i ${config.home.homeDirectory}/nix-config/assets/wallpaper.jpeg -m fill"
       "nm-applet"
       "blueman-applet"
+      "gtk-launch preload-webapps"
     ];
   };
 }
