@@ -49,7 +49,7 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "backup";
+          home-manager.backupFileExtension = "hm-bak";
 
           # Pass special arguments to Home Manager modules
           home-manager.extraSpecialArgs = {
