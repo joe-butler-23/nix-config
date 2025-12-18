@@ -19,22 +19,6 @@ pkgs.writeShellScriptBin "file-review" ''
     "$HOME/Pictures"
   )
 
-  # Development artifacts patterns
-  ARTIFACTS=(
-    "node_modules"
-    ".venv"
-    "venv"
-    "__pycache__"
-    ".pytest_cache"
-    "target"  # Rust
-    "dist"
-    "build"
-    ".cache"
-    "*.pyc"
-    ".DS_Store"
-    "Thumbs.db"
-  )
-
   # ==========================================
   # STYLING - Nord Color Palette
   # ==========================================
@@ -590,49 +574,6 @@ pkgs.writeShellScriptBin "file-review" ''
     done <<< "$files"
   }
 
-  review_dev_artifacts() {
-    header
-    gum style --foreground "$NORD14" --bold --margin "1 0" "Category: Development Artifacts"
-
-    gum spin --spinner dot --title "Scanning for artifacts..." -- sleep 0.2
-
-    local existing_dirs=()
-    for dir in "''${TARGET_DIRS[@]}"; do
-      [ -d "$dir" ] && existing_dirs+=("$dir")
-    done
-
-    if [ ''${#existing_dirs[@]} -eq 0 ]; then
-      gum style --foreground "$NORD3" "No target directories found"
-      gum input --placeholder "Press Enter to continue..."
-      return
-    fi
-
-    # Find common dev artifacts
-    local artifacts_found=()
-    for pattern in "''${ARTIFACTS[@]}"; do
-      while IFS= read -r item; do
-        [ -n "$item" ] && artifacts_found+=("$item")
-      done < <(find "''${existing_dirs[@]}" -name "$pattern" \( -type d -o -type f \) 2>/dev/null)
-    done
-
-    if [ ''${#artifacts_found[@]} -eq 0 ]; then
-      gum style --foreground "$NORD15" "✓ No development artifacts found"
-      gum_input --placeholder "Press Enter to continue..."
-      return
-    fi
-
-    gum style --foreground "$NORD13" "Found ''${#artifacts_found[@]} artifacts"
-    echo ""
-
-    if ! gum_confirm "Review these artifacts?"; then
-      return
-    fi
-
-    for artifact in "''${artifacts_found[@]}"; do
-      review_item "$artifact" "Development Artifact" || break
-    done
-  }
-
   review_empty_dirs() {
     header
     gum style --foreground "$NORD14" --bold --margin "1 0" "Category: Empty Directories"
@@ -720,7 +661,6 @@ pkgs.writeShellScriptBin "file-review" ''
         "recent_directories" \
         "recent_files" \
         "large_files" \
-        "dev_artifacts" \
         "empty_directories" \
         "show_summary" \
         "exit")
@@ -734,9 +674,6 @@ pkgs.writeShellScriptBin "file-review" ''
           ;;
         "large_files")
           review_large_files
-          ;;
-        "dev_artifacts")
-          review_dev_artifacts
           ;;
         "empty_directories")
           review_empty_dirs
