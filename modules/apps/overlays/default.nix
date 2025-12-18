@@ -262,6 +262,15 @@ _: _final: prev: {
       mkdir -p $out/bin
       ln -sf $out/libexec/zed-editor $out/bin/zed
 
+      # Wrap the binary to include necessary libraries in LD_LIBRARY_PATH for dlopen
+      wrapProgram $out/libexec/zed-editor \
+        --prefix LD_LIBRARY_PATH : "${prev.lib.makeLibraryPath [
+        prev.wayland
+        prev.libxkbcommon
+        prev.vulkan-loader
+        prev.libGL
+      ]}"
+
       runHook postInstall
     '';
     passthru.updateScript = prev.writeShellScript "update-zed" ''
