@@ -16,6 +16,22 @@ pkgs.writeShellScriptBin "weekly-review" ''
     # FUNCTIONS
     # ==========================================
 
+    gum_choose() {
+      command gum choose "$@" </dev/tty
+    }
+
+    gum_confirm() {
+      command gum confirm "$@" </dev/tty
+    }
+
+    gum_input() {
+      command gum input "$@" </dev/tty
+    }
+
+    strip_ansi() {
+      sed -r 's/\x1B\[[0-9;]*[mK]//g'
+    }
+
     header() {
       clear
       gum style --foreground "$NORD6" --border double --border-foreground "$NORD13" --padding "1 2" --margin "1 0" --align center "Weekly Review & Maintenance"
@@ -27,7 +43,7 @@ pkgs.writeShellScriptBin "weekly-review" ''
 
       if [ ! -d "$CONFIG_DIR" ]; then
         gum style --foreground "$NORD11" "Config directory $CONFIG_DIR not found!"
-        return
+        return 1
       fi
 
       cd "$CONFIG_DIR"
@@ -42,7 +58,7 @@ pkgs.writeShellScriptBin "weekly-review" ''
         gum style --foreground "$NORD13" "flake.lock has changed."
 
         # Commit changes?
-        if gum confirm "Commit & Push flake.lock changes?"; then
+        if gum_confirm "Commit & Push flake.lock changes?"; then
           gum spin --spinner line --title "Committing..." -- git add flake.lock
           gum spin --spinner line --title "Committing..." -- git commit -m "chore: update flake.lock"
           gum spin --spinner line --title "Pushing..." -- git push
@@ -52,7 +68,7 @@ pkgs.writeShellScriptBin "weekly-review" ''
         fi
 
         # Apply System Updates?
-        if gum confirm "Apply system updates now (sudo)?"; then
+        if gum_confirm "Apply system updates now (sudo)?"; then
           sudo nixos-rebuild switch --flake .
           gum style --foreground "$NORD15" "System updated."
         else
@@ -60,7 +76,8 @@ pkgs.writeShellScriptBin "weekly-review" ''
         fi
       fi
 
-      gum input --placeholder "Press Enter to continue..."
+      gum_input --placeholder "Press Enter to continue..."
+      return 0
     }
 
     clean_files() {
@@ -70,12 +87,13 @@ pkgs.writeShellScriptBin "weekly-review" ''
       if ! command -v file-review &> /dev/null; then
         gum style --foreground "$NORD11" "file-review command not found!"
         gum style --foreground "$NORD13" "Please rebuild your system to enable the new file review tool."
-        gum input --placeholder "Press Enter to continue..."
-        return
+        gum_input --placeholder "Press Enter to continue..."
+        return 1
       fi
 
       # Launch the standalone file review tool
       file-review
+      return 0
     }
 
     generate_diagnostics() {
@@ -133,8 +151,8 @@ pkgs.writeShellScriptBin "weekly-review" ''
       if ! command -v claude &> /dev/null; then
         gum style --foreground "$NORD11" "Claude Code CLI not found in PATH!"
         gum style --foreground "$NORD13" "Please ensure Claude Code is installed and accessible."
-        gum input --placeholder "Press Enter to continue..."
-        return
+        gum_input --placeholder "Press Enter to continue..."
+        return 1
       fi
 
       # Create cache directory
@@ -161,39 +179,114 @@ pkgs.writeShellScriptBin "weekly-review" ''
 
       echo ""
       gum style --foreground "$NORD15" "Claude session ended - returning to menu"
-      gum input --placeholder "Press Enter to continue..."
+      gum_input --placeholder "Press Enter to continue..."
+      return 0
     }
 
     # ==========================================
-    # MAIN LOOP
+    # CHECKLIST
     # ==========================================
 
-    while true; do
-      header
+    declare -a TASK_ORDER=(
+      "sys_update"
+      "clean_recent_files"
+      "ai_system_review"
+    )
 
-      CHOICE=$(gum choose \
-        --header.foreground "$NORD14" \
-        --cursor.foreground "$NORD13" \
-        --selected.foreground "$NORD13" \
-        "sys_update" \
-        "clean_recent_files" \
-        "ai_system_review" \
-        "exit")
+    declare -A TASK_LABEL=(
+      ["sys_update"]="System update"
+      ["clean_recent_files"]="File review & cleanup"
+      ["ai_system_review"]="AI system review"
+    )
 
-      case "$CHOICE" in
-        "sys_update")
-          update_system
-          ;;
-        "clean_recent_files")
-          clean_files
-          ;;
-        "ai_system_review")
-          ai_system_review
-          ;;
-        "exit")
-          echo "See you next week!"
-          exit 0
-          ;;
+    run_task() {
+      local id="$1"
+      case "$id" in
+        "sys_update") update_system ;;
+        "clean_recent_files") clean_files ;;
+        "ai_system_review") ai_system_review ;;
+        *) return 1 ;;
       esac
-    done
+    }
+
+    checklist() {
+      local -A done=()
+
+      while true; do
+        header
+        gum style --foreground "$NORD3" "Pick a step (or run remaining); edit TASK_ORDER/TASK_LABEL to add more."
+        echo ""
+
+        local -a options=()
+        local -A label_to_id=()
+
+        local id
+        for id in "''${TASK_ORDER[@]}"; do
+          local label="''${TASK_LABEL[$id]}"
+          label_to_id["$label"]="$id"
+
+          if [ "''${done[$id]:-0}" -eq 1 ]; then
+            options+=("$(printf "\033[32m[✓]\033[0m %s" "$label")")
+          else
+            options+=("$(printf "[ ] %s" "$label")")
+          fi
+        done
+
+        options+=("run_remaining")
+        options+=("reset_checklist")
+        options+=("exit")
+
+        local choice
+        choice="$(gum_choose \
+          --header.foreground "$NORD14" \
+          --cursor.foreground "$NORD13" \
+          --selected.foreground "$NORD13" \
+          "''${options[@]}")"
+
+        local clean_choice
+        clean_choice="$(printf '%s' "$choice" | strip_ansi)"
+
+        case "$clean_choice" in
+          "run_remaining")
+            for id in "''${TASK_ORDER[@]}"; do
+              if [ "''${done[$id]:-0}" -eq 1 ]; then
+                continue
+              fi
+              if run_task "$id"; then
+                done["$id"]=1
+              else
+                gum style --foreground "$NORD11" "Step failed: ''${TASK_LABEL[$id]}"
+                gum_input --placeholder "Press Enter to continue..."
+                break
+              fi
+            done
+            ;;
+          "reset_checklist")
+            done=()
+            ;;
+          "exit")
+            echo "See you next week!"
+            return 0
+            ;;
+          "[ ] "*|"[✓] "*)
+            local label="''${clean_choice#"[ ] "}"
+            label="''${label#"[✓] "}"
+
+            local selected_id="''${label_to_id[$label]}"
+            if [ -z "$selected_id" ]; then
+              continue
+            fi
+
+            if run_task "$selected_id"; then
+              done["$selected_id"]=1
+            else
+              gum style --foreground "$NORD11" "Step failed: $label"
+              gum_input --placeholder "Press Enter to continue..."
+            fi
+            ;;
+        esac
+      done
+    }
+
+    checklist
 ''
