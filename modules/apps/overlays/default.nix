@@ -256,9 +256,9 @@ _: _final: prev: {
       mkdir -p $out
       cp -r * $out/
 
-      # Symlink the binary
+      # Overwrite the existing bin/zed with a symlink to libexec/zed-editor
       mkdir -p $out/bin
-      ln -s $out/libexec/zed-editor $out/bin/zed
+      ln -sf $out/libexec/zed-editor $out/bin/zed
 
       runHook postInstall
     '';
