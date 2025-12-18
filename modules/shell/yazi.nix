@@ -7,8 +7,8 @@
       opener = {
         edit = [
           {
-            run = ''[ -f "$1" ] && nvim "$1"'';
-            desc = "Edit with Neovim";
+            run = ''emacsclient -c -n "$@"'';
+            desc = "Edit with Emacs";
             for = "unix";
           }
           {

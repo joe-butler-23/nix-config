@@ -88,7 +88,7 @@
           yazi "$@" --cwd-file "$tmp_cwd" --chooser-file "$tmp_pick"
           pick=$(<"$tmp_pick")
           if [ -n "$pick" ]; then
-            nvim "$pick"
+            ''${EDITOR:-nvim} "$pick"
           else
             cwd=$(<"$tmp_cwd")
             if [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
@@ -102,34 +102,28 @@
         eval "$(zoxide init zsh)"
 
         # Ensure cache directory exists
-        [[ -d "$HOME/.zsh/cache" ]] || mkdir -p "$HOME/.zsh/cache"
+        local zsh_cache="''${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+        [[ -d "$zsh_cache" ]] || mkdir -p "$zsh_cache"
 
-        # Lazy Completion (Triggers on first TAB press)
-        _lazy_compinit() {
-          unfunction _lazy_compinit 2>/dev/null
-          autoload -Uz compinit
-          local zcompdump="$HOME/.zsh/cache/zcompdump-$ZSH_VERSION"
+        # Standard Completion (safer than lazy loading)
+        autoload -Uz compinit
+        local zcompdump="$zsh_cache/zcompdump-$ZSH_VERSION"
 
-          # Compile cache in background if needed
-          if [[ -s "$zcompdump" && ( ! -s "$zcompdump.zwc" || "$zcompdump" -nt "$zcompdump.zwc" ) ]]; then
-            zcompile "$zcompdump" &!
-          fi
+        # Compile cache in background if needed
+        if [[ -s "$zcompdump" && ( ! -s "$zcompdump.zwc" || "$zcompdump" -nt "$zcompdump.zwc" ) ]]; then
+          zcompile "$zcompdump" &!
+        fi
 
-          compinit -C -d "$zcompdump"
+        compinit -C -d "$zcompdump"
 
-          # Styles
-          zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
-          zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
-          zstyle ':completion:*' rehash true
-          zstyle ':completion:*' menu select
-          zstyle ':completion:*' accept-exact '*(N)'
-          zstyle ':completion:*' use-cache on
-          zstyle ':completion:*' cache-path "$HOME/.zsh/cache"
-
-          zle expand-or-complete
-        }
-        zle -N _lazy_compinit
-        bindkey '^I' _lazy_compinit
+        # Completion Styles
+        zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
+        zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
+        zstyle ':completion:*' rehash true
+        zstyle ':completion:*' menu select
+        zstyle ':completion:*' accept-exact '*(N)'
+        zstyle ':completion:*' use-cache on
+        zstyle ':completion:*' cache-path "$zsh_cache"
 
         # Lazy NVM
         if [ -d "$HOME/.nvm" ]; then
