@@ -1,5 +1,4 @@
 {
-  lib,
   pkgs,
   config,
   ...
@@ -9,21 +8,20 @@
     path = "${config.xdg.configHome}/espanso/match/secrets.yml";
   };
 
-  services.espanso = {
-    enable = true;
-    package = pkgs.espanso-wayland;
-
-    # Config and matches now managed by chezmoi instead of Nix
-    # configs.default and matches.base removed to avoid conflicts
-  };
-
+  # Manual systemd service - not using services.espanso to avoid config conflicts
   systemd.user.services.espanso = {
     Unit = {
+      Description = "Espanso text expander daemon";
       After = ["graphical-session.target" "sops-nix.service"];
       PartOf = ["graphical-session.target"];
       Wants = ["sops-nix.service"];
     };
 
-    Install.WantedBy = lib.mkForce ["graphical-session.target"];
+    Service = {
+      ExecStart = "${pkgs.espanso-wayland}/bin/espanso daemon";
+      Restart = "on-failure";
+    };
+
+    Install.WantedBy = ["graphical-session.target"];
   };
 }
