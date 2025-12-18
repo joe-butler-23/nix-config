@@ -675,6 +675,11 @@ pkgs.writeShellScriptBin "file-review" ''
   }
 
   show_summary() {
+    local prompt=1
+    if [ "''${1:-}" = "--no-prompt" ]; then
+      prompt=0
+    fi
+
     header
     gum style --foreground "$NORD14" --bold --margin "1 0" "Review Summary"
     echo ""
@@ -695,7 +700,9 @@ pkgs.writeShellScriptBin "file-review" ''
     fi
 
     echo ""
-    gum_input --placeholder "Press Enter to exit..."
+    if [ "$prompt" -eq 1 ]; then
+      gum_input --placeholder "Press Enter to exit..."
+    fi
   }
 
   # ==========================================
@@ -738,7 +745,7 @@ pkgs.writeShellScriptBin "file-review" ''
           show_summary
           ;;
         "exit")
-          show_summary
+          show_summary --no-prompt
           return
           ;;
       esac
