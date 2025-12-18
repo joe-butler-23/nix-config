@@ -263,6 +263,12 @@
             mime = "application/{pdf,doc,rtf,vnd.*}";
             fg = "#6a9589";
           }
+          # hidden files
+          {
+            name = "*";
+            is = "hidden";
+            fg = "#727169";
+          }
           # broken links
           {
             name = "*";
