@@ -96,38 +96,48 @@
     installPhase = "true";
   };
 
-  # Define extension suite for reuse
-  privacy-extensions = [
+  # Define extension suite for reuse (combining general privacy + app specific)
+  all-extensions = [
     ublock-origin
     clearurls
     consent-o-matic
     fastforward
+    unhook-extension
   ];
 
-  # Common flags for standalone app mode to suppress extension popups
+  # Common flags for standalone app mode to suppress extension popups and improve speed
   standalone-app-flags = "--no-first-run --no-default-browser-check --disable-background-mode --disable-extensions-file-access-check --disable-background-timer-throttling --disable-renderer-backgrounding --disable-component-update --disable-sync --disable-breakpad --disable-crash-reporter --disable-speech-api --disable-domain-reliability --no-pings";
 
-  # Create wrapper scripts for each web app
-  makeWebAppWrapper = name: url: dataDir: extraFlags: let
-    extensionsList = extraFlags ++ privacy-extensions;
-  in
-    pkgs.writeShellScript "${name}-wrapper" ''
-      # Create profile directory and preferences if not exists
-      mkdir -p "${config.xdg.dataHome}/${dataDir}/Default"
-      if [ ! -f "${config.xdg.dataHome}/${dataDir}/Default/Preferences" ]; then
-        echo '{"profile":{"name":"Web App Profile"},"extensions":{"settings":{"pkehgijcmpdhfbdbbnkijodmdjhbjlgp":{"has_run":true},"aemomkdncapdnfajjbbcbdebjljbpmpj":{"firstRun":false,"firstrun":true,"skipWelcome":true}}},"first_run":false,"welcome_page":""}' > "${config.xdg.dataHome}/${dataDir}/Default/Preferences"
-      fi
+  # Shared profile directory for the "Zygote" strategy
+  shared-profile-dir = "${config.xdg.dataHome}/brave-webapps";
 
-      # Launch the application
-      exec ${pkgs.vivaldi}/bin/vivaldi ${standalone-app-flags} --app=${url} --load-extension=${lib.concatStringsSep "," extensionsList} --user-data-dir=${config.xdg.dataHome}/${dataDir}
-    '';
+  # Unified launcher script for all web apps
+  webappLauncher = pkgs.writeShellScript "webapp-launcher" ''
+    APP_URL="$1"
+    PROFILE_DIR="${shared-profile-dir}"
+    EXTENSIONS="${lib.concatStringsSep "," all-extensions}"
+
+    # Ensure profile and preferences exist
+    mkdir -p "$PROFILE_DIR/Default"
+    if [ ! -f "$PROFILE_DIR/Default/Preferences" ]; then
+      # Initialize preferences to suppress extension popups (using IDs found in previous configs)
+      echo '{"profile":{"name":"Web Apps"},"extensions":{"settings":{"pkehgijcmpdhfbdbbnkijodmdjhbjlgp":{"has_run":true},"aemomkdncapdnfajjbbcbdebjljbpmpj":{"firstRun":false,"firstrun":true,"skipWelcome":true}}},"first_run":false,"welcome_page":""}' > "$PROFILE_DIR/Default/Preferences"
+    fi
+
+    # Launch the web app using the shared profile
+    # If the browser is already running (Zygote), this opens a new window instantly.
+    exec ${pkgs.brave}/bin/brave ${standalone-app-flags} \
+      --app="$APP_URL" \
+      --load-extension="$EXTENSIONS" \
+      --user-data-dir="$PROFILE_DIR"
+  '';
 in {
   xdg.desktopEntries = {
     chatgpt = {
       name = "ChatGPT";
       comment = "ChatGPT AI Assistant Web App";
       icon = "${config.home.homeDirectory}/nix-config/modules/apps/web-apps/icons/chatgpt.png";
-      exec = "${makeWebAppWrapper "chatgpt" "https://chat.openai.com" "vivaldi-chatgpt" []}";
+      exec = "${webappLauncher} https://chat.openai.com";
       categories = ["Development"];
       terminal = false;
     };
@@ -136,15 +146,16 @@ in {
       name = "Spotify Web Player";
       comment = "Spotify Web App";
       icon = "spotify";
-      exec = "${makeWebAppWrapper "spotify" "https://open.spotify.com" "vivaldi-spotify" []}";
+      exec = "${webappLauncher} https://open.spotify.com";
       categories = ["AudioVideo" "Audio"];
       terminal = false;
     };
+
     mathacademy = {
       name = "Math Academy";
       comment = "Math Academy Web App";
       icon = "${config.home.homeDirectory}/nix-config/modules/apps/web-apps/icons/mathacademy.png";
-      exec = "${makeWebAppWrapper "mathacademy" "https://www.mathacademy.com/learn" "vivaldi-mathacademy" []}";
+      exec = "${webappLauncher} https://www.mathacademy.com/learn";
       categories = ["Education" "Science"];
       terminal = false;
     };
@@ -153,51 +164,8 @@ in {
       name = "YouTube";
       comment = "YouTube Web App";
       icon = "youtube";
-      exec = "${pkgs.writeShellScript "youtube-wrapper" ''
-        # Create profile directory and preferences if not exists
-        mkdir -p "${config.xdg.dataHome}/brave-youtube/Default"
-        if [ ! -f "${config.xdg.dataHome}/brave-youtube/Default/Preferences" ]; then
-          echo '{"profile":{"name":"YouTube Web App"},"first_run":false,"welcome_page":""}' > "${config.xdg.dataHome}/brave-youtube/Default/Preferences"
-        fi
-
-        # Launch YouTube as windowed app with extensions for restrictions and YouTube-specific features
-        # TEMPORARILY DISABLED app-locker to access extension settings
-        exec ${pkgs.brave}/bin/brave \
-          --app=https://www.youtube.com \
-          --load-extension=${unhook-extension} \
-          --user-data-dir=${config.xdg.dataHome}/brave-youtube \
-          --disable-features=TranslateUI \
-          --hide-scrollbars \
-          --disable-background-timer-throttling \
-          --disable-renderer-backgrounding \
-          --no-first-run \
-          --disable-default-apps
-      ''}";
+      exec = "${webappLauncher} https://www.youtube.com";
       categories = ["AudioVideo" "Video"];
-      terminal = false;
-    };
-
-    configure-youtube = {
-      name = "Configure YouTube Extensions";
-      comment = "Open YouTube profile to configure Unhook and other extensions";
-      icon = "preferences-system";
-      exec = "${pkgs.writeShellScript "configure-youtube-wrapper" ''
-        # Launch Brave with YouTube profile but with full UI to access extension settings
-        exec ${pkgs.brave}/bin/brave \
-          https://www.youtube.com \
-          --load-extension=${unhook-extension} \
-          --user-data-dir=${config.xdg.dataHome}/brave-youtube \
-          --no-first-run
-      ''}";
-      categories = ["Settings"];
-      terminal = false;
-    };
-
-    # Override to hide the main Vivaldi browser entry from Rofi and other launchers.
-    vivaldi = {
-      name = "Vivaldi";
-      exec = "${pkgs.vivaldi}/bin/vivaldi";
-      noDisplay = true;
       terminal = false;
     };
 
@@ -205,17 +173,43 @@ in {
       name = "Outlook";
       comment = "Outlook Web App";
       icon = "${config.home.homeDirectory}/nix-config/modules/apps/web-apps/icons/outlook.png";
-      exec = "${pkgs.writeShellScript "outlook-wrapper" ''
-        # Create profile directory and preferences if not exists
-        mkdir -p "${config.xdg.dataHome}/brave-outlook/Default"
-        if [ ! -f "${config.xdg.dataHome}/brave-outlook/Default/Preferences" ]; then
-          echo '{"profile":{"name":"Outlook Web App"},"extensions":{"settings":{"pkehgijcmpdhfbdbbnkijodmdjhbjlgp":{"has_run":true},"aemomkdncapdnfajjbbcbdebjljbpmpj":{"firstRun":false,"firstrun":true,"skipWelcome":true}}},"first_run":false,"welcome_page":""}' > "${config.xdg.dataHome}/brave-outlook/Default/Preferences"
-        fi
-
-        # Launch Outlook as Brave web app with privacy extensions
-        exec ${pkgs.brave}/bin/brave --app=https://outlook.office.com/mail/ --load-extension=${lib.concatStringsSep "," privacy-extensions} --user-data-dir=${config.xdg.dataHome}/brave-outlook
-      ''}";
+      exec = "${webappLauncher} https://outlook.office.com/mail/";
       categories = ["Office" "Email"];
+      terminal = false;
+    };
+
+    # Utility to configure extensions for the shared profile
+    configure-webapps = {
+      name = "Configure Web Apps";
+      comment = "Open Shared Web Apps profile to configure extensions";
+      icon = "preferences-system";
+      exec = "${pkgs.writeShellScript "configure-webapps-wrapper" ''
+        exec ${pkgs.brave}/bin/brave \
+          about:blank \
+          --load-extension="${lib.concatStringsSep "," all-extensions}" \
+          --user-data-dir="${shared-profile-dir}" \
+          --no-first-run
+      ''}";
+      categories = ["Settings"];
+      terminal = false;
+    };
+
+    # Optional: Preload the browser process at login for instant app launches
+    preload-webapps = {
+      name = "Preload Web Apps";
+      comment = "Start Web Apps backend in background";
+      icon = "web-browser";
+      exec = "${pkgs.brave}/bin/brave --no-startup-window --user-data-dir=\"${shared-profile-dir}\" --load-extension=\"${lib.concatStringsSep "," all-extensions}\"";
+      categories = ["System"];
+      terminal = false;
+      noDisplay = true; # Don't show in menus, intended for autostart
+    };
+
+    # Hide standard Vivaldi if unused
+    vivaldi = {
+      name = "Vivaldi";
+      exec = "${pkgs.vivaldi}/bin/vivaldi";
+      noDisplay = true;
       terminal = false;
     };
   };
