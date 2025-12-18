@@ -1,6 +1,6 @@
 {pkgs}:
 pkgs.writeShellScriptBin "file-review" ''
-  export PATH="${pkgs.gum}/bin:${pkgs.fd}/bin:${pkgs.coreutils}/bin:${pkgs.trash-cli}/bin:${pkgs.gnugrep}/bin:${pkgs.findutils}/bin:${pkgs.git}/bin:${pkgs.gnused}/bin:$PATH"
+  export PATH="${pkgs.gum}/bin:${pkgs.fd}/bin:${pkgs.coreutils}/bin:${pkgs.trash-cli}/bin:${pkgs.gnugrep}/bin:${pkgs.findutils}/bin:${pkgs.git}/bin:${pkgs.gnused}/bin:${pkgs.file}/bin:$PATH"
 
   # ==========================================
   # CONFIGURATION
@@ -9,11 +9,10 @@ pkgs.writeShellScriptBin "file-review" ''
   # Thresholds
   LARGE_FILE_SIZE="100M"
   RECENT_DAYS=7
-  ABANDONED_DAYS=30
 
   # Target directories for scanning
   TARGET_DIRS=(
-    "$HOME/Downloads"
+    "$HOME/downloads"
     "$HOME/development"
     "$HOME/projects"
     "$HOME/Documents"
@@ -62,6 +61,64 @@ pkgs.writeShellScriptBin "file-review" ''
   # ==========================================
   # UTILITY FUNCTIONS
   # ==========================================
+
+  gum_choose() {
+    command gum choose "$@" </dev/tty
+  }
+
+  gum_confirm() {
+    command gum confirm "$@" </dev/tty
+  }
+
+  gum_input() {
+    command gum input "$@" </dev/tty
+  }
+
+  open_directory() {
+    local dir="$1"
+
+    if command -v thunar >/dev/null 2>&1; then
+      nohup thunar "$dir" >/dev/null 2>&1 &
+      return 0
+    fi
+
+    if command -v xdg-open >/dev/null 2>&1; then
+      nohup xdg-open "$dir" >/dev/null 2>&1 &
+      return 0
+    fi
+
+    gum style --foreground "$NORD11" "No file manager found (need thunar or xdg-open)"
+    gum_input --placeholder "Press Enter to continue..."
+    return 1
+  }
+
+  format_bytes() {
+    local bytes="$1"
+    numfmt --to=iec-i --suffix=B "$bytes" 2>/dev/null || echo "''${bytes}B"
+  }
+
+  resolve_dir() {
+    for candidate in "$@"; do
+      if [ -d "$candidate" ]; then
+        echo "$candidate"
+        return 0
+      fi
+    done
+    return 1
+  }
+
+  get_review_dirs() {
+    local -a review_dirs=()
+
+    local dir
+    dir="$(resolve_dir "$HOME/downloads" "$HOME/Downloads")" && review_dirs+=("$dir")
+    dir="$(resolve_dir "$HOME/development" "$HOME/Development")" && review_dirs+=("$dir")
+    dir="$(resolve_dir "$HOME/documents" "$HOME/Documents")" && review_dirs+=("$dir")
+    dir="$(resolve_dir "$HOME/projects" "$HOME/Projects")" && review_dirs+=("$dir")
+    dir="$(resolve_dir "$HOME/utilities" "$HOME/Utilities")" && review_dirs+=("$dir")
+
+    printf '%s\n' "''${review_dirs[@]}"
+  }
 
   header() {
     clear
@@ -120,9 +177,9 @@ pkgs.writeShellScriptBin "file-review" ''
     fi
 
     echo ""
-    local action=$(gum choose --header.foreground "$NORD14" \
-      "trash" \
+    local action=$(gum_choose --header.foreground "$NORD14" \
       "keep" \
+      "trash" \
       "preview" \
       "skip_remaining")
 
@@ -137,13 +194,11 @@ pkgs.writeShellScriptBin "file-review" ''
           gum style --foreground "$NORD11" "✗ Failed to trash"
           log_action "ERROR: Failed to trash $item"
         fi
-        sleep 0.5
         ;;
       "keep")
         gum style --foreground "$NORD3" "Kept"
         log_action "KEEP: $item"
         KEEP_COUNT=$((KEEP_COUNT + 1))
-        sleep 0.3
         ;;
       "preview")
         if [ -d "$item" ]; then
@@ -154,7 +209,7 @@ pkgs.writeShellScriptBin "file-review" ''
           file "$item"
           head -n 20 "$item" 2>/dev/null || echo "(binary file)"
         fi
-        gum input --placeholder "Press Enter to continue..."
+        gum_input --placeholder "Press Enter to continue..."
         review_item "$item" "$context"  # Show choices again
         ;;
       "skip_remaining")
@@ -169,45 +224,280 @@ pkgs.writeShellScriptBin "file-review" ''
   # CATEGORY SCANNERS
   # ==========================================
 
-  review_recent_downloads() {
+  list_recent_directories() {
     header
-    gum style --foreground "$NORD14" --bold --margin "1 0" "Category: Recent Downloads (< $RECENT_DAYS days)"
+    gum style --foreground "$NORD14" --bold --margin "1 0" "Category: Recent Directories (< $RECENT_DAYS days)"
 
-    if [ ! -d "$HOME/Downloads" ]; then
-      gum style --foreground "$NORD3" "Downloads directory not found"
-      gum input --placeholder "Press Enter to continue..."
+    local -a review_dirs=()
+    mapfile -t review_dirs < <(get_review_dirs)
+
+    if [ ''${#review_dirs[@]} -eq 0 ]; then
+      gum style --foreground "$NORD3" "No review directories found"
+      gum_input --placeholder "Press Enter to continue..."
       return
     fi
 
-    gum spin --spinner dot --title "Scanning Downloads..." -- sleep 1
+    gum spin --spinner dot --title "Scanning recent directories..." -- sleep 0.2
 
-    local files=$(find "$HOME/Downloads" -type f -mtime -$RECENT_DAYS 2>/dev/null | sort)
-    local count=$(echo "$files" | grep -c . || echo "0")
+    local -A count_by_bucket=()
+    local -A last_ts_by_bucket=()
 
-    if [ "$count" -eq 0 ] || [ -z "$files" ]; then
-      gum style --foreground "$NORD15" "✓ No recent downloads to review"
-      gum input --placeholder "Press Enter to continue..."
+    for root in "''${review_dirs[@]}"; do
+      root="''${root%/}"
+
+      while IFS=$'\t' read -r ts path; do
+        [ -z "$path" ] && continue
+
+        local ts_int="''${ts%.*}"
+        local rel="''${path#"$root"/}"
+        local bucket
+
+        if [ "$rel" = "$path" ]; then
+          bucket="$root"
+        else
+          local first="''${rel%%/*}"
+          if [ "$first" = "$rel" ]; then
+            bucket="$root"
+          else
+            bucket="$root/$first"
+          fi
+        fi
+
+        count_by_bucket["$bucket"]=$(( ''${count_by_bucket["$bucket"]:-0} + 1 ))
+
+        local prev="''${last_ts_by_bucket["$bucket"]:-0}"
+        if [ "$ts_int" -gt "$prev" ]; then
+          last_ts_by_bucket["$bucket"]="$ts_int"
+        fi
+      done < <(
+        find "$root" \
+          \( \
+            -path '*/.git/*' -o \
+            -path '*/node_modules/*' -o \
+            -path '*/.venv/*' -o \
+            -path '*/venv/*' -o \
+            -path '*/__pycache__/*' -o \
+            -path '*/.pytest_cache/*' -o \
+            -path '*/target/*' -o \
+            -path '*/dist/*' -o \
+            -path '*/build/*' -o \
+            -path '*/.cache/*' \
+          \) -prune -o \
+          -type f \
+          -mtime -"$RECENT_DAYS" \
+          ! -name '*.pyc' \
+          ! -name '.DS_Store' \
+          ! -name 'Thumbs.db' \
+          -printf '%T@\t%p\n' 2>/dev/null
+      )
+    done
+
+    if [ ''${#count_by_bucket[@]} -eq 0 ]; then
+      gum style --foreground "$NORD15" "✓ No recent directories to review"
+      gum_input --placeholder "Press Enter to continue..."
       return
     fi
 
-    gum style --foreground "$NORD13" "Found $count recent files"
+    local tmp
+    tmp="$(mktemp)"
+    trap 'rm -f "$tmp"' RETURN
+
+    for bucket in "''${!count_by_bucket[@]}"; do
+      local ts="''${last_ts_by_bucket["$bucket"]:-0}"
+      local count="''${count_by_bucket["$bucket"]:-0}"
+      local last_str
+      last_str="$(date -d "@$ts" '+%Y-%m-%d %H:%M' 2>/dev/null || echo "unknown")"
+      printf "%s\t%04d\t%s\t%s\n" "$ts" "$count" "$last_str" "$bucket" >> "$tmp"
+    done
+
+    sort -nr "$tmp" -o "$tmp"
+
+    header
+    gum style --foreground "$NORD13" "Directories with recently modified files (select one to review)"
     echo ""
 
-    if ! gum confirm "Review these files?"; then
+    local -a options=()
+    mapfile -t options < <(cut -f2- "$tmp")
+
+    while true; do
+      local selection
+      selection="$(gum_choose --height 20 --header "Enter opens in Thunar (Esc to go back)" "''${options[@]}")"
+      if [ -z "$selection" ]; then
+        return
+      fi
+
+      local dir
+      dir="$(printf '%s' "$selection" | cut -f3-)"
+      [ -z "$dir" ] && continue
+
+      open_directory "$dir" || true
+    done
+  }
+
+  review_recent_files() {
+    header
+    gum style --foreground "$NORD14" --bold --margin "1 0" "Category: Recent Files (< $RECENT_DAYS days)"
+
+    local -a review_dirs=()
+    mapfile -t review_dirs < <(get_review_dirs)
+
+    if [ ''${#review_dirs[@]} -eq 0 ]; then
+      gum style --foreground "$NORD3" "No review directories found"
+      gum_input --placeholder "Press Enter to continue..."
       return
     fi
 
-    while IFS= read -r file; do
-      [ -z "$file" ] && continue
-      review_item "$file" "Recent Download" || break
-    done <<< "$files"
+    gum spin --spinner dot --title "Scanning recent files..." -- sleep 0.2
+
+    local tmp
+    tmp="$(mktemp)"
+    trap 'rm -f "$tmp"' RETURN
+
+    for dir in "''${review_dirs[@]}"; do
+      find "$dir" \
+        \( \
+          -path '*/.git/*' -o \
+          -path '*/node_modules/*' -o \
+          -path '*/.venv/*' -o \
+          -path '*/venv/*' -o \
+          -path '*/__pycache__/*' -o \
+          -path '*/.pytest_cache/*' -o \
+          -path '*/target/*' -o \
+          -path '*/dist/*' -o \
+          -path '*/build/*' -o \
+          -path '*/.cache/*' \
+        \) -prune -o \
+        -type f \
+        -mtime -"$RECENT_DAYS" \
+        ! -name '*.pyc' \
+        ! -name '.DS_Store' \
+        ! -name 'Thumbs.db' \
+        -printf '%T@\t%s\t%p\n' 2>/dev/null
+    done | sort -nr > "$tmp"
+
+    local count
+    count="$(wc -l < "$tmp" | tr -d ' ')"
+
+    if [ "$count" -eq 0 ]; then
+      gum style --foreground "$NORD15" "✓ No recent files to review"
+      gum_input --placeholder "Press Enter to continue..."
+      return
+    fi
+
+    local remaining
+    remaining="$(mktemp)"
+    trap 'rm -f "$tmp" "$remaining"' RETURN
+    cp "$tmp" "$remaining"
+
+    while true; do
+      local lines_total
+      lines_total="$(wc -l < "$remaining" | tr -d ' ')"
+
+      if [ "$lines_total" -eq 0 ]; then
+        gum style --foreground "$NORD15" "✓ No remaining recent files to review"
+        gum_input --placeholder "Press Enter to continue..."
+        return
+      fi
+
+      local -a display_lines=()
+      local -A bytes_by_path=()
+      local idx=0
+
+      while IFS=$'\t' read -r _ts bytes path; do
+        [ -z "$path" ] && continue
+        idx=$((idx + 1))
+        bytes_by_path["$path"]="$bytes"
+        display_lines+=("$(printf "%04d\t%s\t%s" "$idx" "$(format_bytes "$bytes")" "$path")")
+      done < "$remaining"
+
+      header
+      gum style --foreground "$NORD13" "Found $lines_total recent files (select one or more)"
+      echo ""
+
+      local selection
+      selection="$(gum_choose --no-limit --height 20 --header "Space to select, Enter to confirm" "''${display_lines[@]}")"
+      if [ -z "$selection" ]; then
+        return
+      fi
+
+      local action
+      action="$(gum_choose --header.foreground "$NORD14" \
+        "trash_selected" \
+        "mark_kept" \
+        "preview_first" \
+        "done")"
+
+      case "$action" in
+        "trash_selected")
+          if ! gum_confirm "Trash selected files?"; then
+            continue
+          fi
+
+          local -A selected_paths=()
+          while IFS=$'\t' read -r _i _size path; do
+            [ -z "$path" ] && continue
+            selected_paths["$path"]=1
+          done <<< "$selection"
+
+          for path in "''${!selected_paths[@]}"; do
+            [ -e "$path" ] || continue
+            if trash-put "$path" 2>/dev/null; then
+              local bytes="''${bytes_by_path[$path]:-0}"
+              TRASH_COUNT=$((TRASH_COUNT + 1))
+              TRASH_SIZE=$((TRASH_SIZE + bytes))
+              log_action "TRASH: $path ($(format_bytes "$bytes"))"
+            else
+              log_action "ERROR: Failed to trash $path"
+            fi
+          done
+
+          local new_remaining
+          new_remaining="$(mktemp)"
+          while IFS=$'\t' read -r ts bytes path; do
+            if [ -z "$path" ] || [ -z "''${selected_paths[$path]+x}" ]; then
+              printf "%s\t%s\t%s\n" "$ts" "$bytes" "$path" >> "$new_remaining"
+            fi
+          done < "$remaining"
+          mv "$new_remaining" "$remaining"
+          ;;
+
+        "mark_kept")
+          local -A kept_paths=()
+          while IFS=$'\t' read -r _i _size path; do
+            [ -z "$path" ] && continue
+            kept_paths["$path"]=1
+            KEEP_COUNT=$((KEEP_COUNT + 1))
+            log_action "KEEP: $path"
+          done <<< "$selection"
+
+          local new_remaining
+          new_remaining="$(mktemp)"
+          while IFS=$'\t' read -r ts bytes path; do
+            if [ -z "$path" ] || [ -z "''${kept_paths[$path]+x}" ]; then
+              printf "%s\t%s\t%s\n" "$ts" "$bytes" "$path" >> "$new_remaining"
+            fi
+          done < "$remaining"
+          mv "$new_remaining" "$remaining"
+          ;;
+
+        "preview_first")
+          local first_path
+          first_path="$(printf "%s\n" "$selection" | head -n 1 | cut -f3-)"
+          [ -n "$first_path" ] && review_item "$first_path" "Recent File (preview)"
+          ;;
+
+        "done")
+          return
+          ;;
+      esac
+    done
   }
 
   review_large_files() {
     header
     gum style --foreground "$NORD14" --bold --margin "1 0" "Category: Large Files (> 100MB)"
 
-    gum spin --spinner dot --title "Scanning for large files..." -- sleep 1
+    gum spin --spinner dot --title "Scanning for large files..." -- sleep 0.2
 
     local existing_dirs=()
     for dir in "''${TARGET_DIRS[@]}"; do
@@ -225,20 +515,22 @@ pkgs.writeShellScriptBin "file-review" ''
 
     if [ "$count" -eq 0 ] || [ -z "$files" ]; then
       gum style --foreground "$NORD15" "✓ No large files found"
-      gum input --placeholder "Press Enter to continue..."
+      gum_input --placeholder "Press Enter to continue..."
       return
     fi
 
     gum style --foreground "$NORD13" "Found $count large files"
     echo ""
 
-    if ! gum confirm "Review these files?"; then
+    if ! gum_confirm "Review these files?"; then
       return
     fi
 
+    local idx=0
     while IFS= read -r file; do
       [ -z "$file" ] && continue
-      review_item "$file" "Large File" || break
+      idx=$((idx + 1))
+      review_item "$file" "Large File ($idx/$count)" || break
     done <<< "$files"
   }
 
@@ -246,7 +538,7 @@ pkgs.writeShellScriptBin "file-review" ''
     header
     gum style --foreground "$NORD14" --bold --margin "1 0" "Category: Development Artifacts"
 
-    gum spin --spinner dot --title "Scanning for artifacts..." -- sleep 1
+    gum spin --spinner dot --title "Scanning for artifacts..." -- sleep 0.2
 
     local existing_dirs=()
     for dir in "''${TARGET_DIRS[@]}"; do
@@ -264,19 +556,19 @@ pkgs.writeShellScriptBin "file-review" ''
     for pattern in "''${ARTIFACTS[@]}"; do
       while IFS= read -r item; do
         [ -n "$item" ] && artifacts_found+=("$item")
-      done < <(find "''${existing_dirs[@]}" -name "$pattern" -type d 2>/dev/null)
+      done < <(find "''${existing_dirs[@]}" -name "$pattern" \( -type d -o -type f \) 2>/dev/null)
     done
 
     if [ ''${#artifacts_found[@]} -eq 0 ]; then
       gum style --foreground "$NORD15" "✓ No development artifacts found"
-      gum input --placeholder "Press Enter to continue..."
+      gum_input --placeholder "Press Enter to continue..."
       return
     fi
 
-    gum style --foreground "$NORD13" "Found ''${#artifacts_found[@]} artifact directories"
+    gum style --foreground "$NORD13" "Found ''${#artifacts_found[@]} artifacts"
     echo ""
 
-    if ! gum confirm "Review these artifacts?"; then
+    if ! gum_confirm "Review these artifacts?"; then
       return
     fi
 
@@ -285,73 +577,11 @@ pkgs.writeShellScriptBin "file-review" ''
     done
   }
 
-  review_abandoned_projects() {
-    header
-    gum style --foreground "$NORD14" --bold --margin "1 0" "Category: Abandoned Projects (> $ABANDONED_DAYS days inactive)"
-
-    gum spin --spinner dot --title "Scanning for abandoned projects..." -- sleep 1
-
-    local project_dirs=()
-    for base in "$HOME/projects" "$HOME/development"; do
-      [ -d "$base" ] && project_dirs+=("$base")
-    done
-
-    if [ ''${#project_dirs[@]} -eq 0 ]; then
-      gum style --foreground "$NORD3" "No project directories found"
-      gum input --placeholder "Press Enter to continue..."
-      return
-    fi
-
-    local abandoned=()
-    for base in "''${project_dirs[@]}"; do
-      while IFS= read -r dir; do
-        [ -z "$dir" ] || [ ! -d "$dir" ] && continue
-
-        # Check if it's a git repo
-        if [ -d "$dir/.git" ]; then
-          local last_commit_days=$(cd "$dir" && git log -1 --format="%ct" 2>/dev/null)
-          if [ -n "$last_commit_days" ]; then
-            local days_ago=$(( ($(date +%s) - last_commit_days) / 86400 ))
-            if [ "$days_ago" -gt "$ABANDONED_DAYS" ]; then
-              abandoned+=("$dir")
-            fi
-          fi
-        else
-          # Not a git repo, check file modification time
-          local last_modified=$(find "$dir" -type f -printf '%T@\n' 2>/dev/null | sort -n | tail -1 | cut -d. -f1)
-          if [ -n "$last_modified" ]; then
-            local days_ago=$(( ($(date +%s) - last_modified) / 86400 ))
-            if [ "$days_ago" -gt "$ABANDONED_DAYS" ]; then
-              abandoned+=("$dir")
-            fi
-          fi
-        fi
-      done < <(find "$base" -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
-    done
-
-    if [ ''${#abandoned[@]} -eq 0 ]; then
-      gum style --foreground "$NORD15" "✓ No abandoned projects found"
-      gum input --placeholder "Press Enter to continue..."
-      return
-    fi
-
-    gum style --foreground "$NORD13" "Found ''${#abandoned[@]} abandoned projects"
-    echo ""
-
-    if ! gum confirm "Review these projects?"; then
-      return
-    fi
-
-    for project in "''${abandoned[@]}"; do
-      review_item "$project" "Abandoned Project" || break
-    done
-  }
-
   review_empty_dirs() {
     header
     gum style --foreground "$NORD14" --bold --margin "1 0" "Category: Empty Directories"
 
-    gum spin --spinner dot --title "Scanning for empty directories..." -- sleep 1
+    gum spin --spinner dot --title "Scanning for empty directories..." -- sleep 0.2
 
     local existing_dirs=()
     for dir in "''${TARGET_DIRS[@]}"; do
@@ -369,20 +599,22 @@ pkgs.writeShellScriptBin "file-review" ''
 
     if [ "$count" -eq 0 ] || [ -z "$empty_dirs" ]; then
       gum style --foreground "$NORD15" "✓ No empty directories found"
-      gum input --placeholder "Press Enter to continue..."
+      gum_input --placeholder "Press Enter to continue..."
       return
     fi
 
     gum style --foreground "$NORD13" "Found $count empty directories"
     echo ""
 
-    if ! gum confirm "Review these directories?"; then
+    if ! gum_confirm "Review these directories?"; then
       return
     fi
 
+    local idx=0
     while IFS= read -r dir; do
       [ -z "$dir" ] && continue
-      review_item "$dir" "Empty Directory" || break
+      idx=$((idx + 1))
+      review_item "$dir" "Empty Directory ($idx/$count)" || break
     done <<< "$empty_dirs"
   }
 
@@ -407,7 +639,7 @@ pkgs.writeShellScriptBin "file-review" ''
     fi
 
     echo ""
-    gum input --placeholder "Press Enter to exit..."
+    gum_input --placeholder "Press Enter to exit..."
   }
 
   # ==========================================
@@ -418,22 +650,24 @@ pkgs.writeShellScriptBin "file-review" ''
     while true; do
       header
 
-      local choice=$(gum choose \
+      local choice=$(gum_choose \
         --header.foreground "$NORD14" \
         --cursor.foreground "$NORD13" \
         --header "Select category to review:" \
-        "recent_downloads" \
+        "recent_directories" \
+        "recent_files" \
         "large_files" \
         "dev_artifacts" \
-        "abandoned_projects" \
         "empty_directories" \
-        "run_all" \
         "show_summary" \
         "exit")
 
       case "$choice" in
-        "recent_downloads")
-          review_recent_downloads
+        "recent_directories")
+          list_recent_directories
+          ;;
+        "recent_files")
+          review_recent_files
           ;;
         "large_files")
           review_large_files
@@ -441,20 +675,8 @@ pkgs.writeShellScriptBin "file-review" ''
         "dev_artifacts")
           review_dev_artifacts
           ;;
-        "abandoned_projects")
-          review_abandoned_projects
-          ;;
         "empty_directories")
           review_empty_dirs
-          ;;
-        "run_all")
-          review_recent_downloads
-          review_large_files
-          review_dev_artifacts
-          review_abandoned_projects
-          review_empty_dirs
-          show_summary
-          return
           ;;
         "show_summary")
           show_summary

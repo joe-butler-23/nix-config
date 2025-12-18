@@ -9,6 +9,8 @@ pkgs.writeShellScriptBin "fzf-file-launcher" ''
     "$HOME/documents"
     "$HOME/projects"
     "$HOME/development"
+    "$HOME/orgflow"
+    "$HOME/utilities"
     "$HOME/nix-config"
   )
 

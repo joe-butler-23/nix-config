@@ -13,6 +13,7 @@
     nix-search-tv
     ripgrep
     tmux
+    trash-cli
     unzip
     wget
     zoxide

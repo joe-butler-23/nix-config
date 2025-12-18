@@ -133,9 +133,20 @@
   hardware.bluetooth.settings = {
     General = {
       Enable = "Source,Sink,Media,Socket,HID";
+      ControllerMode = "dual"; # Allow BR/EDR and LE
+      FastConnectable = true; # Improve connection stability
     };
   };
   services.blueman.enable = true;
+
+  # Better Bluetooth headset support (HFP/HSP profiles)
+  services.pipewire.wireplumber.configPackages = [
+    (pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/51-bluez-config.lua" ''
+      bluez_monitor.properties = {
+        ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+      }
+    '')
+  ];
 
   # Windows network discovery
   services.samba-wsdd = {

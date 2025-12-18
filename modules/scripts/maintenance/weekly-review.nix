@@ -64,44 +64,18 @@ pkgs.writeShellScriptBin "weekly-review" ''
     }
 
     clean_files() {
-      gum style --foreground "$NORD14" --bold --margin "1 0" "Clean Recent Files"
+      gum style --foreground "$NORD14" --bold --margin "1 0" "File Review & Cleanup"
 
-      TARGET_DIRS=()
-      for dir in "development" "boox" "Documents" "Downloads" "Pictures" "utilities"; do
-        if [ -d "$HOME/$dir" ]; then
-          TARGET_DIRS+=("$HOME/$dir")
-        fi
-      done
-
-      echo "Scanning for files changed in the last 7 days..."
-
-      # Find files -> Select with Gum -> Delete
-      # We use a temp file to store the list because gum filter outputs to stdout
-      FILES_TO_DELETE=$(fd . "''${TARGET_DIRS[@]}" \
-        --type f \
-        --changed-within 7d \
-        --exclude ".git" \
-        --exclude "node_modules" \
-        --exclude ".cache" \
-        --exclude ".env" \
-        --exclude ".venv" \
-        | gum filter --no-limit --placeholder "Select files to DELETE (Tab to select, Enter to confirm)" --height 15)
-
-      if [ -n "$FILES_TO_DELETE" ]; then
-        echo "You selected:"
-        echo "$FILES_TO_DELETE" | sed 's/^/  - /'
-
-        if gum confirm "Are you sure you want to PERMANENTLY delete these files?"; then
-          echo "$FILES_TO_DELETE" | xargs rm -v
-          gum style --foreground "$NORD15" "Files deleted."
-        else
-          gum style --foreground "$NORD3" "Operation cancelled."
-        fi
-      else
-        gum style --foreground "$NORD3" "No files selected."
+      # Check if file-review is available
+      if ! command -v file-review &> /dev/null; then
+        gum style --foreground "$NORD11" "file-review command not found!"
+        gum style --foreground "$NORD13" "Please rebuild your system to enable the new file review tool."
+        gum input --placeholder "Press Enter to continue..."
+        return
       fi
 
-      gum input --placeholder "Press Enter to continue..."
+      # Launch the standalone file review tool
+      file-review
     }
 
     generate_diagnostics() {
