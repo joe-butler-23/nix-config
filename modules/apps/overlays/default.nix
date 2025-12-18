@@ -240,12 +240,14 @@ _: _final: prev: {
     ];
 
     buildInputs = with prev; [
+      alsa-lib
       curl
       fontconfig
       freetype
       libGL
       libxkbcommon
       openssl
+      stdenv.cc.cc.lib
       vulkan-loader
       wayland
       zlib
