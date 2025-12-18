@@ -11,5 +11,6 @@
     (import ./study-focus.nix {inherit pkgs;})
     (import ./rofi-quick-capture.nix {inherit pkgs;})
     (import ./maintenance/weekly-review.nix {inherit pkgs;})
+    (import ./maintenance/file-review.nix {inherit pkgs;})
   ];
 }
