@@ -194,23 +194,32 @@ in {
       terminal = false;
     };
 
-    # Optional: Preload the browser process at login for instant app launches
-    preload-webapps = {
-      name = "Preload Web Apps";
-      comment = "Start Web Apps backend in background";
-      icon = "web-browser";
-      exec = "${pkgs.brave}/bin/brave --no-startup-window --user-data-dir=\"${shared-profile-dir}\" --load-extension=\"${lib.concatStringsSep "," all-extensions}\"";
-      categories = ["System"];
-      terminal = false;
-      noDisplay = true; # Don't show in menus, intended for autostart
-    };
-
     # Hide standard Vivaldi if unused
     vivaldi = {
       name = "Vivaldi";
       exec = "${pkgs.vivaldi}/bin/vivaldi";
       noDisplay = true;
       terminal = false;
+    };
+  };
+
+  # Systemd service to keep the browser backend alive for instant app launching
+  systemd.user.services.brave-webapps-preloader = {
+    Unit = {
+      Description = "Brave Web Apps Preloader (Shared Zygote)";
+      After = ["graphical-session.target"];
+      PartOf = ["graphical-session.target"];
+    };
+
+    Service = {
+      # Use the exact same profile and extensions as the apps
+      ExecStart = "${pkgs.brave}/bin/brave ${standalone-app-flags} --no-startup-window --user-data-dir=\"${shared-profile-dir}\" --load-extension=\"${lib.concatStringsSep "," all-extensions}\"";
+      Restart = "always";
+      RestartSec = 3;
+    };
+
+    Install = {
+      WantedBy = ["graphical-session.target"];
     };
   };
 }
