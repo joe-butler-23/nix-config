@@ -12,5 +12,7 @@
     (import ./rofi-quick-capture.nix {inherit pkgs;})
     (import ./maintenance/weekly-review.nix {inherit pkgs;})
     (import ./maintenance/file-review.nix {inherit pkgs;})
+    (import ./maintenance/system-maintenance.nix {inherit pkgs;})
+    (import ./maintenance/weekly-metrics.nix {inherit pkgs;})
   ];
 }

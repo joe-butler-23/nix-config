@@ -159,11 +159,14 @@ pkgs.writeShellScriptBin "file-review" ''
     fi
 
     echo ""
-    local action=$(gum_choose --header.foreground "$NORD14" \
+    local action
+    if ! action=$(gum_choose --header.foreground "$NORD14" \
       "keep" \
       "trash" \
       "preview" \
-      "skip_remaining")
+      "skip_remaining"); then
+      return 1
+    fi
 
     case "$action" in
       "trash")
@@ -546,7 +549,7 @@ pkgs.writeShellScriptBin "file-review" ''
 
     if [ ''${#existing_dirs[@]} -eq 0 ]; then
       gum style --foreground "$NORD3" "No target directories found"
-      gum input --placeholder "Press Enter to continue..."
+      gum_input --placeholder "Press Enter to continue..."
       return
     fi
 
@@ -587,7 +590,7 @@ pkgs.writeShellScriptBin "file-review" ''
 
     if [ ''${#existing_dirs[@]} -eq 0 ]; then
       gum style --foreground "$NORD3" "No target directories found"
-      gum input --placeholder "Press Enter to continue..."
+      gum_input --placeholder "Press Enter to continue..."
       return
     fi
 
@@ -654,7 +657,8 @@ pkgs.writeShellScriptBin "file-review" ''
     while true; do
       header
 
-      local choice=$(gum_choose \
+      local choice
+      if ! choice=$(gum_choose \
         --header.foreground "$NORD14" \
         --cursor.foreground "$NORD13" \
         --header "Select category to review:" \
@@ -663,7 +667,9 @@ pkgs.writeShellScriptBin "file-review" ''
         "large_files" \
         "empty_directories" \
         "show_summary" \
-        "exit")
+        "exit"); then
+        return 0
+      fi
 
       case "$choice" in
         "recent_directories")
