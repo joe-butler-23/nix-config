@@ -224,4 +224,60 @@ _: _final: prev: {
       platforms = platforms.linux;
     };
   };
+
+  zed-editor = prev.stdenv.mkDerivation rec {
+    pname = "zed-editor";
+    version = "0.217.2";
+
+    src = prev.fetchurl {
+      url = "https://github.com/zed-industries/zed/releases/download/v${version}/zed-linux-x86_64.tar.gz";
+      sha256 = "095wky28ff370d44kj40fagypd7ry0lqbpyh9vxj56pw7glnnvvx";
+    };
+
+    nativeBuildInputs = [
+      prev.autoPatchelfHook
+      prev.makeWrapper
+    ];
+
+    buildInputs = with prev; [
+      curl
+      fontconfig
+      freetype
+      libGL
+      libxkbcommon
+      openssl
+      vulkan-loader
+      wayland
+      zlib
+    ];
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/bin $out/libexec $out/share
+      cp -r zed.app/* $out/
+
+      # Symlink the binary
+      ln -s $out/libexec/zed-editor $out/bin/zed
+
+      runHook postInstall
+    '';
+
+    passthru.updateScript = prev.writeShellScript "update-zed" ''
+      set -euo pipefail
+      LATEST=$(curl -s https://api.github.com/repos/zed-industries/zed/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+      echo "Latest version: $LATEST"
+      sed -i "s/version = ".*";/version = \"$LATEST\";/" modules/apps/overlays/default.nix
+      URL="https://github.com/zed-industries/zed/releases/download/v$LATEST/zed-linux-x86_64.tar.gz"
+      HASH=$(nix-prefetch-url "$URL")
+      sed -i "s|sha256 = ".*";|sha256 = \"$HASH\";|" modules/apps/overlays/default.nix
+      echo "Updated zed-editor to $LATEST with hash $HASH"
+    '';
+
+    meta = with prev.lib; {
+      description = "Zed Editor";
+      homepage = "https://zed.dev";
+      license = licenses.gpl3;
+      platforms = platforms.linux;
+    };
+  };
 }

@@ -87,8 +87,6 @@ pkgs.writeShellScriptBin "file-review" ''
       return 0
     fi
 
-    gum style --foreground "$NORD11" "No file manager found (need thunar or xdg-open)"
-    gum_input --placeholder "Press Enter to continue..."
     return 1
   }
 
@@ -241,6 +239,7 @@ pkgs.writeShellScriptBin "file-review" ''
 
     local -A count_by_bucket=()
     local -A last_ts_by_bucket=()
+    local -A has_child_bucket=()
 
     for root in "''${review_dirs[@]}"; do
       root="''${root%/}"
@@ -260,6 +259,7 @@ pkgs.writeShellScriptBin "file-review" ''
             bucket="$root"
           else
             bucket="$root/$first"
+            has_child_bucket["$root"]=1
           fi
         fi
 
@@ -303,6 +303,13 @@ pkgs.writeShellScriptBin "file-review" ''
     trap 'rm -f "$tmp"' RETURN
 
     for bucket in "''${!count_by_bucket[@]}"; do
+      for root in "''${review_dirs[@]}"; do
+        root="''${root%/}"
+        if [ "$bucket" = "$root" ] && [ -n "''${has_child_bucket[$root]+x}" ]; then
+          continue 2
+        fi
+      done
+
       local ts="''${last_ts_by_bucket["$bucket"]:-0}"
       local count="''${count_by_bucket["$bucket"]:-0}"
       local last_str
@@ -312,25 +319,74 @@ pkgs.writeShellScriptBin "file-review" ''
 
     sort -nr "$tmp" -o "$tmp"
 
-    header
-    gum style --foreground "$NORD13" "Directories with recently modified files (select one to review)"
-    echo ""
-
-    local -a options=()
-    mapfile -t options < <(cut -f2- "$tmp")
+    local -A reviewed_buckets=()
 
     while true; do
+      header
+      gum style --foreground "$NORD13" "Directories with recently modified files"
+      echo ""
+
+      strip_ansi() {
+        sed -r 's/\x1B\[[0-9;]*[mK]//g'
+      }
+
+      bucket_from_display() {
+        local display="$1"
+        display="''${display%/}"
+
+        if [[ "$display" == "~/"* ]]; then
+          echo "$HOME/''${display#~/}"
+          return 0
+        fi
+
+        if [[ "$display" == "~" ]]; then
+          echo "$HOME"
+          return 0
+        fi
+
+        echo "$display"
+      }
+
+      local -a options=()
+
+      while IFS=$'\t' read -r _ts count last_str bucket; do
+        [ -z "$bucket" ] && continue
+
+        local display_bucket
+        display_bucket="''${bucket/#$HOME/~}"
+        display_bucket="''${display_bucket%/}/"
+
+        local line
+        line="$(printf "%s\t%s\t%s" "$count" "$last_str" "$display_bucket")"
+        if [ -n "''${reviewed_buckets[$bucket]+x}" ]; then
+          options+=("$(printf "\033[90m%s\033[0m" "$line")")
+        else
+          options+=("$line")
+        fi
+      done < "$tmp"
+
       local selection
       selection="$(gum_choose --height 20 --header "Enter opens in Thunar (Esc to go back)" "''${options[@]}")"
       if [ -z "$selection" ]; then
         return
       fi
 
-      local dir
-      dir="$(printf '%s' "$selection" | cut -f3-)"
-      [ -z "$dir" ] && continue
+      local clean_selection
+      clean_selection="$(printf '%s' "$selection" | strip_ansi)"
 
-      open_directory "$dir" || true
+      local display_bucket
+      display_bucket="$(printf '%s' "$clean_selection" | cut -f3-)"
+
+      local selected_bucket
+      selected_bucket="$(bucket_from_display "$display_bucket")"
+      [ -z "$selected_bucket" ] && continue
+
+      if open_directory "$selected_bucket"; then
+        reviewed_buckets["$selected_bucket"]=1
+      else
+        gum style --foreground "$NORD11" "Could not open directory (need thunar or xdg-open)"
+        gum_input --placeholder "Press Enter to continue..."
+      fi
     done
   }
 
