@@ -1,0 +1,92 @@
+{config, ...}: {
+  wayland.windowManager.hyprland.settings = {
+    monitor = [
+      ",preferred,auto,1"
+    ];
+
+    env = [
+      "XCURSOR_SIZE,24"
+      "HYPRCURSOR_SIZE,24"
+      "XDG_CURRENT_DESKTOP,Hyprland"
+      "XDG_SESSION_TYPE,wayland"
+      "XDG_SESSION_DESKTOP,Hyprland"
+      "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
+    ];
+
+    general = {
+      gaps_in = 0;
+      gaps_out = 0;
+      border_size = 0;
+      resize_on_border = false;
+      allow_tearing = false;
+      layout = "dwindle";
+    };
+
+    decoration = {
+      rounding = 0;
+      active_opacity = 1.0;
+      inactive_opacity = 1.0;
+      shadow = {
+        enabled = false;
+        range = 4;
+        render_power = 3;
+      };
+      blur = {
+        enabled = false;
+        size = 3;
+        passes = 1;
+        vibrancy = 0.1696;
+      };
+    };
+
+    animations = {
+      enabled = false;
+    };
+
+    dwindle = {
+      pseudotile = true;
+      preserve_split = true;
+    };
+
+    master = {
+      new_status = "master";
+    };
+
+    misc = {
+      force_default_wallpaper = 0;
+      disable_hyprland_logo = true;
+      vfr = true;
+      vrr = 2;
+    };
+
+    input = {
+      kb_layout = "gb";
+      kb_variant = "basic";
+      kb_model = "pc105";
+      kb_options = "caps:escape";
+      kb_rules = "evdev";
+      follow_mouse = 1;
+      sensitivity = 0;
+      touchpad = {
+        natural_scroll = false;
+      };
+    };
+
+    device = {
+      name = "epic-mouse-v1";
+      sensitivity = -0.5;
+    };
+
+    exec-once = [
+      "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE"
+      "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE"
+      "systemctl --user start graphical-session.target"
+
+      # Apps
+      "waybar"
+      "swaybg -i ${config.home.homeDirectory}/nix-config/assets/wallpaper.jpeg -m fill"
+      "nm-applet"
+      "blueman-applet"
+    ];
+  };
+}

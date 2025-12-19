@@ -3,7 +3,12 @@
   pkgsUnstable,
   ...
 }: {
-  # Config now managed by chezmoi at ~/.config/hypr/hyprland.conf
+  imports = [
+    ./binds.nix
+    ./rules.nix
+    ./settings.nix
+  ];
+
   home.packages = [pkgs.swaybg pkgs.rofi pkgs.mako];
 
   wayland.windowManager.hyprland = {

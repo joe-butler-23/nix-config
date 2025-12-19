@@ -20,16 +20,6 @@
     zathura # Config managed by chezmoi
     waybar # Config managed by chezmoi
 
-    # Shell
-    zsh # Config managed by chezmoi
-    zsh-powerlevel10k
-    zsh-syntax-highlighting
-    zsh-autosuggestions
-    zsh-history-substring-search
-
-    # File Manager
-    yazi # Config managed by chezmoi
-
     # Temporary: mako notification daemon (should be in home.packages)
     mako
   ];
