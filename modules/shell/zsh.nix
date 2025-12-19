@@ -77,6 +77,14 @@
         # Load p10k config
         source "${config.xdg.configHome}/zsh/.p10k.zsh"
 
+        # Kitty shell integration
+        if [ -n "$KITTY_INSTALLATION_DIR" ]; then
+          export KITTY_SHELL_INTEGRATION="enabled"
+          autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
+          kitty-integration
+          unfunction kitty-integration
+        fi
+
         # Core options
         setopt correct extendedglob nocaseglob rcexpandparam nocheckjobs numericglobsort nobeep appendhistory histignorealldups autocd inc_append_history histignorespace interactivecomments
 

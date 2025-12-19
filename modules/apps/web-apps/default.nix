@@ -202,24 +202,4 @@ in {
       terminal = false;
     };
   };
-
-  # Systemd service to keep the browser backend alive for instant app launching
-  systemd.user.services.brave-webapps-preloader = {
-    Unit = {
-      Description = "Brave Web Apps Preloader (Shared Zygote)";
-      After = ["graphical-session.target"];
-      PartOf = ["graphical-session.target"];
-    };
-
-    Service = {
-      # Use the exact same profile and extensions as the apps
-      ExecStart = "${pkgs.brave}/bin/brave ${standalone-app-flags} --no-startup-window --user-data-dir=\"${shared-profile-dir}\" --load-extension=\"${lib.concatStringsSep "," all-extensions}\"";
-      Restart = "always";
-      RestartSec = 3;
-    };
-
-    Install = {
-      WantedBy = ["graphical-session.target"];
-    };
-  };
 }

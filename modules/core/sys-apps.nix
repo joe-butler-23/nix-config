@@ -15,6 +15,9 @@
     nixd
     lm_sensors
 
+    # Terminal & Desktop
+    kitty # Config managed by chezmoi
+
     # Temporary: mako notification daemon (should be in home.packages)
     mako
   ];
