@@ -8,7 +8,6 @@
     ./thunar.nix
     ./utils.nix
     ./espanso.nix
-    ./zathura.nix
     ./syncthing.nix
     ./web-apps
   ];
