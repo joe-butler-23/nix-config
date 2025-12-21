@@ -36,10 +36,12 @@
       modules = [
         ../modules/core
         ../modules/services
+        ../modules/shell
+        ../modules/desktop
 
         # System Modules (Enable System-wide Features)
-        ../modules/desktop/brave-wrapper.nix
         inputs.stylix.nixosModules.stylix
+        ../modules/desktop/stylix.nix
         inputs.sops-nix.nixosModules.sops
 
         # Use readOnlyPkgs to properly inject our custom pkgs with overlays
@@ -65,16 +67,19 @@
             home.stateVersion = "25.05";
 
             imports = [
-              ../modules/shell
-              ../modules/desktop
               ../modules/apps
               ../modules/scripts
               ../modules/editor
 
               ## User Modules
 
-              # sops
+              # sops (minimal, only for AI tools compatibility)
               inputs.sops-nix.homeManagerModules.sops
+              {
+                sops.age.keyFile = "/home/${user}/nix-config/secrets/sops.agekey";
+                sops.defaultSopsFile = ../../secrets/secrets.yaml;
+                sops.secrets.CONTEXT7_API_KEY = {};
+              }
 
               # ai tools
               inputs.ai-utilities.homeManagerModules.default

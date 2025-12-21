@@ -1,8 +1,6 @@
 {...}: {
   imports = [
-    ./gtk.nix
-    ./hypr
-    ./whichkey.nix
-    ./wlogout/wlogout.nix
+    ./mime-types.nix
+    ./system.nix
   ];
 }

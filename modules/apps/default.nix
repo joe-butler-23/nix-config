@@ -7,8 +7,6 @@
     ./vscodium.nix
     ./thunar.nix
     ./utils.nix
-    ./espanso.nix
-    ./syncthing.nix
     ./web-apps
   ];
 

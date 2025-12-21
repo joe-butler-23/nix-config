@@ -1,8 +1,4 @@
 {pkgs, ...}: {
-  imports = [
-    ./stylix.nix
-  ];
-
   #### Hyprland sys setup
   programs.hyprland.enable = true;
   hardware.graphics.enable = true;

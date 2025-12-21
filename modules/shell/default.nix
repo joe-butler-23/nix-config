@@ -1,7 +1,7 @@
 {...}: {
   imports = [
-    ./utils.nix
+    ./environment.nix
+    ./user-dirs.nix
     ./sops.nix
-    ./xdg.nix
   ];
 }
