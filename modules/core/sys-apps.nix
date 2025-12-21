@@ -173,6 +173,7 @@ in {
     pkgs.obsidian
     pkgs.zotero
     pkgs.vivaldi
+    pkgs.vscodium
 
     # Editors
     pkgs.emacs-pgtk

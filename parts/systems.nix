@@ -20,7 +20,6 @@
   };
 
   # Generated extensions set
-  vsx = inputs.nix-vscode-extensions.extensions.${system}.vscode-marketplace;
 
   # ========================================
   # NIXOS SYSTEM CONFIGURATION (mkSystem)
@@ -46,38 +45,6 @@
 
         # Use readOnlyPkgs to properly inject our custom pkgs with overlays
         {nixpkgs.pkgs = pkgs;}
-
-        # Home Manager Integration (NixOS Module)
-        inputs.home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "hm-bak";
-
-          # Pass special arguments to Home Manager modules
-          home-manager.extraSpecialArgs = {
-            inherit inputs pkgsUnstable vsx user;
-            inherit (inputs) whichkey anki-forge;
-          };
-
-          # User Configuration ("Home")
-          home-manager.users.${user} = {
-            home.username = user;
-            home.homeDirectory = "/home/${user}";
-            home.stateVersion = "25.05";
-
-            imports = [
-              ../modules/apps
-              ../modules/scripts
-              ../modules/editor
-
-              ## User Modules
-
-              # ai tools (uses system-level SOPS for CONTEXT7_API_KEY)
-              inputs.ai-utilities.homeManagerModules.default
-            ];
-          };
-        }
 
         # Host-specific configuration
         ../modules/hosts/${hostName}.nix
