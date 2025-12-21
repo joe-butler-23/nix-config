@@ -1,0 +1,1 @@
+/home/joebutler/.emacs.d/var/straight/repos/flymake/.github/PULL_REQUEST_TEMPLATE.md

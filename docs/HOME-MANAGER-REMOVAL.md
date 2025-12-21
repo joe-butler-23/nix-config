@@ -827,3 +827,44 @@ git commit -m "docs: add home-manager removal migration plan"
 ```
 
 This creates a permanent record of the migration strategy in your repository.
+
+## Migration Complete ✅
+
+**Date Completed**: December 21, 2025
+
+All phases of the home-manager removal migration have been successfully completed:
+
+### Final System Architecture
+
+**System-Level (NixOS)**:
+- All packages in `modules/core/sys-apps.nix`
+- Services as systemd user services in `modules/services/`
+- Environment variables in `modules/shell/environment.nix`
+- SOPS secrets at system level (`/run/secrets/`)
+- MIME types in `modules/desktop/mime-types.nix`
+- XDG user directories in `modules/shell/user-dirs.nix`
+
+**Chezmoi**:
+- All dotfiles (Hyprland, Zsh, Kitty, Waybar, Rofi, Mako, etc.)
+- wlogout config and icons
+- wlr-which-key config
+
+**Minimal Home Manager**:
+- Only user-level applications in `modules/apps/`
+- AI utilities integration
+- Editor configurations
+
+### Removed Files
+- `modules/desktop/gtk.nix` → Replaced by system-level Papirus theme
+- `modules/desktop/whichkey.nix` → Config moved to chezmoi
+- `modules/shell/xdg.nix` → Split into system-level mime-types.nix and user-dirs.nix
+- `modules/shell/utils.nix` → Packages moved to sys-apps.nix
+
+### Key Fixes During Migration
+- SOPS migration: Removed home-manager sops, all secrets now system-level
+- Espanso secret key: Fixed to use `espanso_matches` from secrets.yaml
+- AI utilities: Updated wrapper to use `/run/secrets/CONTEXT7_API_KEY`
+- wlogout: Added to system packages with chezmoi config
+- GTK theme: Added Papirus to system packages with environment variable
+
+All functionality preserved, no regressions detected.

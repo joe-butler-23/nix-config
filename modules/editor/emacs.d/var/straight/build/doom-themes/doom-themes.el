@@ -1,0 +1,1 @@
+/home/joebutler/.emacs.d/var/straight/repos/themes/doom-themes.el

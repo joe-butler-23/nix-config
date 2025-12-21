@@ -1,0 +1,1 @@
+/home/joebutler/.emacs.d/var/straight/repos/themes/themes/doom-oceanic-next-theme.el

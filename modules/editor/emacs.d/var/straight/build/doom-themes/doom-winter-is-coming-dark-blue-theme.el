@@ -1,0 +1,1 @@
+/home/joebutler/.emacs.d/var/straight/repos/themes/themes/doom-winter-is-coming-dark-blue-theme.el

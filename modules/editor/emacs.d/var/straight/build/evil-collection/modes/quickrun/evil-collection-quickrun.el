@@ -1,0 +1,1 @@
+/home/joebutler/.emacs.d/var/straight/repos/evil-collection/modes/quickrun/evil-collection-quickrun.el

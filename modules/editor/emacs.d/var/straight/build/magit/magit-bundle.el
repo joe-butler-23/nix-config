@@ -1,0 +1,1 @@
+/home/joebutler/.emacs.d/var/straight/repos/magit/lisp/magit-bundle.el

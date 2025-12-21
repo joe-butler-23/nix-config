@@ -1,0 +1,1 @@
+/home/joebutler/.emacs.d/var/straight/repos/evil-collection/modes/cmake-mode/evil-collection-cmake-mode.el

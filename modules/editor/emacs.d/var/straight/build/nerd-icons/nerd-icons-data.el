@@ -1,0 +1,1 @@
+/home/joebutler/.emacs.d/var/straight/repos/nerd-icons.el/nerd-icons-data.el

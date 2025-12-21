@@ -1,0 +1,1 @@
+/home/joebutler/.emacs.d/var/straight/repos/emacs-undo-fu-session/undo-fu-session.el

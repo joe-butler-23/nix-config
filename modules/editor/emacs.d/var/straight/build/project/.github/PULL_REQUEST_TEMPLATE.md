@@ -1,0 +1,1 @@
+/home/joebutler/.emacs.d/var/straight/repos/project/.github/PULL_REQUEST_TEMPLATE.md

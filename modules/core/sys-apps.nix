@@ -73,12 +73,14 @@ in {
     pkgs.kitty # Config managed by chezmoi
     pkgs.zathura # Config managed by chezmoi
     pkgs.waybar # Config managed by chezmoi
+    pkgs.wlogout # Config managed by chezmoi
     pkgs.hyprland # Config managed by chezmoi
     pkgs.hypridle # Config managed by chezmoi
     pkgs.hyprlock # Config managed by chezmoi
     pkgs.rofi # Config managed by chezmoi
     pkgs.swaybg # Wallpaper daemon
     pkgs.mako # Config managed by chezmoi
+    pkgs.papirus-icon-theme
 
     # Shell
     pkgs.zsh # Config managed by chezmoi

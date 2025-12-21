@@ -1,0 +1,1 @@
+/home/joebutler/.emacs.d/var/straight/repos/evil-collection/modes/auto-package-update/evil-collection-auto-package-update.el
