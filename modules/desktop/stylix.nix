@@ -1,6 +1,5 @@
 {
   pkgs,
-  user,
   ...
 }: {
   stylix = {
@@ -44,19 +43,5 @@
     opacity = {
       terminal = 0.95;
     };
-  };
-
-  # Home Manager Targets
-  home-manager.users.${user}.stylix.targets = {
-    # False
-    foot.enable = false;
-    mako.enable = false;
-    yazi.enable = false;
-    waybar.enable = false;
-
-    # True
-    rofi.enable = true;
-    gtk.enable = true;
-    hyprlock.enable = true;
   };
 }
