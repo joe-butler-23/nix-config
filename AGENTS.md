@@ -28,6 +28,30 @@ NixOS system configuration managed declaratively with Home Manager. This reposit
 
 **Task Tracking:** This project uses **org-mode** for task management.
 
+## Code Comments Style
+
+**Present-State Documentation:**
+- Comments document current state, NOT historical changes
+- Avoid: "now", "moved to", "no longer", or any progression language
+- Git history captures changes; code comments capture current reality
+
+**Conciseness:**
+- One line when possible
+- No redundant explanations
+
+**Examples:**
+
+❌ Bad:
+```nix
+# Note: Kanshi service is now system-level (modules/services/kanshi.nix)
+# Config is managed by chezmoi at ~/.config/kanshi/config
+```
+
+✅ Good:
+```nix
+# Kanshi: laptop-specific, config in chezmoi
+```
+
 ## Available Skills (Progressive Disclosure)
 
 <skills_system priority="1">
