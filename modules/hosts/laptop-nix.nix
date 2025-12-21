@@ -1,7 +1,8 @@
-{
-  config,
-  ...
-}: {
+{config, ...}: {
+  imports = [
+    ../services/kanshi.nix
+  ];
+
   networking.hostName = "laptop-nix";
 
   assertions = [

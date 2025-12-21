@@ -2,6 +2,6 @@
   imports = [
     ./espanso.nix
     ./syncthing.nix
-    ./kanshi.nix
+    # kanshi moved to laptop-specific (modules/hosts/laptop-nix.nix)
   ];
 }
