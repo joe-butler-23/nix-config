@@ -14,6 +14,7 @@
     serviceConfig = {
       ExecStart = "${pkgs.espanso-wayland}/bin/espanso daemon";
       Restart = "on-failure";
+      RestartSec = "5s";
     };
   };
 

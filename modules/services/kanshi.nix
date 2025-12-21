@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   # Kanshi monitor daemon (user service)
   # Config managed by chezmoi at ~/.config/kanshi/config
   systemd.user.services.kanshi = {
@@ -13,6 +10,7 @@
       Type = "simple";
       ExecStart = "${pkgs.kanshi}/bin/kanshi";
       Restart = "on-failure";
+      RestartSec = "5s";
     };
   };
 }
