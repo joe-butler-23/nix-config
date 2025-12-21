@@ -35,6 +35,7 @@
       };
       modules = [
         ../modules/core
+        ../modules/services
 
         # System Modules (Enable System-wide Features)
         ../modules/desktop/brave-wrapper.nix
