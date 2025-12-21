@@ -42,6 +42,7 @@
         inputs.stylix.nixosModules.stylix
         ../modules/desktop/stylix.nix
         inputs.sops-nix.nixosModules.sops
+        inputs.ai-utilities.nixosModules.default
 
         # Use readOnlyPkgs to properly inject our custom pkgs with overlays
         {nixpkgs.pkgs = pkgs;}
