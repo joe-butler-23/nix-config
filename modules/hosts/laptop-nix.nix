@@ -1,6 +1,5 @@
 {
   config,
-  user,
   ...
 }: {
   networking.hostName = "laptop-nix";
@@ -29,24 +28,6 @@
     USB_DEVICE_BLACKLIST = "4653:0004"; # Corne keyboard vendor:product
   };
 
-  # Laptop-only Home-Manager config
-  home-manager.users.${user} = {
-    services.kanshi.enable = true;
-
-    # Kanshi dynamically manages monitor enable/disable based on connected displays
-    # The 'exec hyprctl reload' is REQUIRED to apply Hyprland's monitor configuration after kanshi enables/disables outputs
-    # DO NOT REMOVE the exec commands - they ensure resolution and scaling settings from hyprland/settings.nix are applied
-    xdg.configFile."kanshi/config".text = ''
-      profile undocked {
-        output eDP-1 mode 1920x1080@60Hz position 0,0
-        exec hyprctl reload
-      }
-
-      profile docked {
-        output "Dell Inc. DELL S2721HSX 1991Q83" mode 1920x1080@75Hz position 0,0
-        output eDP-1 disable
-        exec hyprctl reload
-      }
-    '';
-  };
+  # Note: Kanshi service is now system-level (modules/services/kanshi.nix)
+  # Config is managed by chezmoi at ~/.config/kanshi/config
 }
