@@ -7,11 +7,6 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
-    stylix = {
-      url = "github:nix-community/stylix/release-25.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";

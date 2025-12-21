@@ -133,9 +133,14 @@ in {
     # Fonts
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.font-awesome
+    pkgs.noto-fonts
     pkgs.noto-fonts-color-emoji
+    pkgs.noto-fonts-cjk-sans
 
-    # Tools
+    # Theming & Cursors
+    pkgs.capitaine-cursors
+    pkgs.papirus-icon-theme
+    pkgs.hicolor-icon-theme
     pkgs.qmk
     pkgs.sops
     pkgs.imagemagick

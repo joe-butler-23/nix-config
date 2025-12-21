@@ -31,6 +31,8 @@
 
     # GTK
     GTK_THEME = "Papirus-Dark";
+    XCURSOR_THEME = "capitaine-cursors";
+    XCURSOR_SIZE = "24";
 
     # Emacs
     EMACS_NATIVE_COMP_ASYNC_REPORT_WARNINGS_ERRORS = "nil";

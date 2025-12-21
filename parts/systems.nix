@@ -5,7 +5,7 @@
   # Import overlays
   overlays = [
     inputs.emacs-overlay.overlays.default
-    (import ../modules/apps/overlays/default.nix {inherit inputs;})
+    (import ../modules/overlays/default.nix {inherit inputs;})
   ];
 
   pkgsUnstable = import inputs.nixpkgs-unstable {
@@ -35,12 +35,9 @@
       modules = [
         ../modules/core
         ../modules/services
-        ../modules/shell
         ../modules/desktop
 
         # System Modules (Enable System-wide Features)
-        inputs.stylix.nixosModules.stylix
-        ../modules/desktop/stylix.nix
         inputs.sops-nix.nixosModules.sops
         inputs.ai-utilities.nixosModules.default
 

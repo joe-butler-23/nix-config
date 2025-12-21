@@ -1,6 +1,5 @@
 {pkgs, ...}: {
   imports = [
-    ../desktop/stylix.nix
   ];
 
   #### Hyprland configuration (System)

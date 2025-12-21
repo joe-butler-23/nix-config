@@ -142,11 +142,11 @@
     };
 in {
   environment.systemPackages = [
-    (makeWebApp "chatgpt" "ChatGPT" "/home/${user}/nix-config/modules/apps/web-apps/icons/chatgpt.png" "https://chat.openai.com" ["Development"])
+    (makeWebApp "chatgpt" "ChatGPT" "/home/${user}/nix-config/modules/desktop/web-apps/icons/chatgpt.png" "https://chat.openai.com" ["Development"])
     (makeWebApp "spotify-web" "Spotify Web Player" "spotify" "https://open.spotify.com" ["AudioVideo" "Audio"])
-    (makeWebApp "mathacademy" "Math Academy" "/home/${user}/nix-config/modules/apps/web-apps/icons/mathacademy.png" "https://www.mathacademy.com/learn" ["Education" "Science"])
+    (makeWebApp "mathacademy" "Math Academy" "/home/${user}/nix-config/modules/desktop/web-apps/icons/mathacademy.png" "https://www.mathacademy.com/learn" ["Education" "Science"])
     (makeWebApp "youtube" "YouTube" "youtube" "https://www.youtube.com" ["AudioVideo" "Video"])
-    (makeWebApp "outlook" "Outlook" "/home/${user}/nix-config/modules/apps/web-apps/icons/outlook.png" "https://outlook.office.com/mail/" ["Office" "Email"])
+    (makeWebApp "outlook" "Outlook" "/home/${user}/nix-config/modules/desktop/web-apps/icons/outlook.png" "https://outlook.office.com/mail/" ["Office" "Email"])
 
     # Utility to configure extensions for the shared profile
     (pkgs.makeDesktopItem {
