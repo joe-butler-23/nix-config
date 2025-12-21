@@ -29,6 +29,5 @@
     USB_DEVICE_BLACKLIST = "4653:0004"; # Corne keyboard vendor:product
   };
 
-  # Note: Kanshi service is now system-level (modules/services/kanshi.nix)
-  # Config is managed by chezmoi at ~/.config/kanshi/config
+  # Kanshi: laptop-specific, config in chezmoi
 }
