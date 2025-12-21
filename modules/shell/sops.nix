@@ -3,6 +3,15 @@
   sops = {
     age.keyFile = "/home/${user}/nix-config/secrets/sops.agekey";
     defaultSopsFile = ../../secrets/secrets.yaml;
-    # CONTEXT7_API_KEY: handled by home-manager sops for AI tools
+
+    secrets.CONTEXT7_API_KEY = {
+      mode = "0440";
+      owner = user;
+    };
+  };
+
+  # Make CONTEXT7_API_KEY available as environment variable
+  environment.variables = {
+    CONTEXT7_API_KEY_PATH = "/run/secrets/CONTEXT7_API_KEY";
   };
 }

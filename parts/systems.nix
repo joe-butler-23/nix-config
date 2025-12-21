@@ -73,15 +73,7 @@
 
               ## User Modules
 
-              # sops (minimal, only for AI tools compatibility)
-              inputs.sops-nix.homeManagerModules.sops
-              {
-                sops.age.keyFile = "/home/${user}/nix-config/secrets/sops.agekey";
-                sops.defaultSopsFile = ../../secrets/secrets.yaml;
-                sops.secrets.CONTEXT7_API_KEY = {};
-              }
-
-              # ai tools
+              # ai tools (uses system-level SOPS for CONTEXT7_API_KEY)
               inputs.ai-utilities.homeManagerModules.default
             ];
           };

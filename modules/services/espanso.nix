@@ -18,7 +18,7 @@
   };
 
   # SOPS secret for espanso
-  sops.secrets."secrets.yml" = {
+  sops.secrets.espanso_matches = {
     owner = user;
     path = "/home/${user}/.config/espanso/match/secrets.yml";
   };

@@ -6,11 +6,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1766052879,
-        "narHash": "sha256-8XHtWGsDJHZiyuGC53tuIkLdaeZ75jASjmTEZYmdmHo=",
+        "lastModified": 1766347600,
+        "narHash": "sha256-mEdKfTZDWH/XPhYVGC7vfyTxUMLADV06bdD5LpEMEeA=",
         "ref": "refs/heads/main",
-        "rev": "172e642579646dba53e7543745392002be4cc8b4",
-        "revCount": 40,
+        "rev": "a2b8a934e424ac13eae04ac891a833c795e852fe",
+        "revCount": 41,
         "type": "git",
         "url": "file:///home/joebutler/projects/sys-arc/ai"
       },
