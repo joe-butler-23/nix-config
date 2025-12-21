@@ -21,11 +21,11 @@
 _: _final: prev: {
   opencode = prev.stdenv.mkDerivation rec {
     pname = "opencode";
-    version = "1.0.166";
+    version = "1.0.184";
 
     src = prev.fetchurl {
       url = "https://github.com/sst/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      sha256 = "0z3ym0xzvrh3xg6wwyl7xngzy8q310p586qz668g13avy1z3cw2k";
+      sha256 = "10dssy93xiyfw0dpizsv8pvhj8zlzvdr9k654yy4insfc8qf4m3b";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
@@ -77,11 +77,11 @@ _: _final: prev: {
 
   gemini = prev.stdenv.mkDerivation rec {
     pname = "gemini-cli";
-    version = "0.22.0-preview.2";
+    version = "0.22.0-preview.3";
 
     src = prev.fetchurl {
       url = "https://github.com/google-gemini/gemini-cli/releases/download/v${version}/gemini.js";
-      sha256 = "0a9cvzk5bbncnvk2xaz3r8qbz48kphfn8yv96xzc7fpmfq906gpi";
+      sha256 = "1nqk935cxk11fxdrvp1sqlj56a1nw5578mkn030d4k6z1qs5lsqb";
     };
 
     dontUnpack = true;
@@ -126,11 +126,11 @@ _: _final: prev: {
 
   claude = prev.stdenv.mkDerivation rec {
     pname = "claude-code";
-    version = "2.0.72";
+    version = "2.0.75";
 
     src = prev.fetchurl {
       url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-      sha256 = "1bb8f7cjzc7xv22djb5bna5dig6fiykslvx498rxvwvwxz0ygq1i";
+      sha256 = "0ql37g8ph56d0953c89xh90qskxf2bcpr234n4fx5hdzn7wdy341";
     };
 
     nativeBuildInputs = [prev.makeWrapper];
@@ -173,11 +173,11 @@ _: _final: prev: {
 
   codex = prev.stdenv.mkDerivation rec {
     pname = "codex";
-    version = "0.73.0";
+    version = "0.77.0";
 
     src = prev.fetchurl {
       url = "https://github.com/openai/codex/releases/download/rust-v${version}/codex-x86_64-unknown-linux-gnu.tar.gz";
-      sha256 = "0q76xybf03r19a81i7pgpmpgv97v0i6sb1lcm9485ky5p05g7m28";
+      sha256 = "12rq4znrhdpjs7pm4prczllljc8m09j80py68j7149cnrnydzlal";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
@@ -227,11 +227,11 @@ _: _final: prev: {
 
   zed-editor = prev.stdenv.mkDerivation rec {
     pname = "zed-editor";
-    version = "0.217.2";
+    version = "0.217.3";
 
     src = prev.fetchurl {
       url = "https://github.com/zed-industries/zed/releases/download/v${version}/zed-linux-x86_64.tar.gz";
-      sha256 = "095wky28ff370d44kj40fagypd7ry0lqbpyh9vxj56pw7glnnvvx";
+      sha256 = "1v9q0c2kylvkbzygp9n5rmkwjxa71d7kv5sxczlfns1bcaqzw511";
     };
 
     nativeBuildInputs = [
