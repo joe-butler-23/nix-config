@@ -19,6 +19,7 @@
     kitty # Config managed by chezmoi
     zathura # Config managed by chezmoi
     waybar # Config managed by chezmoi
+    hyprland # Config managed by chezmoi
     hypridle # Config managed by chezmoi
     hyprlock # Config managed by chezmoi
 
