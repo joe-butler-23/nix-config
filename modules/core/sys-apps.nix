@@ -22,6 +22,9 @@
     hyprland # Config managed by chezmoi
     hypridle # Config managed by chezmoi
     hyprlock # Config managed by chezmoi
+    rofi # Config managed by chezmoi
+    swaybg # Wallpaper daemon
+    mako # Config managed by chezmoi
 
     # Shell
     zsh # Config managed by chezmoi
@@ -32,9 +35,6 @@
 
     # File Manager
     yazi # Config managed by chezmoi
-
-    # Temporary: mako notification daemon (should be in home.packages)
-    mako
   ];
 
   # thunar dotfiles in modules/apps/thunar.nix
