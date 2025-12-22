@@ -104,7 +104,7 @@
   ];
 
   # Common flags for standalone app mode
-  standalone-app-flags = "--no-first-run --no-default-browser-check --disable-background-mode --disable-extensions-file-access-check --disable-background-timer-throttling --disable-renderer-backgrounding --disable-component-update --disable-sync --disable-breakpad --disable-crash-reporter --disable-speech-api --disable-domain-reliability --no-pings";
+  standalone-app-flags = "--ozone-platform=wayland --no-first-run --no-default-browser-check --disable-background-mode --disable-extensions-file-access-check --disable-background-timer-throttling --disable-renderer-backgrounding --disable-component-update --disable-sync --disable-breakpad --disable-crash-reporter --disable-speech-api --disable-domain-reliability --no-pings";
 
   # Shared profile directory
   shared-profile-dir = "/home/${user}/.local/share/brave-webapps";

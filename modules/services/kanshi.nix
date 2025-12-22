@@ -11,6 +11,7 @@
       ExecStart = "${pkgs.kanshi}/bin/kanshi";
       Restart = "on-failure";
       RestartSec = "5s";
+      Environment = "PATH=${pkgs.hyprland}/bin:$PATH";
     };
   };
 }

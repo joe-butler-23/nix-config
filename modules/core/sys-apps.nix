@@ -121,6 +121,7 @@ in {
     pkgs.bluetui
     pkgs.blueman
     pkgs.localsend
+    pkgs.nwg-look
     pkgs.viewnior
     pkgs.xfce.mousepad
     pkgs.gtksourceview4

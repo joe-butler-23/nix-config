@@ -4,8 +4,13 @@
   braveGatekeeper = pkgs.writeShellScriptBin "brave" ''
     set -euo pipefail
 
+    # DEBUG: Log invocation
+    echo "[$(date)] invoked with args: $*" >> /tmp/brave-wrapper.log
+    echo "Parent: $(ps -o comm= $PPID)" >> /tmp/brave-wrapper.log
+    # END DEBUG
+
     # Ensure dependencies are in PATH
-    export PATH="${pkgs.gum}/bin:${pkgs.coreutils}/bin:${pkgs.findutils}/bin:${pkgs.sudo}/bin:${pkgs.kitty}/bin:${pkgs.emacs}/bin:${pkgs.libnotify}/bin:${pkgs.gnugrep}/bin:${pkgs.gawk}/bin:${pkgs.util-linux}/bin:${pkgs.systemd}/bin:${pkgs.hyprland}/bin:$PATH"
+    export PATH="${pkgs.gum}/bin:${pkgs.coreutils}/bin:${pkgs.findutils}/bin:${pkgs.sudo}/bin:${pkgs.kitty}/bin:${pkgs.emacs}/bin:${pkgs.libnotify}/bin:${pkgs.gnugrep}/bin:${pkgs.gawk}/bin:${pkgs.util-linux}/bin:${pkgs.systemd}/bin:${pkgs.hyprland}/bin:${pkgs.procps}/bin:$PATH"
 
     # === CONFIGURATION ===
     readonly PROJECTS_DIR="$HOME/projects"
@@ -15,6 +20,23 @@
 
     # Capture original arguments (URLs) immediately
     BRAVE_ARGS=("$@")
+
+    # Bypass gatekeeper for Localhost
+    for arg in "''${BRAVE_ARGS[@]}"; do
+        if [[ "$arg" == *"localhost"* ]] || [[ "$arg" == *"127.0.0.1"* ]] || [[ "$arg" == *"::1"* ]]; then
+             # Log that we are bypassing
+             echo "[$(date)] Bypassing gatekeeper for localhost: $arg" >> /tmp/brave-wrapper.log
+             exec "${realBrave}/bin/brave" --ozone-platform=wayland "''${BRAVE_ARGS[@]}"
+        fi
+    done
+
+    # Bypass gatekeeper for automated tools (Node, Python)
+    # Get parent command
+    PARENT_CMD=$(ps -o comm= $PPID || echo "unknown")
+    if [[ "$PARENT_CMD" == "node" ]] || [[ "$PARENT_CMD" == "python"* ]] || [[ "$PARENT_CMD" == "uvx" ]] || [[ "$PARENT_CMD" == "npx" ]]; then
+         echo "[$(date)] Bypassing gatekeeper for parent: $PARENT_CMD" >> /tmp/brave-wrapper.log
+         exec "${realBrave}/bin/brave" --ozone-platform=wayland "''${BRAVE_ARGS[@]}"
+    fi
 
     # Nord Colors
     readonly NORD11="#BF616A"
@@ -74,7 +96,7 @@
 
         # Launch Brave in new window (systemd-run returns immediately)
         systemd-run --user --unit="brave-session-$unit_timestamp" \
-            "${realBrave}/bin/brave" --new-window "''${BRAVE_ARGS[@]}" \
+            "${realBrave}/bin/brave" --ozone-platform=wayland --new-window "''${BRAVE_ARGS[@]}" \
             >/dev/null 2>&1
 
         # Launch Emacs side panel with an internal delay so we don't block here
