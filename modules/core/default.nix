@@ -55,7 +55,6 @@
   imports = [
     ./hardware.nix
     ./sys-apps.nix
-    ./system.nix
     ./environment.nix
     ./user-dirs.nix
     ./sops.nix
