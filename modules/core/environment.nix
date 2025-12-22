@@ -26,15 +26,10 @@
     # SOPS
     SOPS_AGE_KEY_FILE = "/home/${user}/nix-config/secrets/sops.agekey";
 
-    # Qt platform (for Syncthing tray)
-    QT_QPA_PLATFORM = "wayland";
-
-    # GTK
-    GTK_THEME = "Papirus-Dark";
-    XCURSOR_THEME = "capitaine-cursors";
-    XCURSOR_SIZE = "24";
-
     # Emacs
+    EDITOR = "emacsclient -c -n";
+    VISUAL = "emacsclient -c -n";
+    SOPS_EDITOR = "emacsclient -t";
     EMACS_NATIVE_COMP_ASYNC_REPORT_WARNINGS_ERRORS = "nil";
   };
 }

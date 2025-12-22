@@ -6,17 +6,17 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1766354812,
-        "narHash": "sha256-xr7+YeESQqdN2cUi3u4iAM4WymeoPhiX42BSXSjdK1I=",
+        "lastModified": 1766393757,
+        "narHash": "sha256-Qakdz/GLp4n6LjVO5u+OtDrLnnqjL2YyNvhDlZhjUlI=",
         "ref": "refs/heads/main",
-        "rev": "ad6b47c0ef540aaf6460772c47c7f0ed8d59cd94",
-        "revCount": 42,
+        "rev": "3d097fe89ec6a30cf1859ae4aa8d9220d8b4e087",
+        "revCount": 44,
         "type": "git",
-        "url": "file:///home/joebutler/projects/sys-arc/ai"
+        "url": "ssh://git@github.com/joe-butler-23/ai"
       },
       "original": {
         "type": "git",
-        "url": "file:///home/joebutler/projects/sys-arc/ai"
+        "url": "ssh://git@github.com/joe-butler-23/ai"
       }
     },
     "anki-forge": {
@@ -46,11 +46,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1766336036,
-        "narHash": "sha256-AMvYhw0KTWuwqEos65vpyT00YtVm0thf3Leja7fi8TE=",
+        "lastModified": 1766395069,
+        "narHash": "sha256-M/Z58pFvRl4YnlyBS5+UHpsRDzKw/8XXXs4qBb+6w30=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "46839b394c0be779599a6b3332bdd9946afa9f89",
+        "rev": "19e7b4e4573178ad3d7c8828aefd1f3a20e6ead4",
         "type": "github"
       },
       "original": {
@@ -138,11 +138,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1766283289,
-        "narHash": "sha256-8yDQJUT5kX6vYwJbuALfp9glIYUI1dxDWT6GpL6mhxA=",
+        "lastModified": 1766369649,
+        "narHash": "sha256-8Z/4upd/AS7pU72QS3GesaWeTgM4VcrSf85bh9fxum8=",
         "owner": "nix-community",
         "repo": "nix-vscode-extensions",
-        "rev": "889481b823cd31a17913f31c35865c25c8a8d28b",
+        "rev": "94058abef65a5f2916f4d9da67d9966039366514",
         "type": "github"
       },
       "original": {
@@ -395,11 +395,11 @@
         "rev": "a5fac09da7a703f38a6e660fac58908cd33bfefa",
         "revCount": 88,
         "type": "git",
-        "url": "file:///home/joebutler/development/whichkey"
+        "url": "ssh://git@github.com/joe-butler-23/wlr-which-key"
       },
       "original": {
         "type": "git",
-        "url": "file:///home/joebutler/development/whichkey"
+        "url": "ssh://git@github.com/joe-butler-23/wlr-which-key"
       }
     }
   },

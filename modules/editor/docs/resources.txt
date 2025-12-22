@@ -10,19 +10,12 @@ environment.systemPackages = [
   pkgs.emacs
 ];
 
-# User-specific installation (in ~/.config/nixpkgs/home.nix)
-home.packages = [
-  pkgs.emacs
-];
-After rebuilding your system with nixos-rebuild switch or home-manager switch, Emacs will be installed and accessible.
+After rebuilding your system with nixos-rebuild switch, Emacs will be installed and accessible.
+User configuration is managed via chezmoi (e.g., ~/.config/emacs or ~/.emacs.d).
 
 Configuration
-Note: Currently, configuring Emacs is possible by using Home Manager. A workaround for a global configuration is highlighted in the advanced section.
 Basic
-programs.emacs = {
-   enable = true;
-   defaultEditor = true;
-};
+Set `EDITOR`/`VISUAL` in your NixOS configuration and manage Emacs config in chezmoi (e.g., ~/.config/emacs).
 Advanced
 # Global Configuration
 # Emacs is running as a daemon here, accesible via the "emacsclient" command
@@ -31,15 +24,6 @@ services.emacs = {
   package = pkgs.emacs;
 };
 
-# Home Configuration
-programs.emacs = {
-  enable = true;
-  package = pkgs.emacs;  # replace with pkgs.emacs-gtk if desired
-  defaultEditor = true;
-  extraConfig = ''
-    (setq standard-indent 2)
-  '';
-};
 Tips and Tricks
 Installing Packages
 Note: Emacs, much like NixOS can rebuild and re-fetch all of its packages based on its initialization file alone, if one chooses to use an extension called "use-package". Such a configuration file can be version controlled and used in all compatible operating systems.

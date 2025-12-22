@@ -16,11 +16,11 @@
     nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
 
     # personal dev apps
-    whichkey.url = "git+file:///home/joebutler/development/whichkey";
+    whichkey.url = "git+ssh://git@github.com/joe-butler-23/wlr-which-key";
     anki-forge.url = "github:joe-butler-23/anki-card-forge";
 
     # ai utilities
-    ai-utilities.url = "git+file:///home/joebutler/projects/sys-arc/ai";
+    ai-utilities.url = "git+ssh://git@github.com/joe-butler-23/ai";
 
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";

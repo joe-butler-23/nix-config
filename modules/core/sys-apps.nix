@@ -80,7 +80,6 @@ in {
     pkgs.rofi # Config managed by chezmoi
     pkgs.swaybg # Wallpaper daemon
     pkgs.mako # Config managed by chezmoi
-    pkgs.papirus-icon-theme
 
     # Shell
     pkgs.zsh # Config managed by chezmoi
@@ -126,8 +125,6 @@ in {
     pkgs.xfce.mousepad
     pkgs.gtksourceview4
     pkgs.gvfs
-    pkgs.papirus-icon-theme
-    pkgs.hicolor-icon-theme
     pkgs.desktop-file-utils
 
     # Fonts

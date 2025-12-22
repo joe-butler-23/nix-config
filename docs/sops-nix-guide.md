@@ -1,8 +1,8 @@
 # sops-nix Guide
 
-This document provides a guide to setting up and using `sops-nix` for managing secrets in a NixOS and Home Manager environment. It is based on the official `sops-nix` repository and community best practices.
+This document provides a guide to setting up and using `sops-nix` for managing secrets in a NixOS environment. It is based on the official `sops-nix` repository and community best practices.
 
-`sops-nix` provides a declarative, atomic, and reproducible way to manage secrets in NixOS and Home Manager configurations, allowing encrypted secrets to be committed to version control. It supports GPG and Age keys for decryption, with Age being recommended for its compatibility with SSH keys.
+`sops-nix` provides a declarative, atomic, and reproducible way to manage secrets in NixOS configurations, allowing encrypted secrets to be committed to version control. It supports GPG and Age keys for decryption, with Age being recommended for its compatibility with SSH keys.
 
 ## 1. Initial Setup and Configuration
 
@@ -25,13 +25,6 @@ Add `sops-nix` as an input in your `flake.nix`:
       modules = [
         ./configuration.nix
         sops-nix.nixosModules.sops # For NixOS
-      ];
-    };
-    homeConfigurations.yourusername = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      modules = [
-        ./home.nix
-        sops-nix.homeManagerModules.sops # For Home Manager
       ];
     };
   };
@@ -128,27 +121,7 @@ After a `nixos-rebuild switch`, secrets will be available as files in `/run/secr
 *   `cat /run/secrets/api-key` will output `hello world :)
 *   `cat /run/secrets/myservice/my_subdir/my_secret` will output `password123`
 
-### 4.2. Home Manager Configuration
-In your `home.nix` (or relevant Home Manager module), configure `sops` for user-level secrets:
-```nix
-# home.nix
-{
-  config, pkgs, ...
-}:
-{
-  sops = {
-    age.keyFile = "/home/user/.config/sops/age/keys.txt"; # Path to your personal age private key
-    # age.sshKeyPaths = [ "/home/user/.ssh/id_ed25519" ]; # Alternative: use SSH key
-    defaultSopsFile = ./secrets.yaml;
-    secrets.test = {}; # Declare a secret
-  };
-  # Ensure services that need secrets start after sops-nix
-  systemd.user.services.my-user-service.unitConfig.After = [ "sops-nix.service" ];
-}
-```
-Home Manager secrets are decrypted to `$XDG_RUNTIME_DIR/secrets.d/` and symlinked to `$HOME/.config/sops-nix/secrets/`.
-
-### 4.3. Secret Permissions and Ownership
+### 4.2. Secret Permissions and Ownership
 You can set `mode`, `owner`, and `group` for secrets:
 ```nix
 sops.secrets.example-secret = {
@@ -158,7 +131,7 @@ sops.secrets.example-secret = {
 };
 ```
 
-### 4.4. Secrets Needed for Users (NixOS only)
+### 4.3. Secrets Needed for Users (NixOS only)
 For secrets required before user creation (e.g., `hashedPasswordFile`), use `neededForUsers = true`. These secrets are decrypted to `/run/secrets-for-users`.
 ```nix
 sops.secrets.my-password.neededForUsers = true;
@@ -168,7 +141,7 @@ users.users.mic92 = {
 };
 ```
 
-### 4.5. Templates for Configuration Files
+### 4.4. Templates for Configuration Files
 To embed secrets directly into configuration files, use `sops.templates`:
 ```nix
 sops.secrets.your-secret = {};

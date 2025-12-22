@@ -62,22 +62,22 @@ All scripts in this folder follow a consistent pattern using Nix's `writeShellSc
 - Follow the template above
 - Test locally with `nix-build` if needed
 
-### 2. Update scripts/default.nix
-Add your script to the packages list:
+### 2. Update modules/core/sys-apps.nix
+Add your script to the packages list in `modules/core/sys-apps.nix`:
 ```nix
-{ pkgs, ... }: {
-  home.packages = [
-    (import ./file-launcher.nix { inherit pkgs; })
-    (import ./recent-files-launcher.nix { inherit pkgs; })
-    (import ./script-name.nix { inherit pkgs; })  # Add this line
-  ];
-}
+environment.systemPackages = [
+  (import ../scripts/file-launcher.nix { inherit pkgs; })
+  (import ../scripts/recent-files-launcher.nix { inherit pkgs; })
+  (import ../scripts/script-name.nix { inherit pkgs; })  # Add this line
+];
 ```
 
 ### 3. Apply Changes
 ```bash
 cd /home/joebutler/nix-config
-home-manager switch --flake .
+git status
+git add .
+ns
 ```
 
 ### 4. Test and Commit
@@ -112,7 +112,7 @@ See existing scripts:
 ### Common Issues
 1. **"command not found"** - Check Nix dependency paths
 2. **"permission denied"** - Ensure script is executable via Nix
-3. **"does not exist"** - Check file is added to scripts/default.nix and added to git tree
+3. **"does not exist"** - Check file is added to `modules/core/sys-apps.nix` and added to git tree
 4. **Blank windows** - Remove Kitty-specific code, use Foot
 
 ### Debug Commands
@@ -124,4 +124,4 @@ which script-name
 script-name
 
 # Rebuild if needed
-cd ~/nix-config && home-manager switch --flake .
+cd ~/nix-config && git status && git add . && ns

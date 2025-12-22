@@ -7,6 +7,9 @@
     MOZ_ENABLE_WAYLAND = "1";
     QT_QPA_PLATFORM = "wayland";
     GDK_BACKEND = "wayland";
+    GTK_THEME = "Papirus-Dark";
+    XCURSOR_THEME = "capitaine-cursors";
+    XCURSOR_SIZE = "24";
   };
 
   #### Display manager
