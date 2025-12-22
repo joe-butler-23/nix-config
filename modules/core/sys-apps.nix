@@ -144,6 +144,7 @@ in {
     pkgs.sops
     pkgs.imagemagick
     pkgs.brightnessctl
+    pkgs.espanso-wayland
 
     # Media / Streaming
     pkgs.ffmpeg
