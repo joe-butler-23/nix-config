@@ -130,6 +130,7 @@ in {
     # Fonts
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.font-awesome
+    pkgs.ibm-plex
     pkgs.noto-fonts
     pkgs.noto-fonts-color-emoji
     pkgs.noto-fonts-cjk-sans
