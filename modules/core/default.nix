@@ -105,6 +105,8 @@
   # ========================================
   networking.networkmanager.enable = true;
   networking.firewall.enable = true;
+  networking.nameservers = [ "127.0.0.1" "::1" ];
+  networking.networkmanager.dns = "none";
   
   # AdGuard Home (Local DNS & Dashboard)
   services.adguardhome = {
