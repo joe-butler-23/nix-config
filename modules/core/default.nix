@@ -77,6 +77,13 @@
   # ========================================
   security.polkit.enable = true;
 
+  security.wrappers.espanso = {
+    source = "${pkgs.espanso-wayland}/bin/espanso";
+    capabilities = "cap_dac_override+p";
+    owner = "root";
+    group = "root";
+  };
+
   services.openssh = {
     enable = true;
     settings = {
@@ -105,9 +112,9 @@
   # ========================================
   networking.networkmanager.enable = true;
   networking.firewall.enable = true;
-  networking.nameservers = [ "127.0.0.1" "::1" ];
+  networking.nameservers = ["127.0.0.1" "::1"];
   networking.networkmanager.dns = "none";
-  
+
   # AdGuard Home (Local DNS & Dashboard)
   services.adguardhome = {
     enable = true;

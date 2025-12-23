@@ -116,6 +116,7 @@ in {
     pkgsUnstable.hyprshot
     pkgsUnstable.hyprland-protocols
     pkgsUnstable.wl-clipboard
+    pkgs.kdotool
     pkgsUnstable.xdg-utils
     pkgsUnstable.wayland-utils
     pkgsUnstable.uwsm
