@@ -105,8 +105,16 @@
   # ========================================
   networking.networkmanager.enable = true;
   networking.firewall.enable = true;
-  networking.nameservers = ["94.140.14.14" "94.140.15.15"];
-  networking.networkmanager.dns = "none";
+  
+  # AdGuard Home (Local DNS & Dashboard)
+  services.adguardhome = {
+    enable = true;
+    openFirewall = true;
+    port = 3000;
+    settings = {
+      schema_version = 20;
+    };
+  };
 
   services.tailscale = {
     enable = true;
