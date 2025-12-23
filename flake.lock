@@ -6,11 +6,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1766393757,
-        "narHash": "sha256-Qakdz/GLp4n6LjVO5u+OtDrLnnqjL2YyNvhDlZhjUlI=",
+        "lastModified": 1766424009,
+        "narHash": "sha256-e9HqO/QYe7LPDx5q4TkYO4u3dEqeeIgEe8lgdUOdD9o=",
         "ref": "refs/heads/main",
-        "rev": "3d097fe89ec6a30cf1859ae4aa8d9220d8b4e087",
-        "revCount": 44,
+        "rev": "958ab5a7fb77d3ae4616bf8b3b332f8fe1fb7199",
+        "revCount": 46,
         "type": "git",
         "url": "ssh://git@github.com/joe-butler-23/ai"
       },
@@ -25,11 +25,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1763833596,
-        "narHash": "sha256-YZqmkMwDdK+Xkb5migQwQEdqHlBX9dC9UIea3nKXdU8=",
+        "lastModified": 1766415608,
+        "narHash": "sha256-1v1nEuZ7jf4dm8PmbjLAscKtHYhLOY6W1DhkZprSHmA=",
         "owner": "joe-butler-23",
         "repo": "anki-card-forge",
-        "rev": "b9ec17ebc6536a94a025994f467a92bec4d5249a",
+        "rev": "015e74309fa471e4800c4977d6e8da570596cb70",
         "type": "github"
       },
       "original": {
@@ -46,11 +46,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1766395069,
-        "narHash": "sha256-M/Z58pFvRl4YnlyBS5+UHpsRDzKw/8XXXs4qBb+6w30=",
+        "lastModified": 1766481377,
+        "narHash": "sha256-Le+O1qSPs7VJqNZ1NXEJmYp2vFWGfjVo+hVxMMST6L0=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "19e7b4e4573178ad3d7c8828aefd1f3a20e6ead4",
+        "rev": "cec8fa90ecfd79221e434a5a378a18fe9eedfe69",
         "type": "github"
       },
       "original": {
@@ -131,6 +131,45 @@
         "type": "github"
       }
     },
+    "flake-utils_4": {
+      "inputs": {
+        "systems": "systems_4"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "hyprdynamicmonitors": {
+      "inputs": {
+        "flake-utils": "flake-utils_3",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1766416899,
+        "narHash": "sha256-kHXs+S3x+DQQB8Y6l/KGJ75Q9+30riVA6N/ka0mbKTQ=",
+        "owner": "fiffeek",
+        "repo": "HyprDynamicMonitors",
+        "rev": "48f8f3c02951aa9a88a844832f761b32e64bf9d1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fiffeek",
+        "repo": "HyprDynamicMonitors",
+        "type": "github"
+      }
+    },
     "nix-vscode-extensions": {
       "inputs": {
         "nixpkgs": [
@@ -184,11 +223,11 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1766014764,
-        "narHash": "sha256-+73VffE5GP5fvbib6Hs1Su6LehG+9UV1Kzs90T2gBLA=",
+        "lastModified": 1766399428,
+        "narHash": "sha256-vS6LSOMDOB3s+L6tqw9IGujxnmUAZQnEG+Vi640LayI=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "2b0d2b456e4e8452cf1c16d00118d145f31160f9",
+        "rev": "a6c3a6141ec1b367c58ead3f7f846c772a25f4e5",
         "type": "github"
       },
       "original": {
@@ -200,11 +239,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1766070988,
-        "narHash": "sha256-G/WVghka6c4bAzMhTwT2vjLccg/awmHkdKSd2JrycLc=",
+        "lastModified": 1766309749,
+        "narHash": "sha256-3xY8CZ4rSnQ0NqGhMKAy5vgC+2IVK0NoVEzDoOh4DA4=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "c6245e83d836d0433170a16eb185cefe0572f8b8",
+        "rev": "a6531044f6d0bef691ea18d4d4ce44d0daa6e816",
         "type": "github"
       },
       "original": {
@@ -268,6 +307,7 @@
         "anki-forge": "anki-forge",
         "emacs-overlay": "emacs-overlay",
         "flake-parts": "flake-parts",
+        "hyprdynamicmonitors": "hyprdynamicmonitors",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable",
@@ -362,6 +402,21 @@
         "type": "github"
       }
     },
+    "systems_4": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "treefmt-nix": {
       "inputs": {
         "nixpkgs": [
@@ -384,7 +439,7 @@
     },
     "whichkey": {
       "inputs": {
-        "flake-utils": "flake-utils_3",
+        "flake-utils": "flake-utils_4",
         "nixpkgs": "nixpkgs_4",
         "rust-overlay": "rust-overlay"
       },

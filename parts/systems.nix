@@ -30,7 +30,7 @@
       inherit system;
       specialArgs = {
         inherit pkgsUnstable user;
-        inherit (inputs) whichkey anki-forge;
+        inherit (inputs) whichkey anki-forge hyprdynamicmonitors;
       };
       modules = [
         ../modules/core
@@ -40,6 +40,7 @@
         # System Modules (Enable System-wide Features)
         inputs.sops-nix.nixosModules.sops
         inputs.ai-utilities.nixosModules.default
+        inputs.hyprdynamicmonitors.nixosModules.default
 
         # Use readOnlyPkgs to properly inject our custom pkgs with overlays
         {nixpkgs.pkgs = pkgs;}

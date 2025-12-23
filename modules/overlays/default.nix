@@ -21,11 +21,11 @@
 _: _final: prev: {
   opencode = prev.stdenv.mkDerivation rec {
     pname = "opencode";
-    version = "1.0.184";
+    version = "1.0.191";
 
     src = prev.fetchurl {
       url = "https://github.com/sst/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      sha256 = "10dssy93xiyfw0dpizsv8pvhj8zlzvdr9k654yy4insfc8qf4m3b";
+      sha256 = "0lm5pqarlyqsdr14k5vix4sfl8vvzwwzmxkj2f0akpcnshlbb3a3";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
@@ -77,11 +77,11 @@ _: _final: prev: {
 
   gemini = prev.stdenv.mkDerivation rec {
     pname = "gemini-cli";
-    version = "0.22.0-preview.3";
+    version = "0.23.0-preview.1";
 
     src = prev.fetchurl {
       url = "https://github.com/google-gemini/gemini-cli/releases/download/v${version}/gemini.js";
-      sha256 = "1nqk935cxk11fxdrvp1sqlj56a1nw5578mkn030d4k6z1qs5lsqb";
+      sha256 = "0jpcmaqivl7asab2b8qai43716m93m1p7lnc93binpyic4im99a8";
     };
 
     dontUnpack = true;
@@ -126,11 +126,11 @@ _: _final: prev: {
 
   claude = prev.stdenv.mkDerivation rec {
     pname = "claude-code";
-    version = "2.0.75";
+    version = "2.0.76";
 
     src = prev.fetchurl {
       url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-      sha256 = "0ql37g8ph56d0953c89xh90qskxf2bcpr234n4fx5hdzn7wdy341";
+      sha256 = "1ndrj51yfgkp1xgph5r3v6n946rlamj3v0y6wk4114wfzwv9k8zw";
     };
 
     nativeBuildInputs = [prev.makeWrapper];

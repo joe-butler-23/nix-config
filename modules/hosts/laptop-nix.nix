@@ -1,7 +1,5 @@
 {config, ...}: {
-  imports = [
-    ../services/kanshi.nix
-  ];
+  imports = [];
 
   networking.hostName = "laptop-nix";
 
@@ -15,6 +13,7 @@
   # Laptop-specific power management services
   services.thermald.enable = true;
   services.tlp.enable = true;
+  services.upower.enable = true;
 
   # TLP configuration - prevent keyboard standby when plugged in
   services.tlp.settings = {
@@ -29,5 +28,9 @@
     USB_DEVICE_BLACKLIST = "4653:0004"; # Corne keyboard vendor:product
   };
 
-  # Kanshi: laptop-specific, config in chezmoi
+  # HyprDynamicMonitors: Replacement for Kanshi
+  services.hyprdynamicmonitors = {
+    enable = true;
+    extraFlags = ["--disable-power-events"];
+  };
 }

@@ -56,6 +56,7 @@ in {
   environment.systemPackages = [
     # Core Utilities
     pkgs.git
+    pkgs.jujutsu
     pkgs.vim
     pkgs.curl
 
