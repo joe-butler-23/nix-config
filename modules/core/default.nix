@@ -93,9 +93,7 @@
     '';
   };
 
-  # SOPS Secrets
-  sops.defaultSopsFile = ../../secrets/secrets.yaml;
-  sops.age.keyFile = "/home/${user}/nix-config/secrets/sops.agekey";
+  # SOPS Secrets - configured in ./sops.nix
 
   # Uinput for Espanso
   services.udev.extraRules = ''
@@ -107,6 +105,8 @@
   # ========================================
   networking.networkmanager.enable = true;
   networking.firewall.enable = true;
+  networking.nameservers = ["94.140.14.14" "94.140.15.15"];
+  networking.networkmanager.dns = "none";
 
   services.tailscale = {
     enable = true;
