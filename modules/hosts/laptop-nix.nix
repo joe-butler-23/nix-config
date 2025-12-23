@@ -1,4 +1,7 @@
-{config, ...}: {
+{
+  config,
+  ...
+}: {
   imports = [];
 
   networking.hostName = "laptop-nix";
@@ -29,8 +32,52 @@
   };
 
   # HyprDynamicMonitors: Replacement for Kanshi
+
   services.hyprdynamicmonitors = {
     enable = true;
+
     extraFlags = ["--disable-power-events"];
+
+    # Correct schema based on source code and examples
+
+    config = ''
+
+      [general]
+
+      destination = "/home/joebutler/.config/hypr/monitors.conf"
+
+
+
+      [profiles.docked]
+
+      config_file = "/home/joebutler/.config/hypr/monitors-docked.conf"
+
+      config_file_type = "static"
+
+      [profiles.docked.conditions]
+
+      [[profiles.docked.conditions.required_monitors]]
+
+      name = "DP-5"
+
+      [[profiles.docked.conditions.required_monitors]]
+
+      name = "eDP-1"
+
+
+
+      [profiles.undocked]
+
+      config_file = "/home/joebutler/.config/hypr/monitors-undocked.conf"
+
+      config_file_type = "static"
+
+      [profiles.undocked.conditions]
+
+      [[profiles.undocked.conditions.required_monitors]]
+
+      name = "eDP-1"
+
+    '';
   };
 }
