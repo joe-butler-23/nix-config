@@ -1,7 +1,10 @@
 keys:
   - &user_joebutler age1egqnsgczkpametatgdl4fua3ea49p5dmt22kwhslykccujjn2qls3q5el4
+  # SSH host key - available at boot before home directory is mounted
+  - &host_laptop age1l3wpm8sl8thqd3y3cskgjc3efy9vm2f28hjmz0wcaaffr53phgnsjnex72
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
       - age:
           - *user_joebutler
+          - *host_laptop

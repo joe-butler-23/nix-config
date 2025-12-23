@@ -1,8 +1,10 @@
 # System-level SOPS configuration
 {user, ...}: {
   sops = {
-    age.keyFile = "/home/${user}/nix-config/secrets/sops.agekey";
     defaultSopsFile = ../../secrets/secrets.yaml;
+
+    # Use SSH host key - available at boot before home directory is mounted
+    age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
 
     secrets.CONTEXT7_API_KEY = {
       mode = "0440";
