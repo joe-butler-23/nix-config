@@ -216,4 +216,7 @@ in {
   # Thunar Dependencies (Volume management & Thumbnails)
   services.gvfs.enable = true;
   services.tumbler.enable = true;
+
+  # PAM configuration for Hyprlock
+  security.pam.services.hyprlock = {};
 }
