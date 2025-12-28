@@ -23,6 +23,8 @@ NixOS system configuration managed declaratively with Home Manager. This reposit
 - Git-tracked changes required for Nix awareness
 
 **Key Directories:**
+- `modules/overlays/` - Custom Nixpkgs overlays (opencode, gemini-cli, claude-code, codex, zed-editor)
+  - If user asks to update overlays: Check latest versions via GitHub/npm APIs, run `nix-prefetch-url` for hashes, update `modules/overlays/default.nix`
 - `modules/editor/`
 - `modules/scripts/` - Custom Nix-based scripts (see [DEVELOPMENT.md](modules/scripts/DEVELOPMENT.md) for script creation guide)
 

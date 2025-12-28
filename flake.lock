@@ -6,11 +6,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1766424009,
-        "narHash": "sha256-e9HqO/QYe7LPDx5q4TkYO4u3dEqeeIgEe8lgdUOdD9o=",
+        "lastModified": 1766941701,
+        "narHash": "sha256-7AULMK4GZqx7OmkumRZ/HFsODf4eIIcM5H64ZJTZ7x4=",
         "ref": "refs/heads/main",
-        "rev": "958ab5a7fb77d3ae4616bf8b3b332f8fe1fb7199",
-        "revCount": 46,
+        "rev": "085b96001f01403d660b16414c08bc8d3cb51db4",
+        "revCount": 48,
         "type": "git",
         "url": "ssh://git@github.com/joe-butler-23/ai"
       },

@@ -32,7 +32,6 @@
   };
 
   # HyprDynamicMonitors: Replacement for Kanshi
-
   services.hyprdynamicmonitors = {
     enable = true;
 

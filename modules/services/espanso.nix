@@ -46,7 +46,7 @@
       Restart = "on-failure";
       RestartSec = "5s";
       Environment = [
-        "PATH=${pkgs.wl-clipboard}/bin:${pkgs.libnotify}/bin:${pkgs.espanso-wayland}/bin:$PATH"
+        "PATH=${pkgs.wl-clipboard}/bin:${pkgs.kdotool}/bin:${pkgs.libnotify}/bin:${pkgs.espanso-wayland}/bin:$PATH"
       ];
     };
   };

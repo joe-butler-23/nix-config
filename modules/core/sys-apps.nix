@@ -146,6 +146,7 @@ in {
     pkgs.sops
     pkgs.imagemagick
     pkgs.brightnessctl
+    pkgs.upower
     pkgs.espanso-wayland
 
     # Media / Streaming
