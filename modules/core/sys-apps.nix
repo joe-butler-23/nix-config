@@ -173,6 +173,7 @@ in {
     # Custom AI Tools (from overlay)
     pkgs.opencode
     pkgs.gemini
+    pkgs.claude
     pkgs.codex
 
     # Applications
