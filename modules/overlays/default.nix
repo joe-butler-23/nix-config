@@ -1,6 +1,30 @@
 # ========================================
 # CUSTOM OVERLAYS
 # ========================================
+# This file acts as a "patch layer" on top of standard Nixpkgs.
+# It injects custom tools that are not available in the official repositories
+# or where we need a specific version/fork.
+#
+# TOOLS PROVIDED:
+# 1. opencode: The OpenCode CLI agent (https://github.com/sst/opencode)
+# 2. gemini: The Google Gemini CLI (https://github.com/google-gemini/gemini-cli)
+# 3. claude: The Anthropic Claude Code CLI (https://github.com/anthropic/claude-code)
+# 4. codex: The OpenAI Codex CLI (https://github.com/openai/codex)
+# 5. zed-editor: The Zed Editor (https://github.com/zed-industries/zed)
+#
+# USAGE:
+# These packages become available in `pkgs` automatically (e.g., pkgs.opencode).
+#
+# AUTOMATIC UPDATES:
+# A systemd service (overlay-updates) runs daily to check for new versions
+# of these packages and automatically updates this file. See:
+# - modules/services/overlay-updates.nix - Service configuration
+# - Systemd timer: overlay-updates.timer - Runs at 00:00 daily
+#
+# TECHNICAL DETAILS:
+# - _final: The "future" package set (unused here)
+# - prev: The "current" package set (used to build our new tools)
+# ========================================
 # This file acts as a "patch layer" on top of the standard Nixpkgs.
 # It injects custom tools that are not available in the official repositories
 # or where we need a specific version/fork.

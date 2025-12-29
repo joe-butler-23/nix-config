@@ -64,13 +64,43 @@ Provides the `codex` CLI tool from the `openai/codex` repository. It fetches the
 
 ### Implementation
 
-*   Fetches `codex-x86_64-unknown-linux-gnu.tar.gz` from GitHub Releases.
-*   Installs the binary to `$out/bin/codex`.
-*   Uses `autoPatchelfHook` for dynamic linking on NixOS.
+ *   Fetches `codex-x86_64-unknown-linux-gnu.tar.gz` from GitHub Releases.
+ *   Installs the binary to `$out/bin/codex`.
+ *   Uses `autoPatchelfHook` for dynamic linking on NixOS.
 
-### How to Update Overlays
+## Zed Editor Overlay (`zed-editor`)
 
-To update these packages, you can use the embedded scripts or follow this procedure:
+### Description
+
+Provides `zed-editor` GUI application from `zed-industries/zed` repository. It fetches pre-built Linux binary from GitHub Releases.
+
+### Implementation
+
+*   Fetches `zed-linux-x86_64.tar.gz` from GitHub Releases.
+*   Installs to `$out/` directory.
+*   Creates symlink from `$out/bin/zed` to `$out/libexec/zed-editor`.
+*   Wraps binary to include necessary libraries in `LD_LIBRARY_PATH` for Wayland support.
+
+## Automated Updates
+
+A systemd service automatically checks for updates daily at 00:00 UTC:
+
+```bash
+systemctl status overlay-updates.timer  # Check timer status
+journalctl -u overlay-updates.service   # View update logs
+```
+
+The service will:
+1. Check for new versions of all overlay packages
+2. Update `modules/overlays/default.nix` with new versions/hashes
+3. Commit changes with message: `chore: update overlay packages [automated]`
+4. Push changes to GitHub
+
+**Note**: If you make manual changes to overlays file, service will detect and commit them on next run.
+
+### How to Update Overlays Manually
+
+To update these packages manually, follow this procedure:
 
 1.  **Get Latest Versions**:
     ```bash
@@ -85,6 +115,8 @@ To update these packages, you can use the embedded scripts or follow this proced
 
     # Claude Code
     curl -s https://registry.npmjs.org/@anthropic-ai/claude-code/latest | jq -r .version
+     # Zed Editor
+     curl -s https://api.github.com/repos/zed-industries/zed/releases/latest | jq -r '.tag_name' | sed 's/^v//'
     ```
 2.  **Get New Hash**:
     Run `nix-prefetch-url` with the new version number found above:
@@ -93,8 +125,30 @@ To update these packages, you can use the embedded scripts or follow this proced
     nix-prefetch-url "https://github.com/sst/opencode/releases/download/v<VERSION>/opencode-linux-x64.tar.gz"
     nix-prefetch-url "https://github.com/openai/codex/releases/download/rust-v<VERSION>/codex-x86_64-unknown-linux-gnu.tar.gz"
     nix-prefetch-url "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-<VERSION>.tgz"
+     nix-prefetch-url "https://github.com/zed-industries/zed/releases/download/v<VERSION>/zed-linux-x86_64.tar.gz"
     ```
 3.  **Update Files**:
-    Edit `modules/apps/overlays/default.nix`:
+    Edit `modules/overlays/default.nix`:
     *   Update `version = "..."` with the new version.
     *   Update `sha256 = "..."` in the respective section with the new hash.
+
+## Service Configuration
+
+The overlay-updates service is configured in `modules/services/overlay-updates.nix`:
+
+*   **Timer**: Runs daily at 00:00 UTC
+*   **User**: joebutler
+*   **Working directory**: `/home/joebutler/nix-config`
+*   **Automatically**: Checks for updates, commits, and pushes changes
+
+To manually trigger an update:
+
+\`\`\`bash
+systemctl start overlay-updates.service
+\`\`\`
+
+To check update logs:
+
+\`\`\`bash
+journalctl -u overlay-updates.service -f
+\`\`\`
