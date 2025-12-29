@@ -446,15 +446,15 @@
       "locked": {
         "lastModified": 1762339941,
         "narHash": "sha256-Rg4FW1Y1xt4mROKXrus0KMrwCQILzTaTzmLm/I3UQJg=",
-        "owner": "joe-butler-23",
-        "repo": "wlr-which-key",
+        "ref": "refs/heads/master",
         "rev": "a5fac09da7a703f38a6e660fac58908cd33bfefa",
-        "type": "github"
+        "revCount": 88,
+        "type": "git",
+        "url": "ssh://git@github.com/joe-butler-23/wlr-which-key"
       },
       "original": {
-        "owner": "joe-butler-23",
-        "repo": "wlr-which-key",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/joe-butler-23/wlr-which-key"
       }
     }
   },
