@@ -55,14 +55,14 @@ _: _final: prev: {
       echo "Latest version: $LATEST"
 
       # Update version in file
-      sed -i "s/^    version = \".*\";/    version = \"$LATEST\";/" modules/overlays/default.nix
+      sed -i '/pname = "opencode"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
 
       # Calculate new hash
       URL="https://github.com/sst/opencode/releases/download/v$LATEST/opencode-linux-x64.tar.gz"
       HASH=$(nix-prefetch-url "$URL")
 
       # Update hash in file
-      sed -i "s/^      sha256 = \".*\";/      sha256 = \"$HASH\";|" modules/overlays/default.nix
+      sed -i '/pname = "opencode"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
 
       echo "Updated opencode to $LATEST with hash $HASH"
     '';
@@ -104,14 +104,14 @@ _: _final: prev: {
       echo "Latest version: $LATEST"
 
       # Update version in file
-      sed -i "s/^    version = \".*\";/    version = \"$LATEST\";/" modules/overlays/default.nix
+      sed -i '/pname = "gemini-cli"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
 
       # Calculate new hash
       URL="https://github.com/google-gemini/gemini-cli/releases/download/v$LATEST/gemini.js"
       HASH=$(nix-prefetch-url "$URL")
 
       # Update hash in file
-      sed -i "s/^      sha256 = \".*\";/      sha256 = \"$HASH\";|" modules/overlays/default.nix
+      sed -i '/pname = "gemini-cli"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
 
       echo "Updated gemini-cli to $LATEST with hash $HASH"
     '';
@@ -151,14 +151,14 @@ _: _final: prev: {
       echo "Latest version: $LATEST"
 
       # Update version in file
-      sed -i "s/^    version = \".*\";/    version = \"$LATEST\";/" modules/overlays/default.nix
+      sed -i '/pname = "claude-code"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
 
       # Calculate new hash
       URL="https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-$LATEST.tgz"
       HASH=$(nix-prefetch-url "$URL")
 
       # Update hash in file
-      sed -i "s/^      sha256 = \".*\";/      sha256 = \"$HASH\";|" modules/overlays/default.nix
+      sed -i '/pname = "claude-code"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
 
       echo "Updated claude-code to $LATEST with hash $HASH"
     '';
@@ -205,14 +205,14 @@ _: _final: prev: {
       echo "Latest version: $LATEST"
 
       # Update version in file
-      sed -i "s/^    version = \".*\";/    version = \"$LATEST\";/" modules/overlays/default.nix
+      sed -i '/pname = "codex"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
 
       # Calculate new hash
       URL="https://github.com/openai/codex/releases/download/rust-v$LATEST/codex-x86_64-unknown-linux-gnu.tar.gz"
       HASH=$(nix-prefetch-url "$URL")
 
       # Update hash in file
-      sed -i "s/^      sha256 = \".*\";/      sha256 = \"$HASH\";|" modules/overlays/default.nix
+      sed -i '/pname = "codex"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
 
       echo "Updated codex to $LATEST with hash $HASH"
     '';
@@ -277,10 +277,10 @@ _: _final: prev: {
       set -euo pipefail
       LATEST=$(curl -s https://api.github.com/repos/zed-industries/zed/releases/latest | jq -r '.tag_name' | sed 's/^v//')
       echo "Latest version: $LATEST"
-      sed -i "s/^    version = \".*\";/    version = \"$LATEST\";/" modules/overlays/default.nix
+      sed -i '/pname = "zed-editor"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
       URL="https://github.com/zed-industries/zed/releases/download/v$LATEST/zed-linux-x86_64.tar.gz"
       HASH=$(nix-prefetch-url "$URL")
-      sed -i "s/^      sha256 = \".*\";/      sha256 = \"$HASH\";|" modules/overlays/default.nix
+      sed -i '/pname = "zed-editor"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
       echo "Updated zed-editor to $LATEST with hash $HASH"
     '';
 
