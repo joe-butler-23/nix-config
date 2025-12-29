@@ -94,6 +94,7 @@ in {
 
     # Shell & CLI Tools
     pkgs.bat
+    pkgs.bind
     pkgs.chezmoi
     pkgs.clipse
     pkgs.fd

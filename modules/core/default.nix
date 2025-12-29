@@ -69,7 +69,6 @@
     extraGroups = ["networkmanager" "wheel" "input" "docker"];
     shell = pkgs.zsh;
   };
-  # Enable Zsh at system level (required for user shell)
   programs.zsh.enable = true;
 
   # ========================================
@@ -101,9 +100,6 @@
     '';
   };
 
-  # SOPS Secrets - configured in ./sops.nix
-
-  # Uinput for Espanso
   services.udev.extraRules = ''
     KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
   '';
@@ -116,13 +112,29 @@
   networking.nameservers = ["127.0.0.1" "::1"];
   networking.networkmanager.dns = "none";
 
-  # AdGuard Home (Local DNS & Dashboard)
   services.adguardhome = {
     enable = true;
     openFirewall = true;
     port = 3000;
+
     settings = {
-      schema_version = 20;
+      dns = {
+        upstream_dns = [
+          "9.9.9.9"
+          "149.112.112.112"
+          "[/anthropic.com/]1.1.1.1"
+          "[/claude.ai/]1.1.1.1"
+          "[/statsig.com/]1.1.1.1"
+          "[/sentry.io/]1.1.1.1"
+        ];
+
+        bootstrap_dns = [
+          "9.9.9.10"
+          "149.112.112.10"
+          "2620:fe::10"
+          "2620:fe::fe:10"
+        ];
+      };
     };
   };
 
@@ -132,14 +144,8 @@
   };
 
   # ========================================
-  # HARDWARE SENSORS
-  # ========================================
-  # NOTE: You might need to run `sensors-detect` and add suggested kernel modules here.
-
-  # ========================================
   # SERVICES
   # ========================================
-  # Audio
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -148,18 +154,16 @@
     wireplumber.enable = true;
   };
 
-  # Bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.settings = {
     General = {
       Enable = "Source,Sink,Media,Socket,HID";
-      ControllerMode = "dual"; # Allow BR/EDR and LE
-      FastConnectable = true; # Improve connection stability
+      ControllerMode = "dual";
+      FastConnectable = true;
     };
   };
   services.blueman.enable = true;
 
-  # Better Bluetooth headset support (HFP/HSP profiles)
   services.pipewire.wireplumber.configPackages = [
     (pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/51-bluez-config.lua" ''
       bluez_monitor.properties = {
@@ -168,18 +172,15 @@
     '')
   ];
 
-  # Windows network discovery
   services.samba-wsdd = {
     enable = true;
     openFirewall = true;
   };
 
-  # Perf & Power
   services.irqbalance.enable = true;
   services.fstrim.enable = true;
   services.fwupd.enable = true;
   powerManagement.enable = true;
 
-  # Docker
   virtualisation.docker.enable = true;
 }
