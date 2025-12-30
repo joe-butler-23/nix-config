@@ -70,6 +70,7 @@ in {
     description = "Update overlay packages";
     after = ["network-online.target"];
     wants = ["network-online.target"];
+    path = with pkgs; [curl jq git openssh];
     environment = {
       HOME = "/home/joebutler";
       GIT_SSH_COMMAND = "ssh -o StrictHostKeyChecking=no";
