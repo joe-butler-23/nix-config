@@ -49,7 +49,7 @@ _: _final: prev: {
 
     src = prev.fetchurl {
       url = "https://github.com/sst/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      sha256 = "0y1w1ilb9cm1y3my9k49wacv0zkrks050qm75wfxg2l8fnhk1f4w";
+      sha256 = "02rjifirvwisl5257q079myfxzfqr3k0xsri10y05kw3r70k5vbs";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
@@ -78,12 +78,14 @@ _: _final: prev: {
 
       echo "Latest version: $LATEST"
 
-      # Update version in file
-      sed -i '/pname = "opencode"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
-
-      # Calculate new hash
+      # Calculate new hash first
       URL="https://github.com/sst/opencode/releases/download/v$LATEST/opencode-linux-x64.tar.gz"
       HASH=$(nix-prefetch-url "$URL")
+
+      echo "Calculated hash: $HASH"
+
+      # Update version in file
+      sed -i '/pname = "opencode"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
 
       # Update hash in file
       sed -i '/pname = "opencode"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
@@ -105,7 +107,7 @@ _: _final: prev: {
 
     src = prev.fetchurl {
       url = "https://github.com/google-gemini/gemini-cli/releases/download/v${version}/gemini.js";
-      sha256 = "1z7k1llspzwybvb0sqqw5r59lhx55a18709vdk9f84qmk2h3f1bz";
+      sha256 = "0pgnnmzbrnvnk8f5xy3my2l1j28ngjck3ylq5rsny1x75hqpscwv";
     };
 
     dontUnpack = true;
@@ -127,12 +129,14 @@ _: _final: prev: {
 
       echo "Latest version: $LATEST"
 
-      # Update version in file
-      sed -i '/pname = "gemini-cli"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
-
-      # Calculate new hash
+      # Calculate new hash first
       URL="https://github.com/google-gemini/gemini-cli/releases/download/v$LATEST/gemini.js"
       HASH=$(nix-prefetch-url "$URL")
+
+      echo "Calculated hash: $HASH"
+
+      # Update version in file
+      sed -i '/pname = "gemini-cli"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
 
       # Update hash in file
       sed -i '/pname = "gemini-cli"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
@@ -174,12 +178,14 @@ _: _final: prev: {
 
       echo "Latest version: $LATEST"
 
-      # Update version in file
-      sed -i '/pname = "claude-code"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
-
-      # Calculate new hash
+      # Calculate new hash first
       URL="https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-$LATEST.tgz"
       HASH=$(nix-prefetch-url "$URL")
+
+      echo "Calculated hash: $HASH"
+
+      # Update version in file
+      sed -i '/pname = "claude-code"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
 
       # Update hash in file
       sed -i '/pname = "claude-code"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
@@ -228,12 +234,14 @@ _: _final: prev: {
 
       echo "Latest version: $LATEST"
 
-      # Update version in file
-      sed -i '/pname = "codex"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
-
-      # Calculate new hash
+      # Calculate new hash first
       URL="https://github.com/openai/codex/releases/download/rust-v$LATEST/codex-x86_64-unknown-linux-gnu.tar.gz"
       HASH=$(nix-prefetch-url "$URL")
+
+      echo "Calculated hash: $HASH"
+
+      # Update version in file
+      sed -i '/pname = "codex"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
 
       # Update hash in file
       sed -i '/pname = "codex"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
@@ -301,9 +309,16 @@ _: _final: prev: {
       set -euo pipefail
       LATEST=$(curl -s https://api.github.com/repos/zed-industries/zed/releases/latest | jq -r '.tag_name' | sed 's/^v//')
       echo "Latest version: $LATEST"
-      sed -i '/pname = "zed-editor"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
+
+      # Calculate new hash first
       URL="https://github.com/zed-industries/zed/releases/download/v$LATEST/zed-linux-x86_64.tar.gz"
       HASH=$(nix-prefetch-url "$URL")
+      echo "Calculated hash: $HASH"
+
+      # Update version in file
+      sed -i '/pname = "zed-editor"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
+
+      # Update hash in file
       sed -i '/pname = "zed-editor"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
       echo "Updated zed-editor to $LATEST with hash $HASH"
     '';
