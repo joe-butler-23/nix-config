@@ -60,7 +60,7 @@
 
     echo "Overlays updated. Committing changes..."
     git add modules/overlays/default.nix
-    git commit -m "chore: update overlay packages [automated]"
+    git commit --no-verify -m "chore: update overlay packages [automated]"
     git push
 
     echo "$(date): Overlay updates completed and pushed."
@@ -70,7 +70,7 @@ in {
     description = "Update overlay packages";
     after = ["network-online.target"];
     wants = ["network-online.target"];
-    path = with pkgs; [curl jq git openssh];
+    path = with pkgs; [curl jq git openssh nix bash];
     environment = {
       HOME = "/home/joebutler";
       GIT_SSH_COMMAND = "ssh -o StrictHostKeyChecking=no";
