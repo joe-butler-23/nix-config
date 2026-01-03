@@ -1,7 +1,10 @@
 # System-level SOPS configuration
-{user, ...}: {
+{user, ...}: let
+  userHome = "/home/${user}";
+in {
   sops = {
-    defaultSopsFile = ../../secrets/secrets.yaml;
+    defaultSopsFile = "${userHome}/nix-config/secrets/secrets.yaml";
+    validateSopsFiles = false;
 
     # Use SSH host key - available at boot before home directory is mounted
     age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];

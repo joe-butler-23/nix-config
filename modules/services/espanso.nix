@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   user,
   ...
@@ -12,36 +13,51 @@
     wantedBy = ["graphical-session.target"];
 
     serviceConfig = {
-      ExecStart = "${pkgs.espanso-wayland}/bin/espanso daemon";
-      # Copy secret to user runtime dir (RAM) and symlink it.
-      # Fix: Use shell variables instead of systemd specifiers inside the script body.
-      ExecStartPre = pkgs.writeShellScript "espanso-pre" ''
+      ExecStart = pkgs.writeShellScript "espanso-start" ''
         set -e
         RUNTIME_DIR="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
 
-        ${pkgs.coreutils}/bin/mkdir -p "$RUNTIME_DIR/espanso"
+        # Wait up to 10s for a Wayland socket so espanso doesn't race the compositor
+        for i in {1..20}; do
+          for sock in "$RUNTIME_DIR"/wayland-*; do
+            if [ -S "$sock" ]; then
+              export WAYLAND_DISPLAY="''${sock##*/}"
+              break 2
+            fi
+          done
+          ${pkgs.coreutils}/bin/sleep 0.5
+        done
+
+        if [ -z "''${WAYLAND_DISPLAY:-}" ]; then
+          echo "Error: Wayland socket not found in $RUNTIME_DIR"
+          exit 1
+        fi
+
+        exec /run/wrappers/bin/espanso daemon
+      '';
+      # Symlink the sops-nix secret into the espanso match directory.
+      ExecStartPre = pkgs.writeShellScript "espanso-pre" ''
+        set -e
+        SECRET_PATH="${config.sops.secrets.espanso_matches.path}"
 
         # Wait up to 10s for the secret to be decrypted by sops-nix
         for i in {1..10}; do
-          if [ -f /run/secrets/espanso_matches ]; then
+          if [ -f "$SECRET_PATH" ]; then
             break
           fi
           ${pkgs.coreutils}/bin/sleep 1
         done
 
-        if [ ! -f /run/secrets/espanso_matches ]; then
-          echo "Error: /run/secrets/espanso_matches not found. sops-nix might have failed."
+        if [ ! -f "$SECRET_PATH" ]; then
+          echo "Error: $SECRET_PATH not found. sops-nix might have failed."
           exit 1
         fi
-
-        ${pkgs.coreutils}/bin/cp -f /run/secrets/espanso_matches "$RUNTIME_DIR/espanso/secrets.yml"
-        ${pkgs.coreutils}/bin/chmod 600 "$RUNTIME_DIR/espanso/secrets.yml"
 
         # Ensure user config directory exists
         ${pkgs.coreutils}/bin/mkdir -p "/home/${user}/.config/espanso/match"
 
         # Create symlink using absolute paths to avoid relative path confusion
-        ${pkgs.coreutils}/bin/ln -sf "$RUNTIME_DIR/espanso/secrets.yml" "/home/${user}/.config/espanso/match/secrets.yml"
+        ${pkgs.coreutils}/bin/ln -sf "$SECRET_PATH" "/home/${user}/.config/espanso/match/secrets.yml"
       '';
       Restart = "on-failure";
       RestartSec = "5s";
@@ -53,7 +69,9 @@
 
   # SOPS secret for espanso
   sops.secrets.espanso_matches = {
+    path = "/run/secrets/espanso_matches.yml";
+    mode = "0400";
     owner = user;
-    # No path specified -> defaults to /run/secrets/espanso_matches
+    group = config.users.users.${user}.group;
   };
 }
