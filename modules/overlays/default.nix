@@ -74,7 +74,7 @@ _: _final: prev: {
       set -euo pipefail
 
       # Get latest version
-      LATEST=$(curl -s https://api.github.com/repos/sst/opencode/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+      LATEST=$(curl -sL https://api.github.com/repos/sst/opencode/releases/latest | jq -r '.tag_name' | sed 's/^v//')
 
       echo "Latest version: $LATEST"
 
@@ -103,11 +103,11 @@ _: _final: prev: {
 
   gemini = prev.stdenv.mkDerivation rec {
     pname = "gemini-cli";
-    version = "0.24.0-nightly.20251231.05049b5ab";
+    version = "0.24.0-nightly.20260103.30f5c4af4";
 
     src = prev.fetchurl {
       url = "https://github.com/google-gemini/gemini-cli/releases/download/v${version}/gemini.js";
-      sha256 = "0pgnnmzbrnvnk8f5xy3my2l1j28ngjck3ylq5rsny1x75hqpscwv";
+      sha256 = "0wsbzk6yzz5pyh37767fxd5d3p8dnzlqpvcdfr6yr2pnv5hidgh9";
     };
 
     dontUnpack = true;
@@ -125,7 +125,7 @@ _: _final: prev: {
       set -euo pipefail
 
       # Get latest version
-      LATEST=$(curl -s "https://api.github.com/repos/google-gemini/gemini-cli/tags" | jq -r '.[0].name' | sed 's/^v//')
+      LATEST=$(curl -sL "https://api.github.com/repos/google-gemini/gemini-cli/tags" | jq -r '.[0].name' | sed 's/^v//')
 
       echo "Latest version: $LATEST"
 
@@ -174,7 +174,7 @@ _: _final: prev: {
       set -euo pipefail
 
       # Get latest version
-      LATEST=$(curl -s https://registry.npmjs.org/@anthropic-ai/claude-code/latest | jq -r .version)
+      LATEST=$(curl -sL https://registry.npmjs.org/@anthropic-ai/claude-code/latest | jq -r .version)
 
       echo "Latest version: $LATEST"
 
@@ -230,7 +230,7 @@ _: _final: prev: {
       set -euo pipefail
 
       # Get latest version
-      LATEST=$(curl -s https://api.github.com/repos/openai/codex/releases/latest | jq -r '.tag_name' | sed 's/^rust-v//')
+      LATEST=$(curl -sL https://api.github.com/repos/openai/codex/releases/latest | jq -r '.tag_name' | sed 's/^rust-v//')
 
       echo "Latest version: $LATEST"
 
@@ -307,7 +307,7 @@ _: _final: prev: {
     '';
     passthru.updateScript = prev.writeShellScript "update-zed" ''
       set -euo pipefail
-      LATEST=$(curl -s https://api.github.com/repos/zed-industries/zed/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+      LATEST=$(curl -sL https://api.github.com/repos/zed-industries/zed/releases/latest | jq -r '.tag_name' | sed 's/^v//')
       echo "Latest version: $LATEST"
 
       # Calculate new hash first
