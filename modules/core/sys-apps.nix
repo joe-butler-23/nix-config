@@ -105,6 +105,7 @@ in {
     pkgs.lazygit
     pkgs.nix-search-tv
     pkgs.ripgrep
+    pkgs.rclone
     pkgs.tmux
     pkgs.trash-cli
     pkgs.unzip
@@ -131,14 +132,6 @@ in {
     pkgs.gvfs
     pkgs.desktop-file-utils
 
-    # Fonts
-    pkgs.nerd-fonts.jetbrains-mono
-    pkgs.font-awesome
-    pkgs.ibm-plex
-    pkgs.noto-fonts
-    pkgs.noto-fonts-color-emoji
-    pkgs.noto-fonts-cjk-sans
-
     # Theming & Cursors
     pkgs.capitaine-cursors
     pkgs.papirus-icon-theme
@@ -158,6 +151,7 @@ in {
     pkgs.networkmanagerapplet
     pkgs.alsa-utils
     pkgs.pavucontrol
+    pkgs.pulseaudio
 
     # Development Tools
     pkgsUnstable.app2unit
@@ -210,6 +204,36 @@ in {
     (import ../scripts/maintenance/system-maintenance.nix {inherit pkgs;})
     (import ../scripts/maintenance/weekly-metrics.nix {inherit pkgs;})
   ];
+
+  fonts = {
+    packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+      font-awesome
+      ibm-plex
+      noto-fonts
+      noto-fonts-color-emoji
+      noto-fonts-cjk-sans
+      dejavu_fonts
+    ];
+    fontconfig = {
+      enable = true;
+      antialias = true;
+      hinting = {
+        enable = true;
+        autohint = false;
+        style = "slight";
+      };
+      subpixel = {
+        rgba = "rgb";
+        lcdfilter = "light";
+      };
+      defaultFonts = {
+        monospace = ["JetBrainsMono Nerd Font"];
+        sansSerif = ["DejaVu Sans" "Noto Sans"];
+        serif = ["Noto Serif"];
+      };
+    };
+  };
 
   # thunar dotfiles in modules/apps/thunar.nix
   programs.thunar.enable = true;
