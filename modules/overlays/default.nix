@@ -45,11 +45,11 @@
 _: _final: prev: {
   opencode = prev.stdenv.mkDerivation rec {
     pname = "opencode";
-    version = "1.0.223";
+    version = "1.1.1";
 
     src = prev.fetchurl {
       url = "https://github.com/sst/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      sha256 = "02fcp6q50acsvnvms14yd6bh5pw08kdgkvjwq6sgs20b988zc6vc";
+      sha256 = "1gf7c4ricv028kpfjrl6c5f5dfavpbbbaxb66ab0aiz4jxf010n3";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
