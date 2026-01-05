@@ -25,11 +25,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1766415608,
-        "narHash": "sha256-1v1nEuZ7jf4dm8PmbjLAscKtHYhLOY6W1DhkZprSHmA=",
+        "lastModified": 1767521992,
+        "narHash": "sha256-60xFFWTBteQxs26EubaMf1sgXFU3KcMotIlGBHXgpGE=",
         "owner": "joe-butler-23",
         "repo": "anki-card-forge",
-        "rev": "015e74309fa471e4800c4977d6e8da570596cb70",
+        "rev": "9112d24e86e99bf052c2fe7466d0d6a60ca9107d",
         "type": "github"
       },
       "original": {
@@ -255,16 +255,16 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1763421233,
-        "narHash": "sha256-Stk9ZYRkGrnnpyJ4eqt9eQtdFWRRIvMxpNRf4sIegnw=",
+        "lastModified": 1751274312,
+        "narHash": "sha256-/bVBlRpECLVzjV19t5KMdMFWSwKLtb5RyXdjz3LJT+g=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "89c2b2330e733d6cdb5eae7b899326930c2c0648",
+        "rev": "50ab793786d9de88ee30ec4e4c24fb4236fc2674",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "ref": "nixos-24.11",
         "repo": "nixpkgs",
         "type": "github"
       }

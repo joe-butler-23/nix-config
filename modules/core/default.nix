@@ -77,13 +77,6 @@
   security.polkit.enable = true;
   security.rtkit.enable = true;
 
-  security.wrappers.espanso = {
-    source = "${pkgs.espanso-wayland}/bin/espanso";
-    capabilities = "cap_dac_override+p";
-    owner = "root";
-    group = "root";
-  };
-
   services.openssh = {
     enable = true;
     settings = {

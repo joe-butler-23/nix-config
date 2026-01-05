@@ -1,9 +1,7 @@
 # System-level SOPS configuration
-{user, ...}: let
-  userHome = "/home/${user}";
-in {
+{user, ...}: {
   sops = {
-    defaultSopsFile = "${userHome}/nix-config/secrets/secrets.yaml";
+    defaultSopsFile = "/var/lib/sops-nix/secrets.yaml";
     validateSopsFiles = false;
 
     # Use SSH host key - available at boot before home directory is mounted

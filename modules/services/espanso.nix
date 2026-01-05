@@ -33,12 +33,12 @@
           exit 1
         fi
 
-        exec /run/wrappers/bin/espanso daemon
+        exec ${pkgs.espanso-wayland}/bin/espanso daemon
       '';
-      # Symlink the sops-nix secret into the espanso match directory.
+      # Symlink the rendered secret into the espanso match directory.
       ExecStartPre = pkgs.writeShellScript "espanso-pre" ''
         set -e
-        SECRET_PATH="${config.sops.secrets.espanso_matches.path}"
+        SECRET_PATH="${config.sops.templates."espanso_matches.yml".path}"
 
         # Wait up to 10s for the secret to be decrypted by sops-nix
         for i in {1..10}; do
@@ -69,9 +69,16 @@
 
   # SOPS secret for espanso
   sops.secrets.espanso_matches = {
-    path = "/run/secrets/espanso_matches.yml";
     mode = "0400";
     owner = user;
-    group = config.users.users.${user}.group;
+    inherit (config.users.users.${user}) group;
+  };
+
+  # Render a match file with an extension for espanso's loader.
+  sops.templates."espanso_matches.yml" = {
+    content = config.sops.placeholder.espanso_matches;
+    mode = "0400";
+    owner = user;
+    inherit (config.users.users.${user}) group;
   };
 }
