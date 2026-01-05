@@ -13,5 +13,9 @@
       Restart = "on-failure";
       RestartSec = "5s";
     };
+
+    # Required for hyprlock, hyprctl, brightnessctl commands
+    path = ["/run/current-system/sw"];
+    environment.PATH = "/run/current-system/sw/bin";
   };
 }
