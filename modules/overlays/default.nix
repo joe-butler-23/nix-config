@@ -318,12 +318,12 @@ _: _final: prev: {
       sha256 = "0zm8b85gd1xhwakd07hmn6vn4w2m3az3sy7dhlmmawqg9899j8k0";
     };
 
-    nativeBuildInputs = [prev.nodejs prev.npm prev.makeWrapper];
+    nativeBuildInputs = [prev.nodejs prev.makeWrapper];
 
     buildPhase = ''
       export HOME=$TMPDIR
-      npm config set cache $TMPDIR/npm-cache
-      npm install $src
+      ${prev.nodejs}/bin/npm config set cache $TMPDIR/npm-cache
+      ${prev.nodejs}/bin/npm install $src
     '';
 
     installPhase = ''
