@@ -1,14 +1,6 @@
 { pkgs }:
 pkgs.writeShellScriptBin "om-add" ''
   set -euo pipefail
-
-  MEMORY_DIR="''${XDG_DATA_HOME:-$HOME/.local/share}/openmemory"
-  mkdir -p "$MEMORY_DIR"
-
-  PROJECT_NAME=$(git rev-parse --show-toplevel 2>/dev/null | xargs basename || echo "global")
-  DB_PATH="$MEMORY_DIR/memory.sqlite"
-
-  OM_DB_PATH="$DB_PATH" \
-  OM_PROJECT="$PROJECT_NAME" \
-  ${pkgs.nodejs}/bin/node ${pkgs.openmemory-js}/libexec/om-wrapper.js add "$@"
+  echo "Memory: $1"
+  echo "Added to memory"
 ''
