@@ -320,11 +320,13 @@ _: _final: prev: {
 
     nativeBuildInputs = [prev.makeWrapper];
 
+    dontUnpack = true;
+
     installPhase = ''
       mkdir -p $out/libexec $out/bin
-      cp -r package/* $out/libexec/
+      tar -xzf $src -C $out/libexec
       makeWrapper ${prev.nodejs}/bin/node $out/bin/opm \
-        --add-flags "$out/libexec/bin/opm.js"
+        --add-flags "$out/libexec/package/bin/opm.js"
     '';
 
     passthru.updateScript = prev.writeShellScript "update-openmemory-js" ''
