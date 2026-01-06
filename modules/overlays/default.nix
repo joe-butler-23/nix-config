@@ -322,6 +322,12 @@ _: _final: prev: {
 
     sourceRoot = "package";
 
+    dontNpmBuild = true;
+
+    npmInstallFlags = [
+      "--omit=dev"
+    ];
+
     nativeBuildInputs = [
       prev.makeWrapper
       prev.pkg-config
