@@ -309,7 +309,7 @@ _: _final: prev: {
     };
   };
 
-  openmemory-js = prev.stdenv.mkDerivation rec {
+  openmemory-js = prev.buildNpmPackage rec {
     pname = "openmemory-js";
     version = "1.3.2";
 
@@ -318,15 +318,31 @@ _: _final: prev: {
       sha256 = "0zm8b85gd1xhwakd07hmn6vn4w2m3az3sy7dhlmmawqg9899j8k0";
     };
 
-    nativeBuildInputs = [prev.makeWrapper];
+    npmDepsHash = "sha256-c9VCsLE88DMy7fJ4HX6h6M02oMZdMruVEB7UQwqtfPU=";
 
-    dontUnpack = true;
+    sourceRoot = "package";
+
+    nativeBuildInputs = [
+      prev.makeWrapper
+      prev.pkg-config
+      prev.python3
+    ];
+
+    buildInputs = [prev.sqlite];
+
+    postPatch = ''
+      cp ${./openmemory-js/package-lock.json} package-lock.json
+    '';
 
     installPhase = ''
-      mkdir -p $out/libexec $out/bin
-      tar -xzf $src -C $out/libexec
+      runHook preInstall
+      mkdir -p $out/libexec/package $out/bin
+      cp -r . $out/libexec/package
       makeWrapper ${prev.nodejs}/bin/node $out/bin/opm \
         --add-flags "$out/libexec/package/bin/opm.js"
+      makeWrapper ${prev.nodejs}/bin/node $out/bin/openmemory-js \
+        --add-flags "$out/libexec/package/bin/opm.js"
+      runHook postInstall
     '';
 
     passthru.updateScript = prev.writeShellScript "update-openmemory-js" ''
@@ -340,8 +356,29 @@ _: _final: prev: {
 
       echo "Calculated hash: $HASH"
 
+      TMP_DIR="$(${prev.coreutils}/bin/mktemp -d)"
+      trap '${prev.coreutils}/bin/rm -rf "$TMP_DIR"' EXIT
+
+      ${prev.curl}/bin/curl -sL "$URL" -o "$TMP_DIR/openmemory-js.tgz"
+      ${prev.gnutar}/bin/tar -xzf "$TMP_DIR/openmemory-js.tgz" -C "$TMP_DIR"
+
+      cd "$TMP_DIR/package"
+
+      ${prev.nodejs}/bin/npm install \
+        --package-lock-only \
+        --ignore-scripts \
+        --no-audit \
+        --no-fund \
+        --prefix "$TMP_DIR/package"
+
+      ${prev.coreutils}/bin/cp "$TMP_DIR/package/package-lock.json" modules/overlays/openmemory-js/package-lock.json
+
+      NPM_HASH=$(${prev."prefetch-npm-deps"}/bin/prefetch-npm-deps modules/overlays/openmemory-js/package-lock.json)
+      echo "Calculated npmDepsHash: $NPM_HASH"
+
       sed -i '/pname = "openmemory-js"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
       sed -i '/pname = "openmemory-js"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
+      sed -i '/pname = "openmemory-js"/,/^  };/ s|^    npmDepsHash = ".*"|    npmDepsHash = "'$NPM_HASH'"|' modules/overlays/default.nix
 
       echo "Updated openmemory-js to $LATEST with hash $HASH"
     '';

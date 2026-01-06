@@ -73,7 +73,7 @@
     fi
 
     echo "Overlays updated. Committing changes..."
-    git add modules/overlays/default.nix
+    git add modules/overlays/default.nix modules/overlays/openmemory-js/package-lock.json
     git commit --no-verify -m "chore: update overlay packages [automated]"
     git push
 
