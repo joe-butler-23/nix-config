@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
-const { Memory } = require('openmemory-js');
+const memLib = require('openmemory-js');
 const path = require('path');
-const fs = require('fs');
 
 const DB_PATH = process.env.OM_DB_PATH || path.join(process.env.HOME || process.env.HOME, '.local/share/openmemory/memory.sqlite');
 const PROJECT_NAME = process.env.OM_PROJECT || 'global';
@@ -13,7 +12,7 @@ async function main() {
   const command = process.argv[2];
   const content = args.slice(1).join(' ') || '';
 
-  const mem = new Memory({
+  const mem = new memLib.Memory({
     path: DB_PATH,
     embeddings: {
       provider: OPENAI_API_KEY ? 'openai' : 'synthetic',
