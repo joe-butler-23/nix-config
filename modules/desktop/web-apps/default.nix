@@ -147,6 +147,8 @@ in {
     (makeWebApp "mathacademy" "Math Academy" "/home/${user}/nix-config/modules/desktop/web-apps/icons/mathacademy.png" "https://www.mathacademy.com/learn" ["Education" "Science"])
     (makeWebApp "youtube" "YouTube" "youtube" "https://www.youtube.com" ["AudioVideo" "Video"])
     (makeWebApp "outlook" "Outlook" "/home/${user}/nix-config/modules/desktop/web-apps/icons/outlook.png" "https://outlook.office.com/mail/" ["Office" "Email"])
+    (makeWebApp "tana" "Tana" "/home/${user}/nix-config/modules/desktop/web-apps/icons/tana.png" "https://app.tana.inc" ["Office" "Productivity"])
+    (makeWebApp "rarecode-rust" "RareCode Rust" "/home/${user}/nix-config/modules/desktop/web-apps/icons/rarecode.png" "https://rarecode.ai/language/rust" ["Development" "Education"])
 
     # Utility to configure extensions for the shared profile
     (pkgs.makeDesktopItem {
