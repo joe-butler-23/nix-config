@@ -1,5 +1,5 @@
 { pkgs }:
-pkgs.writeScript ""om-delete"" ''
+pkgs.writeScript "om-delete-script" ''
   #!/bin/sh
   set -euo pipefail
 

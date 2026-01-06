@@ -1,5 +1,5 @@
 { pkgs }:
-pkgs.writeScript ""om-list"" ''
+pkgs.writeScript "om-list-script" ''
   #!/bin/sh
   set -euo pipefail
 

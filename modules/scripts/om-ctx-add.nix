@@ -1,5 +1,5 @@
 { pkgs }:
-pkgs.writeScript ""om-ctx-add"" ''
+pkgs.writeScript "om-ctx-add-script" ''
   #!/bin/sh
   set -euo pipefail
 

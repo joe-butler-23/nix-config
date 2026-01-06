@@ -1,5 +1,5 @@
 { pkgs }:
-pkgs.writeScript ""om-changelog-query"" ''
+pkgs.writeScript "om-changelog-query-script" ''
   #!/bin/sh
   set -euo pipefail
 

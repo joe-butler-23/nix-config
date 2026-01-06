@@ -1,5 +1,5 @@
 { pkgs }:
-pkgs.writeScript ""om-pattern-query"" ''
+pkgs.writeScript "om-pattern-query-script" ''
   #!/bin/sh
   set -euo pipefail
 
