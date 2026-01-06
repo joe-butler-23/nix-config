@@ -45,6 +45,20 @@
       fi
     fi
 
+    if [ -n "${pkgs.byterover.passthru.updateScript or ""}" ]; then
+      echo "Updating byterover..."
+      if ${pkgs.byterover.passthru.updateScript or ""}; then
+        UPDATED=1
+      fi
+    fi
+
+    if [ -n "${pkgs.openmemory-js.passthru.updateScript or ""}" ]; then
+      echo "Updating openmemory-js..."
+      if ${pkgs.openmemory-js.passthru.updateScript or ""}; then
+        UPDATED=1
+      fi
+    fi
+
     if [ -n "${pkgs.zed-editor.passthru.updateScript or ""}" ]; then
       echo "Updating zed-editor..."
       if ${pkgs.zed-editor.passthru.updateScript or ""}; then

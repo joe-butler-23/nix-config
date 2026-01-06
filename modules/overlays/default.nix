@@ -10,7 +10,10 @@
 # 2. gemini: The Google Gemini CLI (https://github.com/google-gemini/gemini-cli)
 # 3. claude: The Anthropic Claude Code CLI (https://github.com/anthropic/claude-code)
 # 4. codex: The OpenAI Codex CLI (https://github.com/openai/codex)
-# 5. zed-editor: The Zed Editor (https://github.com/zed-industries/zed)
+# 5. openmemory-js: The OpenMemory JavaScript SDK (https://github.com/CaviraOSS/OpenMemory)
+# 5. byterover: The ByteRover Cipher AI agent framework (https://byterover.dev)
+# 6. openmemory-js: The OpenMemory JavaScript SDK (https://github.com/CaviraOSS/OpenMemory)
+# 7. zed-editor: The Zed Editor (https://github.com/zed-industries/zed)
 #
 # USAGE:
 # These packages become available in `pkgs` automatically (e.g., pkgs.opencode).
@@ -254,6 +257,119 @@ _: _final: prev: {
       homepage = "https://github.com/openai/codex";
       license = licenses.asl20;
       platforms = platforms.linux;
+    };
+  };
+
+  byterover = prev.stdenv.mkDerivation rec {
+    pname = "byterover-cipher";
+    version = "0.3.0";
+
+    src = prev.fetchurl {
+      url = "https://registry.npmjs.org/@byterover/cipher/-/cipher-${version}.tgz";
+      sha256 = "14ji50k41v04nfgfa96q6607g21rb6b8kxyy8fz321gvy65l3x92";
+    };
+
+    nativeBuildInputs = [prev.makeWrapper];
+
+    installPhase = ''
+      mkdir -p $out/libexec $out/bin
+      cp -r * $out/libexec/
+      makeWrapper ${prev.nodejs}/bin/node $out/bin/byterover \
+        --add-flags "$out/libexec/dist/src/app/index.cjs"
+    '';
+
+    passthru.updateScript = prev.writeShellScript "update-byterover" ''
+      set -euo pipefail
+
+      # Get latest version
+      LATEST=$(curl -sL https://registry.npmjs.org/@byterover/cipher/latest | jq -r .version)
+
+      echo "Latest version: $LATEST"
+
+      # Calculate new hash first
+      URL="https://registry.npmjs.org/@byterover/cipher/-/cipher-$LATEST.tgz"
+      HASH=$(nix-prefetch-url "$URL")
+
+      echo "Calculated hash: $HASH"
+
+      # Update version in file
+      sed -i '/pname = "byterover-cipher"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
+
+      # Update hash in file
+      sed -i '/pname = "byterover-cipher"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
+
+      echo "Updated byterover-cipher to $LATEST with hash $HASH"
+    '';
+
+    meta = with prev.lib; {
+      description = "ByteRover Cipher - Memory-powered AI agent framework";
+      homepage = "https://byterover.dev";
+      license = licenses.elastic20;
+      platforms = platforms.all;
+    };
+  };
+
+  openmemory-js = prev.stdenv.mkDerivation rec {
+    pname = "openmemory-js";
+    version = "1.3.2";
+
+    src = prev.fetchurl {
+      url = "https://registry.npmjs.org/openmemory-js/-/openmemory-js-${version}.tgz";
+      sha256 = "0zm8b85gd1xhwakd07hmn6vn4w2m3az3sy7dhlmmawqg9899j8k0";
+    };
+
+    nativeBuildInputs = [prev.nodejs prev.npm prev.makeWrapper];
+
+    buildPhase = ''
+      export HOME=$TMPDIR
+      npm config set cache $TMPDIR/npm-cache
+      npm install $src
+    '';
+
+    installPhase = ''
+      mkdir -p $out/libexec $out/bin
+
+      cp -r node_modules/openmemory-js $out/libexec/
+      cp -r node_modules/.bin $out/libexec/.bin 2>/dev/null || true
+
+      for dir in $out/libexec/node_modules/*/.bin; do
+        [ -d "$dir" ] && cp -r $dir/* $out/libexec/.bin/ 2>/dev/null || true
+      done
+
+      makeWrapper ${prev.nodejs}/bin/node $out/bin/openmemory-js \
+        --add-flags "$out/libexec/openmemory-js/dist/cli.js"
+
+      chmod +x $out/libexec/openmemory-js/dist/cli.js 2>/dev/null || true
+    '';
+
+    passthru.updateScript = prev.writeShellScript "update-openmemory-js" ''
+      set -euo pipefail
+
+      # Get latest version
+      LATEST=$(curl -sL https://registry.npmjs.org/openmemory-js/latest | jq -r .version)
+
+      echo "Latest version: $LATEST"
+
+      # Calculate new hash first
+      URL="https://registry.npmjs.org/openmemory-js/-/openmemory-js-$LATEST.tgz"
+      HASH=$(nix-prefetch-url "$URL")
+
+      echo "Calculated hash: $HASH"
+
+      # Update version in file
+      sed -i '/pname = "openmemory-js"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
+
+      # Update hash in file
+      sed -i '/pname = "openmemory-js"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
+
+      echo "Updated openmemory-js to $LATEST with hash $HASH"
+    '';
+
+    meta = with prev.lib; {
+      description = "OpenMemory JavaScript SDK - Persistent memory for AI agents";
+      homepage = "https://github.com/CaviraOSS/OpenMemory";
+      license = licenses.mit;
+      platforms = platforms.all;
     };
   };
 

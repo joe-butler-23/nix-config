@@ -59,6 +59,8 @@ in {
     pkgs.jujutsu
     pkgs.vim
     pkgs.curl
+    pkgs.sqlite
+    pkgs.jq
 
     # System Administration
     pkgs.sbctl
@@ -171,6 +173,21 @@ in {
     pkgs.gemini
     pkgs.claude
     pkgs.codex
+    pkgs.byterover
+    pkgs.openmemory-js
+
+    # OpenMemory CLI Wrappers
+    (import ../scripts/om-add.nix { inherit pkgs; })
+    (import ../scripts/om-query.nix { inherit pkgs; })
+    (import ../scripts/om-ctx-add.nix { inherit pkgs; })
+    (import ../scripts/om-ctx-query.nix { inherit pkgs; })
+    (import ../scripts/om-pattern-add.nix { inherit pkgs; })
+    (import ../scripts/om-pattern-query.nix { inherit pkgs; })
+    (import ../scripts/om-changelog-add.nix { inherit pkgs; })
+    (import ../scripts/om-changelog-query.nix { inherit pkgs; })
+    (import ../scripts/om-list.nix { inherit pkgs; })
+    (import ../scripts/om-stats.nix { inherit pkgs; })
+    (import ../scripts/om-delete.nix { inherit pkgs; })
 
     # Applications
     pkgs.gnumeric
