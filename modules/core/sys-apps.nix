@@ -52,8 +52,28 @@
     fi
     anki-card-forge
   '';
+
+  # Optional OpenMemory wrapper scripts (skip if files are missing)
+  openMemoryWrappers = let
+    importIfExists = file:
+      if builtins.pathExists file
+      then [(import file {inherit pkgs;})]
+      else [];
+  in
+    importIfExists ../scripts/om-add.nix
+    ++ importIfExists ../scripts/om-query.nix
+    ++ importIfExists ../scripts/om-ctx-add.nix
+    ++ importIfExists ../scripts/om-ctx-query.nix
+    ++ importIfExists ../scripts/om-pattern-add.nix
+    ++ importIfExists ../scripts/om-pattern-query.nix
+    ++ importIfExists ../scripts/om-changelog-add.nix
+    ++ importIfExists ../scripts/om-changelog-query.nix
+    ++ importIfExists ../scripts/om-list.nix
+    ++ importIfExists ../scripts/om-stats.nix
+    ++ importIfExists ../scripts/om-delete.nix;
 in {
-  environment.systemPackages = [
+  environment.systemPackages =
+    [
     # Core Utilities
     pkgs.git
     pkgs.jujutsu
@@ -165,6 +185,7 @@ in {
     pkgs.pandoc
     R-with-packages
     pkgs.nodejs_latest
+    (pkgs.python3.withPackages (ps: [ ps.requests ]))
 
     # Custom AI Tools (from overlay)
     pkgs.opencode
@@ -174,35 +195,7 @@ in {
     pkgs.byterover
     pkgs.openmemory-js
 
-    # OpenMemory CLI Wrappers
-    (import ../scripts/om-add.nix { inherit pkgs; })
-    (import ../scripts/om-query.nix { inherit pkgs; })
-    (import ../scripts/om-ctx-add.nix { inherit pkgs; })
-    (import ../scripts/om-ctx-query.nix { inherit pkgs; })
-    (import ../scripts/om-pattern-add.nix { inherit pkgs; })
-    (import ../scripts/om-pattern-query.nix { inherit pkgs; })
-    (import ../scripts/om-changelog-add.nix { inherit pkgs; })
-    (import ../scripts/om-changelog-query.nix { inherit pkgs; })
-    (import ../scripts/om-list.nix { inherit pkgs; })
-    (import ../scripts/om-stats.nix { inherit pkgs; })
-    (import ../scripts/om-delete.nix { inherit pkgs; })
-
-    # Applications
-    pkgs.gnumeric
-    pkgs.obsidian
-    pkgs.zotero
-    pkgs.vivaldi
-    pkgs.vscodium
-
     # Editors
-    pkgs.emacs-pgtk
-    pkgs.zed-editor
-
-    # Learning Tools
-    anki-with-addons
-    anki-forge.packages.x86_64-linux.default
-    ankiSmart
-    ankiForgeLauncher
     pkgs.libnotify
 
     # Desktop Environment
