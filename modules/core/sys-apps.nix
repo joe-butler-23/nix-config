@@ -101,6 +101,7 @@ in {
     pkgs.fzf
     pkgs.gum
     pkgs.htop
+    pkgs.inotify-tools
     pkgs.jq
     pkgs.lazygit
     pkgs.nix-search-tv

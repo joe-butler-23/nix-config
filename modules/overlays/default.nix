@@ -45,11 +45,11 @@
 _: _final: prev: {
   opencode = prev.stdenv.mkDerivation rec {
     pname = "opencode";
-    version = "1.1.1";
+    version = "1.1.3";
 
     src = prev.fetchurl {
       url = "https://github.com/sst/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      sha256 = "1gf7c4ricv028kpfjrl6c5f5dfavpbbbaxb66ab0aiz4jxf010n3";
+      sha256 = "10lbglamc5wivbyhajn402bm1qmz8w95kgn6jyyazbdrn1fchjp7";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
@@ -259,11 +259,11 @@ _: _final: prev: {
 
   zed-editor = prev.stdenv.mkDerivation rec {
     pname = "zed-editor";
-    version = "0.217.3";
+    version = "0.217.4";
 
     src = prev.fetchurl {
       url = "https://github.com/zed-industries/zed/releases/download/v${version}/zed-linux-x86_64.tar.gz";
-      sha256 = "1v9q0c2kylvkbzygp9n5rmkwjxa71d7kv5sxczlfns1bcaqzw511";
+      sha256 = "0i9915p5zqv9vwymjdl8cb2mjnak85q9z666s8q36g83j6amaml4";
     };
 
     nativeBuildInputs = [
