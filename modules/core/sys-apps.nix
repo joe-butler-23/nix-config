@@ -59,8 +59,6 @@ in {
     pkgs.jujutsu
     pkgs.vim
     pkgs.curl
-    pkgs.sqlite
-    pkgs.jq
 
     # System Administration
     pkgs.sbctl

@@ -318,48 +318,27 @@ _: _final: prev: {
       sha256 = "0zm8b85gd1xhwakd07hmn6vn4w2m3az3sy7dhlmmawqg9899j8k0";
     };
 
-    nativeBuildInputs = [prev.nodejs prev.makeWrapper];
-
-    buildPhase = ''
-      export HOME=$TMPDIR
-      ${prev.nodejs}/bin/npm config set cache $TMPDIR/npm-cache
-      ${prev.nodejs}/bin/npm install $src
-    '';
+    nativeBuildInputs = [prev.makeWrapper];
 
     installPhase = ''
       mkdir -p $out/libexec $out/bin
-
-      cp -r node_modules/openmemory-js $out/libexec/
-      cp -r node_modules/.bin $out/libexec/.bin 2>/dev/null || true
-
-      for dir in $out/libexec/node_modules/*/.bin; do
-        [ -d "$dir" ] && cp -r $dir/* $out/libexec/.bin/ 2>/dev/null || true
-      done
-
-      makeWrapper ${prev.nodejs}/bin/node $out/bin/openmemory-js \
-        --add-flags "$out/libexec/openmemory-js/dist/cli.js"
-
-      chmod +x $out/libexec/openmemory-js/dist/cli.js 2>/dev/null || true
+      cp -r package/* $out/libexec/
+      makeWrapper ${prev.nodejs}/bin/node $out/bin/opm \
+        --add-flags "$out/libexec/bin/opm.js"
     '';
 
     passthru.updateScript = prev.writeShellScript "update-openmemory-js" ''
       set -euo pipefail
 
-      # Get latest version
       LATEST=$(curl -sL https://registry.npmjs.org/openmemory-js/latest | jq -r .version)
-
       echo "Latest version: $LATEST"
 
-      # Calculate new hash first
       URL="https://registry.npmjs.org/openmemory-js/-/openmemory-js-$LATEST.tgz"
       HASH=$(nix-prefetch-url "$URL")
 
       echo "Calculated hash: $HASH"
 
-      # Update version in file
       sed -i '/pname = "openmemory-js"/,/^  };/ s|^    version = ".*"|    version = "'$LATEST'"|' modules/overlays/default.nix
-
-      # Update hash in file
       sed -i '/pname = "openmemory-js"/,/^  };/ s|^      sha256 = ".*"|      sha256 = "'$HASH'"|' modules/overlays/default.nix
 
       echo "Updated openmemory-js to $LATEST with hash $HASH"

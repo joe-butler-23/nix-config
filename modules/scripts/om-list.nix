@@ -3,14 +3,11 @@ pkgs.writeShellScriptBin "om-list" ''
   set -euo pipefail
 
   MEMORY_DIR="''${XDG_DATA_HOME:-$HOME/.local/share}/openmemory"
-  DB_PATH="$MEMORY_DIR/memory.sqlite"
   mkdir -p "$MEMORY_DIR"
 
   PROJECT_NAME=$(git rev-parse --show-toplevel 2>/dev/null | xargs basename || echo "global")
+  DB_PATH="$MEMORY_DIR/memory.sqlite"
 
-  node ${pkgs.openmemory-js}/libexec/openmemory-js/dist/cli.js \
-    list \
-    --db "$DB_PATH" \
-    --project "$PROJECT_NAME" \
-    --json
+  OM_DB_PATH="$DB_PATH" \
+  ${pkgs.openmemory-js}/bin/opm list
 ''

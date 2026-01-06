@@ -3,17 +3,16 @@ pkgs.writeShellScriptBin "om-delete" ''
   set -euo pipefail
 
   MEMORY_DIR="''${XDG_DATA_HOME:-$HOME/.local/share}/openmemory"
-  DB_PATH="$MEMORY_DIR/memory.sqlite"
   mkdir -p "$MEMORY_DIR"
 
   if [ -z "$1" ]; then
     echo "Usage: om-delete <memory-id>"
-    exit 1
+    exit1
   fi
 
-  node ${pkgs.openmemory-js}/libexec/openmemory-js/dist/cli.js \
-    delete "$1" \
-    --db "$DB_PATH"
+  DB_PATH="$MEMORY_DIR/memory.sqlite"
+  OM_DB_PATH="$DB_PATH" \
+  ${pkgs.openmemory-js}/bin/opm delete "$1"
 
   echo "Memory deleted: $1"
 ''
