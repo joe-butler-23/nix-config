@@ -1,16 +1,4 @@
 { pkgs }:
-pkgs.writeShellScriptBin "$cmd" ""
+pkgs.writeShellScriptBin "$base" ""
   set -euo pipefail
-
-  MEMORY_DIR="\''${XDG_DATA_HOME:-$HOME/.local/share}/openmemory"
-  mkdir -p "$MEMORY_DIR"
-
-  PROJECT_NAME=\$(git rev-parse --show-toplevel 2>/dev/null | xargs basename || echo "global")
-  DB_PATH="\$MEMORY_DIR/memory.sqlite"
-
-  export OM_DB_PATH="\$DB_PATH"
-  export OM_PROJECT="\$PROJECT_NAME"
-  export OPENAI_API_KEY="''\${OPENAI_API_KEY}"
-
-  echo "Command: $cmd - DB: \$DB_PATH - Project: \$PROJECT_NAME"
-""
+  echo "$base: \$@"
