@@ -188,10 +188,14 @@
       }
     };
 
-    run().catch((err) => {
-      console.error("[error] " + (err && err.message ? err.message : String(err)));
-      process.exit(1);
-    });
+    run()
+      .then(() => {
+        process.exit(0);
+      })
+      .catch((err) => {
+        console.error("[error] " + (err && err.message ? err.message : String(err)));
+        process.exit(1);
+      });
   '';
 
   mkOmScript = {
