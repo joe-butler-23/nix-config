@@ -3,7 +3,7 @@
     const path = require("path");
 
     const base = "${pkgs.openmemory-js}/libexec/package";
-    const { Memory } = require(path.join(base, "dist", "index.js"));
+    const { Memory } = require(path.join(base, "dist", "core", "memory.js"));
     const db = require(path.join(base, "dist", "core", "db.js"));
     const { all_async, get_async, run_async, vector_store } = db;
 
