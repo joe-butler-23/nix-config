@@ -126,7 +126,6 @@ in {
       pkgs.lazygit
       pkgs.nix-search-tv
       pkgs.ripgrep
-      pkgs.rclone
       pkgs.tmux
       pkgs.trash-cli
       pkgs.unzip

@@ -66,7 +66,7 @@
   users.users.${user} = {
     isNormalUser = true;
     createHome = true;
-    extraGroups = ["networkmanager" "wheel" "input" "docker" "fuse"];
+    extraGroups = ["networkmanager" "wheel" "input" "docker"];
     shell = pkgs.zsh;
   };
   programs.zsh.enable = true;
@@ -74,7 +74,6 @@
   # ========================================
   # FILESYSTEMS
   # ========================================
-  programs.fuse.userAllowOther = true;
 
   # ========================================
   # SECURITY
