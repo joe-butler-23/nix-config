@@ -327,7 +327,6 @@ _: _final: prev: {
       tar -xzf $src -C $out/libexec
       makeWrapper ${prev.nodejs}/bin/node $out/bin/opm \
         --add-flags "$out/libexec/package/bin/opm.js"
-      cp ${./modules/scripts/om-wrapper.js} $out/libexec/
     '';
 
     passthru.updateScript = prev.writeShellScript "update-openmemory-js" ''

@@ -186,6 +186,7 @@ in {
     (import ../scripts/om-list.nix { inherit pkgs; })
     (import ../scripts/om-stats.nix { inherit pkgs; })
     (import ../scripts/om-delete.nix { inherit pkgs; })
+    (import ../scripts/om-wrapper.js { inherit pkgs; })
 
     # Applications
     pkgs.gnumeric
