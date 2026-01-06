@@ -12,7 +12,7 @@ pkgs.writeShellScriptBin "om-delete" ''
 
   DB_PATH="$MEMORY_DIR/memory.sqlite"
   OM_DB_PATH="$DB_PATH" \
-  ${pkgs.openmemory-js}/bin/opm delete "$1"
+  ${pkgs.nodejs}/bin/node ${pkgs.openmemory-js}/libexec/om-wrapper.js delete "$1"
 
   echo "Memory deleted: $1"
 ''

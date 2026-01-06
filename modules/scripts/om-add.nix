@@ -9,5 +9,6 @@ pkgs.writeShellScriptBin "om-add" ''
   DB_PATH="$MEMORY_DIR/memory.sqlite"
 
   OM_DB_PATH="$DB_PATH" \
-  ${pkgs.openmemory-js}/bin/opm add "$@"
+  OM_PROJECT="$PROJECT_NAME" \
+  ${pkgs.nodejs}/bin/node ${pkgs.openmemory-js}/libexec/om-wrapper.js add "$@"
 ''
