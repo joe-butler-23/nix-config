@@ -1,5 +1,6 @@
 { pkgs }:
-pkgs.writeShellScriptBin "om-ctx-add" ''
+pkgs.writeScript ""om-ctx-add"" ''
+  #!/bin/sh
   set -euo pipefail
 
   MEMORY_DIR="''${XDG_DATA_HOME:-$HOME/.local/share}/openmemory"
@@ -8,7 +9,12 @@ pkgs.writeShellScriptBin "om-ctx-add" ''
   PROJECT_NAME=$(git rev-parse --show-toplevel 2>/dev/null | xargs basename || echo "global")
   DB_PATH="$MEMORY_DIR/memory.sqlite"
 
-  OM_DB_PATH="$DB_PATH" \
-  OM_PROJECT="$PROJECT_NAME" \
-  ${pkgs.nodejs}/bin/node ${pkgs.openmemory-js}/libexec/om-wrapper.js add "$@"
+  export OM_DB_PATH="$DB_PATH"
+  export OM_PROJECT="$PROJECT_NAME"
+  export OPENAI_API_KEY="''${OPENAI_API_KEY}"
+
+  # Simple test for now
+  echo "Memory: $1"
+  echo "DB: $DB_PATH"
+  echo "Project: $PROJECT_NAME"
 ''

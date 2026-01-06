@@ -1,18 +1,20 @@
 { pkgs }:
-pkgs.writeShellScriptBin "om-delete" ''
+pkgs.writeScript ""om-delete"" ''
+  #!/bin/sh
   set -euo pipefail
 
   MEMORY_DIR="''${XDG_DATA_HOME:-$HOME/.local/share}/openmemory"
   mkdir -p "$MEMORY_DIR"
 
-  if [ -z "$1" ]; then
-    echo "Usage: om-delete <memory-id>"
-    exit1
-  fi
-
+  PROJECT_NAME=$(git rev-parse --show-toplevel 2>/dev/null | xargs basename || echo "global")
   DB_PATH="$MEMORY_DIR/memory.sqlite"
-  OM_DB_PATH="$DB_PATH" \
-  ${pkgs.nodejs}/bin/node ${pkgs.openmemory-js}/libexec/om-wrapper.js delete "$1"
 
-  echo "Memory deleted: $1"
+  export OM_DB_PATH="$DB_PATH"
+  export OM_PROJECT="$PROJECT_NAME"
+  export OPENAI_API_KEY="''${OPENAI_API_KEY}"
+
+  # Simple test for now
+  echo "Memory: $1"
+  echo "DB: $DB_PATH"
+  echo "Project: $PROJECT_NAME"
 ''
