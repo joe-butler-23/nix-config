@@ -48,11 +48,11 @@
 _: _final: prev: {
   opencode = prev.stdenv.mkDerivation rec {
     pname = "opencode";
-    version = "1.1.3";
+    version = "1.1.4";
 
     src = prev.fetchurl {
       url = "https://github.com/sst/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      sha256 = "10lbglamc5wivbyhajn402bm1qmz8w95kgn6jyyazbdrn1fchjp7";
+      sha256 = "13qbb7x3x50kcsz67n8a8y4wf4137544aa8sfp3w0lwyk314vdk8";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
@@ -106,11 +106,11 @@ _: _final: prev: {
 
   gemini = prev.stdenv.mkDerivation rec {
     pname = "gemini-cli";
-    version = "0.24.0-nightly.20260103.30f5c4af4";
+    version = "0.24.0-preview.0";
 
     src = prev.fetchurl {
       url = "https://github.com/google-gemini/gemini-cli/releases/download/v${version}/gemini.js";
-      sha256 = "0wsbzk6yzz5pyh37767fxd5d3p8dnzlqpvcdfr6yr2pnv5hidgh9";
+      sha256 = "148qggzbs9ggjy2pjm0jr9pp7c9p7m90282kpzcpgfg872kvv7sl";
     };
 
     dontUnpack = true;
@@ -206,11 +206,11 @@ _: _final: prev: {
 
   codex = prev.stdenv.mkDerivation rec {
     pname = "codex";
-    version = "0.77.0";
+    version = "0.79.0";
 
     src = prev.fetchurl {
       url = "https://github.com/openai/codex/releases/download/rust-v${version}/codex-x86_64-unknown-linux-gnu.tar.gz";
-      sha256 = "12rq4znrhdpjs7pm4prczllljc8m09j80py68j7149cnrnydzlal";
+      sha256 = "0bgqs9rz7mll3kw5mx2w9g0c2d0qw297nkm9dnr6xsihvkd16jma";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
