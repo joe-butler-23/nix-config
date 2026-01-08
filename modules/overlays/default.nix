@@ -48,11 +48,11 @@
 _: _final: prev: {
   opencode = prev.stdenv.mkDerivation rec {
     pname = "opencode";
-    version = "1.1.4";
+    version = "1.1.6";
 
     src = prev.fetchurl {
       url = "https://github.com/sst/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      sha256 = "13qbb7x3x50kcsz67n8a8y4wf4137544aa8sfp3w0lwyk314vdk8";
+      sha256 = "15n9qvx711rl9ddhd8m3gi1jcj7j2qp4r1c8lsmzc7x6qbvkfd3v";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
@@ -157,11 +157,11 @@ _: _final: prev: {
 
   claude = prev.stdenv.mkDerivation rec {
     pname = "claude-code";
-    version = "2.0.76";
+    version = "2.1.1";
 
     src = prev.fetchurl {
       url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-      sha256 = "1ndrj51yfgkp1xgph5r3v6n946rlamj3v0y6wk4114wfzwv9k8zw";
+      sha256 = "1sqn80dmbfwdczzzmc4bcy0wykl9wyf07gpr7x009hsk3ays5jd0";
     };
 
     nativeBuildInputs = [prev.makeWrapper];
@@ -399,11 +399,11 @@ _: _final: prev: {
 
   zed-editor = prev.stdenv.mkDerivation rec {
     pname = "zed-editor";
-    version = "0.217.4";
+    version = "0.218.6";
 
     src = prev.fetchurl {
       url = "https://github.com/zed-industries/zed/releases/download/v${version}/zed-linux-x86_64.tar.gz";
-      sha256 = "0i9915p5zqv9vwymjdl8cb2mjnak85q9z666s8q36g83j6amaml4";
+      sha256 = "1wn4592hx6mwr4ikbx9a25d8frmkniiqsla4m3wdw3lcgs8knm5p";
     };
 
     nativeBuildInputs = [
