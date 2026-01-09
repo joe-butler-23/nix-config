@@ -48,11 +48,11 @@
 _: _final: prev: {
   opencode = prev.stdenv.mkDerivation rec {
     pname = "opencode";
-    version = "1.1.6";
+    version = "1.1.8";
 
     src = prev.fetchurl {
       url = "https://github.com/sst/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      sha256 = "15n9qvx711rl9ddhd8m3gi1jcj7j2qp4r1c8lsmzc7x6qbvkfd3v";
+      sha256 = "12qqc4nharnl6863fk2qjw9cw3kj1vqcc1r1ml988g649snpawn4";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
@@ -157,11 +157,11 @@ _: _final: prev: {
 
   claude = prev.stdenv.mkDerivation rec {
     pname = "claude-code";
-    version = "2.1.1";
+    version = "2.1.2";
 
     src = prev.fetchurl {
       url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-      sha256 = "1sqn80dmbfwdczzzmc4bcy0wykl9wyf07gpr7x009hsk3ays5jd0";
+      sha256 = "08l24i6qbrjnaymqh2wr4z06yfh14k54id6gas347s5wmns50968";
     };
 
     nativeBuildInputs = [prev.makeWrapper];
