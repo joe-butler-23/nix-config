@@ -48,11 +48,11 @@
 _: _final: prev: {
   opencode = prev.stdenv.mkDerivation rec {
     pname = "opencode";
-    version = "1.1.8";
+    version = "1.1.11";
 
     src = prev.fetchurl {
       url = "https://github.com/sst/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      sha256 = "12qqc4nharnl6863fk2qjw9cw3kj1vqcc1r1ml988g649snpawn4";
+      sha256 = "0ylkavvkxgkf99rw64wm5srdlvcxxn2ccglbrfcsn2nh925ywhgg";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
@@ -157,11 +157,11 @@ _: _final: prev: {
 
   claude = prev.stdenv.mkDerivation rec {
     pname = "claude-code";
-    version = "2.1.2";
+    version = "2.1.3";
 
     src = prev.fetchurl {
       url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-      sha256 = "08l24i6qbrjnaymqh2wr4z06yfh14k54id6gas347s5wmns50968";
+      sha256 = "1j0ci47bf8lkzgq32hi7dyqv122zrjvbv3sbak68015g7rg6fqb3";
     };
 
     nativeBuildInputs = [prev.makeWrapper];
@@ -206,11 +206,11 @@ _: _final: prev: {
 
   codex = prev.stdenv.mkDerivation rec {
     pname = "codex";
-    version = "0.79.0";
+    version = "0.80.0";
 
     src = prev.fetchurl {
       url = "https://github.com/openai/codex/releases/download/rust-v${version}/codex-x86_64-unknown-linux-gnu.tar.gz";
-      sha256 = "0bgqs9rz7mll3kw5mx2w9g0c2d0qw297nkm9dnr6xsihvkd16jma";
+      sha256 = "0hfzilflzcsi1pp2kjdxyfgk1r1k8yjnn6vdl8vj6m75rk61bzx9";
     };
 
     nativeBuildInputs = [prev.autoPatchelfHook];
